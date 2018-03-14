@@ -1,0 +1,13 @@
+{
+  "name": "technology-speaks",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Technology Speaks allows for cross team collaboration and feedback.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kbateson/technology-speaks.git"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.209.0"
+  }
+}
