@@ -48,19 +48,40 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  getDogs:
-    handler: handler.getDogs
+  getPostById:
+    handler: js/posts-api/handler.getPostById
     events:
       - http:
-          path: dogs
+          path: posts/{postId}
           method: get
 
-  putDog:
-    handler: handler.createDog
+  deletePost:
+    handler: js/posts-api/handler.deletePost
     events:
       - http:
-          path: dogs
+          path: posts/{postId}
+          method: delete
+
+  createPost:
+    handler: js/posts-api/handler.createPost
+    events:
+      - http:
+          path: posts
           method: post
+
+  updatePostContent:
+    handler: js/posts-api/handler.updatePostContent
+    events:
+      - http:
+          path: posts/{postId}
+          method: put
+
+  updatePostState:
+    handler: js/posts-api/handler.updatePostState
+    events:
+      - http:
+          path: posts/{postId}/state/{state}
+          method: put
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -101,7 +122,7 @@ resources:
    dogsTable:
      Type: AWS::DynamoDB::Table
      Properties:
-        TableName: dogs
+        TableName: posts
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
