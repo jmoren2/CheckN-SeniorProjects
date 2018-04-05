@@ -7,7 +7,7 @@ provider:
 
 resources:
  Resources:
-   dogsTable:
+   posts:
      Type: AWS::DynamoDB::Table
      Properties:
         TableName: posts
