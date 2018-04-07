@@ -19,20 +19,12 @@ provider:
   region: us-west-2
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - "dynamoDB:*"
+    Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
+   
 
 # you can define service wide environment variables here
 #  environment:
@@ -83,11 +75,32 @@ functions:
           path: posts/{postId}/state/{state}
           method: put
 
+  getDog:
+    handler: js/posts-api/handler.getDog
+    events:
+      - http:
+          path: dogs/{dogId}
+          method: get
+
+  getDogs:
+    handler: js/posts-api/handler.getDogs
+    events:
+      - http:
+          path: dogs
+          method: get
+
+  createDog:
+    handler: js/posts-api/handler.createDog
+    events:
+      - http:
+          path: dogs
+          method: post
+
 resources:
- Resources:
-   posts:
-     Type: AWS::DynamoDB::Table
-     Properties:
+  Resources:
+    posts:
+      Type: AWS::DynamoDB::Table
+      Properties:
         TableName: posts
         AttributeDefinitions:
           - AttributeName: id
@@ -98,3 +111,58 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+    dogs:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: dogs
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    
+    # users:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: users
+    #       AttributeDefinitions:
+    #         - AttributeName: id
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: id
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5
+
+    # comments:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: comments
+    #       AttributeDefinitions:
+    #         - AttributeName: id
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: id
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5
+
+    # tags:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: tags
+    #       AttributeDefinitions:
+    #         - AttributeName: id
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: id
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5
