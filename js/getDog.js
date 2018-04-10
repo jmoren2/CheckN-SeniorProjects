@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports.getDog = (ddb, event, callback) => {
-  ddb.get({TableName: 'dogs', Key: {'id': event.pathParameters.dogId}}, function(error, data) {
+  ddb.get({TableName: 'dogs', Key: {'id': parseInt(event.pathParameters.dogId)}}, function(error, data) {
     if(error)
       callback(null, {
         statusCode: 500,
