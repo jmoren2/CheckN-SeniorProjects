@@ -7,8 +7,6 @@ module.exports.createPost = (ddb, event, context, callback) => {
         TableName: 'posts'
 
     }
-
-    console.log(post);
     
     ddb.put(post, function(error, data) {
         if(error)
