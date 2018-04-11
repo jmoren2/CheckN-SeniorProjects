@@ -1,12 +1,18 @@
 'use strict';
+let uuid = require('node-uuid');
 
 module.exports.createPost = (ddb, event, context, callback) => {
 
-    var post = {
-        Item: JSON.parse(event.body),
-        TableName: 'posts'
 
-    }
+  if (event.body !== null && event.body !== undefined) {
+        var eventBody = JSON.parse(event.body);
+        eventBody.id = uuid.v4();
+
+
+        var post = {
+            TableName: 'posts',
+            Item: body
+        }
     
     ddb.put(post, function(error, data) {
         if(error)
@@ -20,4 +26,11 @@ module.exports.createPost = (ddb, event, context, callback) => {
             body: JSON.stringify({message: 'Post Created!'})
           });
       });
+
+    }
+    else
+        callback(null,{
+            statusCode: 500,
+            body: JSON.stringify({message: 'Create Post Failed.'})
+        });
 }
