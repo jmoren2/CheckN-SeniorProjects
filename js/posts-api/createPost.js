@@ -6,7 +6,7 @@ const moment = require('moment');
 module.exports.createPost = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
     var body = JSON.parse(event.body);
-    body.id = uuid.v4();
+    body.postId = uuid.v4();
     var now = moment().toISOString();
     body.timestamp = now;
 
