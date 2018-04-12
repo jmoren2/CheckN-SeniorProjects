@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.updatePostState = (ddb, event, context, callback) => {
+module.exports.deleteComment = (ddb, event, context, callback) => {
     var response = {
         statusCode: 500,
         body: JSON.stringify({
