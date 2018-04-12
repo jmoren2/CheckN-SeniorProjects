@@ -1,16 +1,12 @@
 'use strict';
 
 module.exports.getPostById = (ddb, event, context, callback) => {
-    ddb.scan({TableName: 'posts'}, function(error, data) {
-        if(error)
-          callback(null, {
+    var response = {
+        statusCode: 500,
+        body: JSON.stringify({
             statusCode: 500,
-            body: JSON.stringify({message: 'get posts failed. Error: ' + error})
-          });
-        else
-          callback(null, {
-            statusCode: 200,
-            body: JSON.stringify({posts: data.Items})
-          });
-      });
+            message: 'endpoint not implemented yet'
+        })
+    }
+    return callback(null, response);
 }
