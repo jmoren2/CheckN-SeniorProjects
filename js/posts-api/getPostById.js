@@ -2,17 +2,20 @@
 
 module.exports.getPostById = (ddb, event, context, callback) => {
     var response = 0;
-    ddb.get({TableName: 'posts', Key: {'id': event.pathParameters.postId}}, function(error, data) {
-        if(error)
+    console.log('parameter content: ' + event.pathParameters.postId);
+    ddb.get({TableName: 'posts', Key: {'postId': event.pathParameters.postId}}, function(error, data) {
+        if(error) {
             response = {
                 statusCode: 500,
-                body: JSON.stringify({message: 'getPostById failed. Error: ' + error})
+                message: JSON.stringify({message: 'getPostById failed. Error: ' + error})
             };
-        else
+        } else {
+            console.log('response: ' + JSON.stringify(data));
             response = {
                 statusCode: 200,
                 body: JSON.stringify({post: data.Item})
             };
+        }
+        return callback(null, response);
     });
-    callback(null, response);
 }

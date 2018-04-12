@@ -104,7 +104,7 @@ resources:
       Properties:
         TableName: posts
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: postId
             AttributeType: S
         KeySchema:
           - AttributeName: id
