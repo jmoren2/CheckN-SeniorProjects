@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports.deletePost = (ddb, event, context, callback) => {
-    var id = -1;
+    var id = "-1";
 
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.postId !== undefined && 
