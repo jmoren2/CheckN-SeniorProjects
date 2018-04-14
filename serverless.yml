@@ -89,71 +89,58 @@ functions:
 
 resources:
   Resources:
-    posts:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: posts
-        AttributeDefinitions:
-          - AttributeName: postId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: postId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
-    dogs:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: dogs
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: N
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+    # posts:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: posts-dev
+    #     AttributeDefinitions:
+    #       - AttributeName: postId
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: postId
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 5
+    #       WriteCapacityUnits: 5
     
-    users:
-      Type: AWS::DynamoDB::Table
-      Properties:
-          TableName: users
-          AttributeDefinitions:
-            - AttributeName: userId
-              AttributeType: S
-          KeySchema:
-            - AttributeName: userId
-              KeyType: HASH
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
+    # users:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: users
+    #       AttributeDefinitions:
+    #         - AttributeName: userId
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: userId
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5
 
-    comments:
-      Type: AWS::DynamoDB::Table
-      Properties:
-          TableName: comments
-          AttributeDefinitions:
-            - AttributeName: commentId
-              AttributeType: S
-          KeySchema:
-            - AttributeName: commentId
-              KeyType: HASH
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
+    # comments:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: comments
+    #       AttributeDefinitions:
+    #         - AttributeName: commentId
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: commentId
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5
 
-    tags:
-      Type: AWS::DynamoDB::Table
-      Properties:
-          TableName: tags
-          AttributeDefinitions:
-            - AttributeName: tagId
-              AttributeType: S
-          KeySchema:
-            - AttributeName: tagId
-              KeyType: HASH
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
+    # tags:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #       TableName: tags
+    #       AttributeDefinitions:
+    #         - AttributeName: tagId
+    #           AttributeType: S
+    #       KeySchema:
+    #         - AttributeName: tagId
+    #           KeyType: HASH
+    #       ProvisionedThroughput:
+    #         ReadCapacityUnits: 5
+    #         WriteCapacityUnits: 5

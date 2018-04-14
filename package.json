@@ -8,6 +8,7 @@
     "url": "https://github.com/kbateson/technology-speaks.git"
   },
   "dependencies": {
-    "aws-sdk": "^2.209.0"
+    "aws-sdk": "^2.209.0",
+    "moment": "^2.22.0"
   }
 }
