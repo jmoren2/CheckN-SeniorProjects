@@ -11,10 +11,10 @@
 #
 # Happy Coding!
 
-service: technology-speaks-capstone
+service: checkN
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: dev
   region: us-west-2
   iamRoleStatements:
@@ -22,23 +22,6 @@ provider:
     Action:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
-
-# you can add statements to the Lambda function's IAM Role here
-
-   
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
 
 functions:
   getPostById:
@@ -62,40 +45,47 @@ functions:
           path: posts
           method: post
 
-  updatePostContent:
-    handler: js/posts-api/handler.updatePostContent
+  updatePost:
+    handler: js/posts-api/handler.updatePost
     events:
       - http:
           path: posts/{postId}
           method: put
 
-  updatePostState:
-    handler: js/posts-api/handler.updatePostState
+  getCommentsByPostId:
+    handler: js/posts-api/handler.getCommentsByPostId
     events:
       - http:
-          path: posts/{postId}/state/{state}
-          method: put
-
-  getDog:
-    handler: js/posts-api/handler.getDog
-    events:
-      - http:
-          path: dogs/{dogId}
+          path: posts/{postId}/comments
           method: get
 
-  getDogs:
-    handler: js/posts-api/handler.getDogs
+  getCommentsBySearch:
+    handler: js/posts-api/handler.getCommentsBySearch
     events:
       - http:
-          path: dogs
+          path: comments
           method: get
 
-  createDog:
-    handler: js/posts-api/handler.createDog
+  deleteComment:
+    handler: js/posts-api/handler.deleteComment
     events:
       - http:
-          path: dogs
+          path: posts/{postId}/comments/{commentId}
+          method: delete
+
+  createComment:
+    handler: js/posts-api/handler.createComment
+    events:
+      - http:
+          path: posts/{postId}/comments
           method: post
+
+  updateComment:
+    handler: js/posts-api/handler.updateComment
+    events:
+      - http:
+          path: posts/{postId}/comments/{commentId}
+          method: put
 
 resources:
   Resources:
@@ -126,44 +116,44 @@ resources:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
     
-    # users:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: users
-    #       AttributeDefinitions:
-    #         - AttributeName: id
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: id
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
+    users:
+      Type: AWS::DynamoDB::Table
+      Properties:
+          TableName: users
+          AttributeDefinitions:
+            - AttributeName: userId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
 
-    # comments:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: comments
-    #       AttributeDefinitions:
-    #         - AttributeName: id
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: id
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
+    comments:
+      Type: AWS::DynamoDB::Table
+      Properties:
+          TableName: comments
+          AttributeDefinitions:
+            - AttributeName: commentId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: commentId
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
 
-    # tags:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: tags
-    #       AttributeDefinitions:
-    #         - AttributeName: id
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: id
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
+    tags:
+      Type: AWS::DynamoDB::Table
+      Properties:
+          TableName: tags
+          AttributeDefinitions:
+            - AttributeName: tagId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: tagId
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5

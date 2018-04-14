@@ -7,34 +7,22 @@ const deleteComment = require('./deleteComment').deleteComment;
 const updateComment = require('./updateComment').updateComment;
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.getPostById = (event, context, callback) => {
-  getPostById(ddb, event, context, callback);
+module.exports.getCommentsByPostId = (event, context, callback) => {
+  getCommentsByPostId(ddb, event, context, callback);
 };
 
-module.exports.createPost = (event, context, callback) => {
-  createPost(ddb, event, context, callback);
+module.exports.getCommentsBySearch = (event, context, callback) => {
+  getCommentsBySearch(ddb, event, context, callback);
 };
 
-module.exports.deletePost = (event, context, callback) => {
-  deletePost(ddb, event, context, callback);
+module.exports.createComment = (event, context, callback) => {
+  createComment(ddb, event, context, callback);
 }
 
-module.exports.updatePostContent = (event, context, callback) => {
-  updatePostContent(ddb, event, context, callback);
+module.exports.updateComment = (event, context, callback) => {
+  updateComment(ddb, event, context, callback);
 }
 
-module.exports.updatePostState = (event, context, callback) => {
-  updatePostState(ddb, event, context, callback);
-}
-
-module.exports.getDog = (event, context, callback) => {
-  getDog(ddb, event, callback);
-}
-
-module.exports.getDogs = (event, context, callback) => {
-  getDogs(ddb, event, callback);
-}
-
-module.exports.createDog = (event, context, callback) => {
-  createDog(ddb, event, callback);
+module.exports.deleteComment = (event, context, callback) => {
+  deleteComment(ddb, event, context, callback);
 }

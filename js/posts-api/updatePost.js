@@ -1,7 +1,7 @@
 'use strict';
 const moment = require('moment');
 
-module.exports.updatePostContent = (ddb, event, context, callback) => {
+module.exports.updatePost = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var tableName = "posts";
         var item = JSON.parse(event.body);
