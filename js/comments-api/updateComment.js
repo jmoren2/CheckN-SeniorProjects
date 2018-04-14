@@ -30,24 +30,24 @@ module.exports.updateComment = (ddb, event, context, callback) => {
         ReturnValues:"UPDATED_NEW"
         };
 
-    console.log("Updating the content of a Post...");
+    console.log("Updating a Comment...");
     ddb.update(params, function(error, data) {
       if(error)
         callback(null, {
           statusCode: 500,
-          body: JSON.stringify({message: 'Update Post Content failed. Error: ' + error})
+          body: JSON.stringify({message: 'Update Comment failed. Error: ' + error})
         });
       else
         callback(null, {
           statusCode: 201,
-          body: JSON.stringify({message: 'Post Content Updated.'})
+          body: JSON.stringify({message: 'Comment Updated.'})
         });
     });
     }
     else{
         callback(null, {
             statusCode: 500,
-            body: JSON.stringify({message: 'Post content updated failed. Error: ' + error})
+            body: JSON.stringify({message: 'Comment updated failed. Error: ' + error})
         });
     }
 }
