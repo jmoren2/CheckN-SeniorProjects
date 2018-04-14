@@ -14,13 +14,22 @@ module.exports.updatePost = (ddb, event, context, callback) => {
             Key:{
                 "postId": postId
             },
-        UpdateExpression: "set content = :content, #time =:timestamp",
+        UpdateExpression: "set content = :content, #time =:timestamp,  title = :title, userId = :userId, pinnedId = :pinnedId, visibilityLevel = :visibilityLevel, #state = :state, positiveVoters = :positiveVoters, neturalVoters = :neutralVoters , negativeVoters = :negativeVoters",
         ExpressionAttributeValues:{
             ":content":item.content,
-            ":timestamp":updatedTimeStamp
+            ":timestamp":updatedTimeStamp,
+            ":title" : item.title,
+            ":userId" : item.userId,
+            ":pinnedId" : item.pinnedId,
+            ":visibilityLevel" :item.visibilityLevel,
+            ":state" : item.state,
+            ":positiveVoters" : item.positiveVoters,
+            ":neutralVoters" : item.neutralVoters,
+            ":negativeVoters" : item.negativeVoters
         },
         ExpressionAttributeNames: {
-            "#time": "timestamp"
+            "#time": "timestamp",
+            "#state" : "state"
         },     
         ReturnValues:"UPDATED_NEW"
         };
