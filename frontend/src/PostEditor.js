@@ -8,13 +8,20 @@ class PostEditor extends Component{//Initial State
 }
 
 componentDidMount(){
-    fetch('https://67kbssnx29.execute-api.us-west-2.amazonaws.com/dev/posts/{postId}')//NEED TO ADD THE POSTID STUFF
-    .then(postInfo => {return results.json();})//Mapping the post contents to the json given by the API
+    fetch('https://67kbssnx29.execute-api.us-west-2.amazonaws.com/dev/posts/{postId}')//NEED postId to be fetched
+    .then(postInfo => {return postInfo.json();})//Grab the JSON given by the API
     .then(data => {
-
+        let postBody = data.postInfo.map((body) => {//Map over data
+            //WORK IN PROGRESS THIS WAS A GUESS
+            return(
+                <div key={body.postInfo}>
+                    <p>{body.postInfo}</p>
+                </div>
+            )
+        })
+        this.setState({postContent: postContent});
+        console.log("STATE:  ", this.state.postContent)
     })
-
-    //WORK IN PROGRESS
 }
 
     render(){
