@@ -5,7 +5,7 @@ import './index.css';
 
 import LogInPage from './LogInPage.js';
 import FeedPage from './FeedPage.js';
-import PostEditor from './ViewPost.js';
+import ViewPost from './ViewPost.js';
 
 class App extends React.Component {
     constructor(props){
@@ -22,7 +22,7 @@ class App extends React.Component {
                     <Route exact path="/" component={LogInPage}/>
                     <Route path="/login" component={LogInPage}/>
                     <Route path="/feed" component={FeedPage}/>
-                    <Route path="/post" component={PostEditor}/>
+                    <Route path="/post/:postID" component={ViewPost}/>
                 </div>
             </Router>
         );

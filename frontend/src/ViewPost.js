@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 
 class ViewPost extends Component{//Initial State
-    constructor(){
-        super();
-        this.state = {postContent: ""};
+    constructor(props){
+        super(props);
+        this.state = {
+            postID: props.match.params.postID,
+            postContent: ""
+        };
     }
 
     componentDidMount(){
-        fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/dabda155-3d89-4cf8-b705-3301fe361249',{
+        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -39,4 +42,4 @@ class ViewPost extends Component{//Initial State
 }
 //ReactDOM.render(<PostEditor />, document.getElementById('root'));
 
-export default PostEditor;
+export default ViewPost;
