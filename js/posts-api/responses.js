@@ -17,6 +17,9 @@ module.exports.deletePostSuccess = (callback) => {
 module.exports.singlePostSuccess = (code, post, callback) => {
     return callback(null, {
         statusCode: code,
+        headers: {
+            "Access-Control-Allow-Origin": "*"
+        },
         body: JSON.stringify({
             statusCode: code,
             post: post
