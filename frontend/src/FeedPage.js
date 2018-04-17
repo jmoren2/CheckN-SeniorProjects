@@ -14,7 +14,7 @@ class FeedPage extends React.Component{
     render(){
         return(
             <div>
-                <Link to="/feed">
+                <Link to="/create">
                     <button>Create Post</button>
                 </Link>
                 <Link to="/post/dabda155-3d89-4cf8-b705-3301fe361249">

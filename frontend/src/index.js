@@ -6,6 +6,7 @@ import './index.css';
 import LogInPage from './LogInPage.js';
 import FeedPage from './FeedPage.js';
 import ViewPost from './ViewPost.js';
+import CreatePost from './CreatePost.js';
 
 class App extends React.Component {
     constructor(props){
@@ -23,6 +24,7 @@ class App extends React.Component {
                     <Route path="/login" component={LogInPage}/>
                     <Route path="/feed" component={FeedPage}/>
                     <Route path="/post/:postID" component={ViewPost}/>
+                    <Route path="/create" component={CreatePost}/>
                 </div>
             </Router>
         );

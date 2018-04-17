@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 
 class CreatePost extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.returnedID = null;
     }
 
     handleSubmit(event){
@@ -22,8 +24,12 @@ class CreatePost extends Component{
                 title<input id="title" name="title" type="text"/>
                 content<input id="content" name="content" type="text"/>
 
-                <button>Send data!</button>
+                <Link to={`post/${this.returnedID}`}>
+                    <button>Send data!</button>
+                </Link>
             </form>
         );
     }
 }
+
+export default CreatePost;
