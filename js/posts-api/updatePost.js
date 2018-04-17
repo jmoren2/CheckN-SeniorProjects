@@ -51,7 +51,7 @@ module.exports.updatePost = (ddb, event, context, callback) => {
     else{
         callback(null, {
             statusCode: 500,
-            body: JSON.stringify({message: 'Post content updated failed. Error: ' + error})
+            body: JSON.stringify({message: 'Post content updated failed. Error: JSON body is empty or undefined' })
         });
     }
 }
