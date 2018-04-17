@@ -1,5 +1,7 @@
 'use strict';
 const moment = require('moment');
+const success = require('./responses').singleCommentSuccess;
+const fail = require('./responses').CommentsFail;
 
 module.exports.updateComment = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
@@ -33,21 +35,12 @@ module.exports.updateComment = (ddb, event, context, callback) => {
     console.log("Updating a Comment...");
     ddb.update(params, function(error, data) {
       if(error)
-        callback(null, {
-          statusCode: 500,
-          body: JSON.stringify({message: 'Update Comment failed. Error: ' + error})
-        });
+        fail(500, 'Update Comment failed. Error: ' + error, callback)
       else
-        callback(null, {
-          statusCode: 201,
-          body: JSON.stringify({message: 'Comment Updated.'})
-        });
+        success(201, data, callback)
     });
     }
     else{
-        callback(null, {
-            statusCode: 500,
-            body: JSON.stringify({message: 'Comment updated failed. Error: ' + error})
-        });
+        fail(500,'Comment updated failed. Error: undefined or empty JSON body', callback )
     }
 }
