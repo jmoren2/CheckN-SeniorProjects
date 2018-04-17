@@ -40,4 +40,6 @@ class PostEditor extends Component{//Initial State
         );
     }
 }
-ReactDOM.render(<PostEditor />, document.getElementById('root'));
+//ReactDOM.render(<PostEditor />, document.getElementById('root'));
+
+export default PostEditor;
