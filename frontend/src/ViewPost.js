@@ -1,16 +1,13 @@
-
 import React, {Component} from 'react';
 
-class PostEditor extends Component{//Initial State
+class ViewPost extends Component{//Initial State
     constructor(){
         super();
         this.state = {postContent: ""};
     }
 
     componentDidMount(){
-        var results;
-        var data;
-        fetch('https://67kbssnx29.execute-api.us-west-2.amazonaws.com/dev/posts/dabda155-3d89-4cf8-b705-3301fe361249',{
+        fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/dabda155-3d89-4cf8-b705-3301fe361249',{
             headers: {
                 'content-type': 'application/json'
             },
@@ -18,18 +15,18 @@ class PostEditor extends Component{//Initial State
             mode: 'cors',
         })//Queries the API for a post with specified ID
         .then(results => {
-            console.log('r: ' + results);
             return results.json();})//Saves the response as JSON
         .then(data => {
             //console.log('d: ' + data);
             //console.log("STATE:  ", this.state.postContent);
+            console.log('r: ' + JSON.stringify(data));
             return(//places the body of the post in an input field for editing
             <div key={data}>
-                <p>{results.post.title}</p>
-                <p>{results.post.content}</p>
+                <h1>{data.post.title}</h1>
+                <p>{data.post.content}</p>
             </div>
         )})
-        .then(this.setState({postContent: data}));//update the state with the above post title and comment(unsure of this spot)
+        .then(data => {this.setState({postContent: data})});//update the state with the above post title and comment(unsure of this spot)
     }
 
     render(){
@@ -39,7 +36,11 @@ class PostEditor extends Component{//Initial State
             </div>
         );
     }
+<<<<<<< HEAD
 }
 //ReactDOM.render(<PostEditor />, document.getElementById('root'));
 
 export default PostEditor;
+=======
+}
+>>>>>>> 70e40c772497a91746e5b125d0b41b6a3bae111e
