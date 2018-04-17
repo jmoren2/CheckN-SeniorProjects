@@ -2,6 +2,8 @@
 
 const uuid = require('uuid');
 const moment = require('moment');
+const success = require('./responses.js').singlePostSuccess;
+const fail = require('./responses.js').postsFail;
 
 module.exports.createPost = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
@@ -19,25 +21,16 @@ module.exports.createPost = (ddb, event, context, callback) => {
     
     ddb.put(post, function(error, data) {
         if(error)
-          callback(null, {
-            statusCode: 500,
-            body: JSON.stringify({message: 'Post creation failed. Error: ' + error})
-          });
+          return fail(500, 'Post creation failed. Error: ' + error, callback);
         else
-          callback(null, {
-            statusCode: 200,
-            body: JSON.stringify({message: 'Post Created!'})
-          });
+          return success(200, event.body, callback);
       });
 
 
     }
     else
     {
-    callback(null, {
-      statusCode: 500,
-      body: JSON.stringify({message: 'Post creation failed. Error: ' + error})
-    });
+      return fail(500, 'Post creation failed. Error: ' + error, callback)
   }
     
 }

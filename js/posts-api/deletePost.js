@@ -1,4 +1,6 @@
 'use strict';
+const success = require('./responses.js').deletePostSuccess;
+const fail = require('./responses.js').postsFail;
 
 module.exports.deletePost = (ddb, event, context, callback) => {
     var id = "-1";
@@ -23,14 +25,8 @@ module.exports.deletePost = (ddb, event, context, callback) => {
     
     ddb.delete(params, function(err, data) {
         if(err)
-            callback(err, {
-                statusCode: 500,
-                body: JSON.stringify({message: 'Delete Post failed. Error: ' + err})
-            });
+            return fail(500, 'Delete Post failed. Error: ' + err, callback);
         else
-            callback(null, {
-                statusCode: 204,
-                body: JSON.stringify({message: 'Successfully Deleted Post ' + id})
-        });
+            return success(callback);
     });
 }
