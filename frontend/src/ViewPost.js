@@ -36,11 +36,7 @@ class ViewPost extends Component{//Initial State
             </div>
         );
     }
-<<<<<<< HEAD
 }
 //ReactDOM.render(<PostEditor />, document.getElementById('root'));
 
 export default PostEditor;
-=======
-}
->>>>>>> 70e40c772497a91746e5b125d0b41b6a3bae111e
