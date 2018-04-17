@@ -1,6 +1,7 @@
 'use strict';
 const moment = require('moment');
-
+const response = require('./responses.js').singlePostSuccess
+const fail = require('./responses').postsFail
 module.exports.updatePost = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var tableName = "posts";
@@ -37,21 +38,12 @@ module.exports.updatePost = (ddb, event, context, callback) => {
     console.log("Updating the content of a Post...");
     ddb.update(params, function(error, data) {
       if(error)
-        callback(null, {
-          statusCode: 500,
-          body: JSON.stringify({message: 'Update Post Content failed. Error: ' + error})
-        });
+        fail(500, 'Update Post Content failed. Error: ' + error, callback)
       else
-        callback(null, {
-          statusCode: 201,
-          body: JSON.stringify({message: 'Post Content Updated.'})
-        });
+        response(201, data, callback)
     });
     }
     else{
-        callback(null, {
-            statusCode: 500,
-            body: JSON.stringify({message: 'Post content updated failed. Error: JSON body is empty or undefined' })
-        });
+        fail(500,'Post content updated failed. Error: JSON body is empty or undefined', callback )
     }
 }
