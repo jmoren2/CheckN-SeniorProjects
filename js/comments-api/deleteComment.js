@@ -22,7 +22,7 @@ module.exports.deleteComment = (ddb, event, context, callback) => {
                 if(err)
                     return deleteCommentFail(500, 'Delete Comment failed. Error: ' + err, callback);
                 else
-                    deleteCommentSuccess(callback);
+                    return deleteCommentSuccess(callback);
             });
         }
         else
