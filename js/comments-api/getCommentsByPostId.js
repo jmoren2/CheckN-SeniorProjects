@@ -30,8 +30,8 @@ module.exports.getCommentsByPostId = (ddb, event, context, callback) => {
             });
         }
         else
-            return multiCommentSuccess(400, 'get Comments by postId failed.', callback);
+            return getCommentsFail(400, 'get Comments by postId failed.', callback);
     }
     else
-        return multiCommentSuccess(400,'get Comments by postId failed', callback);
+        return getCommentsFail(400,'get Comments by postId failed', callback);
 }
