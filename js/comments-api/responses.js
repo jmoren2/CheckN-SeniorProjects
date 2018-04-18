@@ -29,8 +29,8 @@ module.exports.multiCommentSuccess = (code, comments, callback) => {
         statusCode: code,
         body: JSON.stringify({
             statusCode: code,
-            comments: comments,
-            count: comments.length
+            comments: comments.Items,
+            count: comments.Count
         })
     })
 }
