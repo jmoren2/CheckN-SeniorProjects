@@ -25,22 +25,14 @@ module.exports.createComment = (ddb, event, context, callback) => {
                 var failMessage = {message: 'Failed to add comment. Error: ' + error};
 
                 fail(500, failMessage, callback ); 
-            //   callback(null, {
-            //     statusCode: 500,
-            //     body: JSON.stringify({message: 'Comment creation failed. Error: ' + error})
-            //   });
 
             }
             else
             {
-                //var successMessage = {message: 'Comment Created!'};
 
-                success(200, commment, callback);
+                success(200, comment, callback);
             }
-            //   callback(null, {
-            //     statusCode: 200,
-            //     body: JSON.stringify({message: 'Comment Created!'})
-            //   });
+
           });
     
     
