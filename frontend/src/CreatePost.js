@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
 
 class CreatePost extends Component{
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.returnedID = null;
-        this.state = {title: '', content: '', returnedId: ''};
+        this.state = {title: '', content: '', returnedId: null, handleSubmitDone: false};
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +29,7 @@ class CreatePost extends Component{
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.post.postId});
+            this.setState({returnedId: response.post.postId, handleSubmitDone: true});
             console.log(this.state.returnedId);
             console.log(response.post);
             console.log(response.post.postId);
@@ -45,14 +45,17 @@ class CreatePost extends Component{
     }
 
     render(){
+        if (this.state.handleSubmitDone === true){
+            return <Redirect to={`/post/${this.state.returnedId}`}/>
+        }
         return(
             <form onSubmit={this.handleSubmit}>
                 title<input type="title" value={this.state.value} onChange={this.handleChangeTitle} type="text" />
                 content<input type="content" value={this.state.value} onChange={this.handleChangeContent} type="text" />
 
-                {/* <Link to={`post/${this.state.returnedID}`}> */}
+                {/*<Link to={`/post/${this.state.returnedId}`}>*/}
                     <button>Send data!</button>
-                {/* </Link> */}
+                {/*</Link>*/}
             </form>
         );
     }
