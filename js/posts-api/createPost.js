@@ -31,14 +31,7 @@ module.exports.createPost = (ddb, event, context, callback) => {
     }
     else
     {
-<<<<<<< Updated upstream
-      return fail(500, 'Post creation failed. Error: ' + error, callback)
-=======
-    callback(null, {
-      statusCode: 500,
-      body: JSON.stringify({message: 'Post creation failed. Error: '})
-    });
->>>>>>> Stashed changes
+      return fail(500, 'Post creation failed. Error: ', callback)
   }
     
 }
