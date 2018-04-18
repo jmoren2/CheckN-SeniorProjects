@@ -17,10 +17,10 @@ module.exports.deleteCommentSuccess = () => {
 module.exports.singleCommentSuccess = (code, comment, callback) => {
     return callback(null, {
         statusCode: code,
-        body: {
+        body: JSON.stringify({
             statusCode: code,
             comment: comment
-        }
+        })
     })
 }
 
