@@ -20,18 +20,16 @@ module.exports.createPost = (ddb, event, context, callback) => {
     }
     
     ddb.put(post, function(error, data) {
-        if(error) {
-          return fail(500, 'Post creation failed. Error: ' + error, callback);
-        } else {
-          console.log('data: ' + data);
-          return success(200, event.body, callback);
-        }
-      });
+      if(error) {
+        return fail(500, 'Post creation failed. Error: ' + error, callback);
+      } else {
+        console.log('data: ' + data);
+        return success(200, body, callback);
+      }
+    });
 
-    }
-    else
-    {
-      return fail(500, 'Post creation failed. Error: ' + error, callback)
-  }
+  } else {
+    return fail(500, 'Post creation failed. Error: ' + error, callback)
+  } 
     
 }

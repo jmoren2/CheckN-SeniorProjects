@@ -14,7 +14,14 @@ class CreatePost extends Component{
 
         fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts', {
             method: 'POST',
-            body: data,
+            body: JSON.stringify(data),
+        })
+        .then(result => {
+            console.log(result);
+            return result.json()
+        })
+        .then(data => {
+            console.log(data);
         });
     }
 
@@ -24,9 +31,9 @@ class CreatePost extends Component{
                 title<input id="title" name="title" type="text"/>
                 content<input id="content" name="content" type="text"/>
 
-                <Link to={`post/${this.returnedID}`}>
+                {/* <Link to={`post/${this.returnedID}`}> */}
                     <button>Send data!</button>
-                </Link>
+                {/* </Link> */}
             </form>
         );
     }
