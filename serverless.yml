@@ -1,16 +1,3 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
-
 service: checkN
 provider:
   name: aws
@@ -23,6 +10,11 @@ provider:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
 
+package:
+  individually: true
+  exclude:
+    - "*/**"
+
 functions:
   getPostById:
     handler: js/posts-api/handler.getPostById
@@ -30,6 +22,25 @@ functions:
       - http:
           path: posts/{postId}
           method: get
+          cors: true
+    package:
+      include:
+        - js/posts-api/getPostById.js
+        - js/posts-api/handler.js
+        - js/posts-api/responses.js
+
+  getPostsBySearch:
+    handler: js/posts-api/handler.getPostsBySearch
+    events:
+      - http:
+          path: posts
+          method: get
+          cors: true
+    package:
+      include:
+        - js/posts-api/getPostsBySearch.js
+        - js/posts-api/handler.js
+        - js/posts-api/responses.js
 
   deletePost:
     handler: js/posts-api/handler.deletePost
@@ -37,13 +48,26 @@ functions:
       - http:
           path: posts/{postId}
           method: delete
+          cors: true
+    package:
+      include:
+        - js/posts-api/deletePost.js
+        - js/posts-api/handler.js
+        - js/posts-api/responses.js
 
   createPost:
     handler: js/posts-api/handler.createPost
     events:
       - http:
           path: posts
-          method: post
+          method: post  
+          cors: true      
+    package:
+      include:
+        - js/posts-api/createPost.js
+        - js/posts-api/handler.js
+        - js/posts-api/responses.js
+        - node_modules/moment/**
 
   updatePost:
     handler: js/posts-api/handler.updatePost
@@ -51,41 +75,80 @@ functions:
       - http:
           path: posts/{postId}
           method: put
+          cors: true
+    package:
+      include:
+        - js/posts-api/updatePost.js
+        - js/posts-api/handler.js
+        - js/posts-api/responses.js
+        - node_modules/moment/**
 
   getCommentsByPostId:
-    handler: js/posts-api/handler.getCommentsByPostId
+    handler: js/comments-api/handler.getCommentsByPostId
     events:
       - http:
           path: posts/{postId}/comments
           method: get
+          cors: true
+    package:
+      include:
+        - js/comments-api/getCommentsByPostId.js
+        - js/comments-api/handler.js
+        - js/comments-api/responses.js
 
   getCommentsBySearch:
-    handler: js/posts-api/handler.getCommentsBySearch
+    handler: js/comments-api/handler.getCommentsBySearch
     events:
       - http:
           path: comments
           method: get
+          cors: true
+    package:
+      include:
+        - js/comments-api/getCommentsBySearch.js
+        - js/comments-api/handler.js
+        - js/comments-api/responses.js
 
   deleteComment:
-    handler: js/posts-api/handler.deleteComment
+    handler: js/comments-api/handler.deleteComment
     events:
       - http:
           path: posts/{postId}/comments/{commentId}
           method: delete
+          cors: true
+    package:
+      include:
+        - js/comments-api/deleteComment.js
+        - js/comments-api/handler.js
+        - js/comments-api/responses.js
 
   createComment:
-    handler: js/posts-api/handler.createComment
+    handler: js/comments-api/handler.createComment
     events:
       - http:
           path: posts/{postId}/comments
           method: post
+          cors: true
+    package:
+      include:
+        - js/comments-api/createComment.js
+        - js/comments-api/handler.js
+        - js/comments-api/responses.js
+        - node_modules/moment/**
 
   updateComment:
-    handler: js/posts-api/handler.updateComment
+    handler: js/comments-api/handler.updateComment
     events:
       - http:
           path: posts/{postId}/comments/{commentId}
           method: put
+          cors: true
+    package:
+      include:
+        - js/comments-api/updateComment.js
+        - js/comments-api/handler.js
+        - js/comments-api/responses.js
+        - node_modules/moment/**
 
 resources:
   Resources:
