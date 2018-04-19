@@ -29,10 +29,9 @@ class CreatePost extends Component{
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.post.postId, handleSubmitDone: true});
-            console.log(this.state.returnedId);
-            console.log(response.post);
-            console.log(response.post.postId);
+            this.setState({returnedId: response.post.Item.postId, handleSubmitDone: true});
+            console.log(response.post.Item);
+            console.log(response.post.Item.postId);
         });
     }
 
@@ -50,12 +49,12 @@ class CreatePost extends Component{
         }
         return(
             <form onSubmit={this.handleSubmit}>
-                title<input type="title" value={this.state.value} onChange={this.handleChangeTitle} type="text" />
-                content<input type="content" value={this.state.value} onChange={this.handleChangeContent} type="text" />
+                title<input value={this.state.value} onChange={this.handleChangeTitle} type="text" />
+                content<input value={this.state.value} onChange={this.handleChangeContent} type="text" />
 
-                {/*<Link to={`/post/${this.state.returnedId}`}>*/}
+                {/* <Link to={`/post/${this.state.returnedId}`}> */}
                     <button>Send data!</button>
-                {/*</Link>*/}
+                {/* </Link> */}
             </form>
         );
     }
