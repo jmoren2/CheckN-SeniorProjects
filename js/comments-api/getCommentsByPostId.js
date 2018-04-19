@@ -11,10 +11,7 @@ module.exports.getCommentsByPostId = (ddb, event, context, callback) => {
             var postId = event.pathParameters.postId;
             var params = {
                 TableName: "comments",
-                FilterExpression: "#postId = :postId",
-                ExpressionAttributeNames: {
-                    "#postId": "postId",
-                },
+                FilterExpression: "postId = :postId",
                 ExpressionAttributeValues: {
                     ":postId": postId
                 }
