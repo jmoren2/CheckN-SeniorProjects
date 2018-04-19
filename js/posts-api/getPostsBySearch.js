@@ -20,7 +20,7 @@ module.exports.getPostsBySearch = (ddb, event, context, callback) => {
 
         // use + as AND operator when passing strings, of the form:
         // /posts?search=key1+key2+...
-        var keyArr = search.split("+");
+        var keyArr = search.split(/[ +]/);
         console.log(keyArr);
 
         var numKeys = 0;
