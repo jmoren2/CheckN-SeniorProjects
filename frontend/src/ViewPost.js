@@ -9,27 +9,24 @@ class ViewPost extends Component{//Initial State
         };
     }
 
-    componentDidMount(){
+    componentDidMount(){//Queries the API for a post with specified ID
         fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
             method: 'GET',
-            mode: 'cors',
-        })//Queries the API for a post with specified ID
+        })
         .then(results => {
             return results.json();})//Saves the response as JSON
         .then(data => {
-            //console.log('d: ' + data);
-            //console.log("STATE:  ", this.state.postContent);
             console.log('r: ' + JSON.stringify(data));
             return(//places the body of the post in an input field for editing
             <div key={data}>
-                <h1>{data.post.title}</h1>
-                <p>{data.post.content}</p>
+                <h1>{data.title}</h1>
+                <p>{data.content}</p>
             </div>
         )})
-        .then(data => {this.setState({postContent: data})});//update the state with the above post title and comment(unsure of this spot)
+        .then(data => {this.setState({postContent: data})});//update the state with the above post title and comment
     }
 
     render(){
@@ -40,6 +37,5 @@ class ViewPost extends Component{//Initial State
         );
     }
 }
-//ReactDOM.render(<PostEditor />, document.getElementById('root'));
 
 export default ViewPost;
