@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 class CreatePost extends Component{
     constructor(props){
@@ -49,8 +49,8 @@ class CreatePost extends Component{
         }
         return(
             <form onSubmit={this.handleSubmit}>
-                title<input value={this.state.value} onChange={this.handleChangeTitle} type="text" />
-                content<input value={this.state.value} onChange={this.handleChangeContent} type="text" />
+                title<input value={this.state.title} onChange={this.handleChangeTitle} type="text" />
+                content<input value={this.state.content} onChange={this.handleChangeContent} type="text" />
 
                 {/* <Link to={`/post/${this.state.returnedId}`}> */}
                     <button>Send data!</button>
