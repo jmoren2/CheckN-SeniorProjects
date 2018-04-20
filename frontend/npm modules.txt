@@ -1,4 +1,0 @@
-react
-react-scripts
-react-dom
-material-ui **NOT YET**
