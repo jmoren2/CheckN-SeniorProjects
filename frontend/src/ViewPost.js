@@ -22,8 +22,8 @@ class ViewPost extends Component{//Initial State
             console.log('r: ' + JSON.stringify(data));
             return(//places the body of the post in an input field for editing
             <div key={data}>
-                <h1>{data.title}</h1>
-                <p>{data.content}</p>
+                <h1>{data.post.title}</h1>
+                <p>{data.post.content}</p>
             </div>
         )})
         .then(data => {this.setState({postContent: data})});//update the state with the above post title and comment
