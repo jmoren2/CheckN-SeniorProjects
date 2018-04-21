@@ -44,6 +44,6 @@ module.exports.updatePost = (ddb, event, context, callback) => {
     });
     }
     else{
-        fail(500,'Post content updated failed. Error: JSON body is empty or undefined', callback )
+        fail(500,'Post content updated failed. Error: JSON body is empty or undefined', callback);
     }
 }
