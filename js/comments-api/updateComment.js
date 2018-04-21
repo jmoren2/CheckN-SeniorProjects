@@ -37,7 +37,7 @@ module.exports.updateComment = (ddb, event, context, callback) => {
       if(error)
         fail(500, 'Update Comment failed. Error: ' + error, callback)
       else
-        success(201, data, callback)
+        success(200, data, callback)
     });
     }
     else{
