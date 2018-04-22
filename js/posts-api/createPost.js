@@ -27,9 +27,7 @@ module.exports.createPost = (ddb, event, context, callback) => {
         return success(200, body, callback);
       }
     });
-
   } else {
     return fail(500, 'Post creation failed. Error: ' + error, callback)
   } 
-    
 }
