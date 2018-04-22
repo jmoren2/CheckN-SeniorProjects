@@ -2,8 +2,8 @@
 
 const uuid = require('uuid');
 const moment = require('moment');
-const fail = require('../posts-api/responses').postsFail;
-const success = require('../posts-api/responses').singlePostSuccess;
+const success = require('./responses.js').singleCommentSuccess;
+const fail = require('./responses.js').CommentsFail;
 
 module.exports.createPost = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
@@ -20,41 +20,14 @@ module.exports.createPost = (ddb, event, context, callback) => {
     }
     
     ddb.put(post, function(error, data) {
-        if(error){
-
-          //var body = JSON.stringify({message: 'Post creation failed. Error: ' + error}); 
-          var body = {message: 'Failed to add post. Error: ' + error};
-
-          fail(500, body, callback );  
-        
-        // callback(null, {
-          //   statusCode: 500,
-          //   body: JSON.stringify({message: 'Post creation failed. Error: ' + error})
-          // });
-
-        }
-        else
-          {
-          //var body = JSON.stringify({message: 'Post Created!'});
-          //var body = {message: 'Post Created!'};
-
-          success(200, post, callback);
-          // callback(null, {
-          //   statusCode: 200,
-          //   body: JSON.stringify({message: 'Post Created!'})
-          // });
-
-          }
-      });
-
-
-    }
-    else
-    {
-      var body = {message: 'Post creation failed. Error: ' + error};
-
-      fail(500, body, callback );  
-    
-  }
-    
+      if(error) {
+        return fail(500, 'Post creation failed. Error: ' + error, callback);
+      } else {
+        console.log('data: ' + data);
+        return success(200, body, callback);
+      }
+    });
+  } else {
+    return fail(500, 'Post creation failed. Error: ' + error, callback)
+  } 
 }
