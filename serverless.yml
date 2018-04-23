@@ -16,6 +16,7 @@ package:
     - "*/**"
 
 functions:
+################### Posts Api ###################
   getPostById:
     handler: js/posts-api/handler.getPostById
     events:
@@ -83,6 +84,140 @@ functions:
         - js/posts-api/responses.js
         - node_modules/moment/**
 
+################### Users Api ###################
+  getUserById:
+    handler: js/users-api/handler.getUserById
+    events:
+      - http:
+          path: users/{userId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/users-api/getUserById.js
+        - js/users-api/handler.js
+        - js/users-api/responses.js
+
+  getUsersBySearch:
+    handler: js/users-api/handler.getUsersBySearch
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+    package:
+      include:
+        - js/users-api/getUsersBySearch.js
+        - js/users-api/handler.js
+        - js/users-api/responses.js
+
+  deleteUser:
+    handler: js/users-api/handler.deleteUser
+    events:
+      - http:
+          path: users/{userId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/users-api/deleteUser.js
+        - js/users-api/handler.js
+        - js/users-api/responses.js
+
+  createUser:
+    handler: js/users-api/handler.createUser
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+    package:
+      include:
+        - js/users-api/createUser.js
+        - js/users-api/handler.js
+        - js/users-api/responses.js
+
+  updateUser:
+    handler: js/users-api/handler.updateUser
+    events:
+      - http:
+          path: users/{userId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/users-api/updateUser.js
+        - js/users-api/handler.js
+        - js/users-api/responses.js
+
+################### Tags Api ###################
+  getTagById:
+    handler: js/tags-api/handler.getTagById
+    events:
+      - http:
+          path: tags/{tagId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/tags-api/getTagById.js
+        - js/tags-api/handler.js
+        - js/tags-api/responses.js
+
+  getTagsBySearch:
+    handler: js/tags-api/handler.getTagsBySearch
+    events:
+      - http:
+          path: tags
+          method: get
+          cors: true
+    package:
+      include:
+        - js/tags-api/getTagsBySearch.js
+        - js/tags-api/handler.js
+        - js/tags-api/responses.js
+
+  deleteTag:
+    handler: js/tags-api/handler.deleteTag
+    events:
+      - http:
+          path: tags/{tagId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/tags-api/deleteTag.js
+        - js/tags-api/handler.js
+        - js/tags-api/responses.js
+
+  createTag:
+    handler: js/tags-api/handler.createTag
+    events:
+      - http:
+          path: tags
+          method: post
+          cors: true
+    package:
+      include:
+        - js/tags-api/createTag.js
+        - js/tags-api/handler.js
+        - js/tags-api/responses.js
+
+  updateTag:
+    handler: js/tags-api/handler.updateTag
+    events:
+      - http:
+          path: tags/{tagId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/tags-api/updateTag.js
+        - js/tags-api/handler.js
+        - js/tags-api/responses.js
+
+
+################### Comments Api ###################
   getCommentsByPostId:
     handler: js/comments-api/handler.getCommentsByPostId
     events:
@@ -149,61 +284,3 @@ functions:
         - js/comments-api/handler.js
         - js/comments-api/responses.js
         - node_modules/moment/**
-
-resources:
-  Resources:
-    # posts:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: posts-dev
-    #     AttributeDefinitions:
-    #       - AttributeName: postId
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: postId
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 5
-    #       WriteCapacityUnits: 5
-    
-    # users:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: users
-    #       AttributeDefinitions:
-    #         - AttributeName: userId
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: userId
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
-
-    # comments:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: comments
-    #       AttributeDefinitions:
-    #         - AttributeName: commentId
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: commentId
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
-
-    # tags:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #       TableName: tags
-    #       AttributeDefinitions:
-    #         - AttributeName: tagId
-    #           AttributeType: S
-    #       KeySchema:
-    #         - AttributeName: tagId
-    #           KeyType: HASH
-    #       ProvisionedThroughput:
-    #         ReadCapacityUnits: 5
-    #         WriteCapacityUnits: 5
