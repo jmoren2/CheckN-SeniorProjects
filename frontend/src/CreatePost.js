@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
+import Navbar from './Navbar.js'
+import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
     constructor(props){
@@ -48,14 +50,49 @@ class CreatePost extends Component{
             return <Redirect to={`/post/${this.state.returnedId}`}/>//go to the post's webpage
         }
         return(
+            <div>
+
+            <Navbar />
+
+            <div className="container">
+            
+            <div className=''>
+                <div className='card card-1  text-md-center'>
+                    <div className='card-body text-center'>
+                    <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
+
             <form onSubmit={this.handleSubmit}>
-                title<input value={this.state.title} onChange={this.handleChangeTitle} type="text" />
-                content<input value={this.state.content} onChange={this.handleChangeContent} type="text" />
+
+
+                                <div className='form-group'>
+                                    <label>Title: </label>
+                                    <input value={this.state.title} onChange={this.handleChangeTitle} placeholder='Enter the title' className='form-control' /> <br />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Content: </label>
+                                    <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
+                                </div>
+                                
+
 
                 {/*<Link to={`/post/${this.state.returnedId}`}>*/}
-                    <button>Send data!</button>
+                <button className='btn btn-info' type='submit'>Submit</button>
                 {/*</Link>*/}
             </form>
+
+
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            
+        
+    
+    
+    
+    
         );
     }
 }

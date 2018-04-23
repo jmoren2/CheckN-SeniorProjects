@@ -1,11 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
+import Navbar from './Navbar.js'
 
 class FeedPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            feed: <div>Feed Placeholder</div>
+            feed: <div>Loading...</div>
         }
     }
 
@@ -36,8 +38,11 @@ class FeedPage extends React.Component{
         var feed = posts.map((post) => {
             return(
                 <Link to={`/post/${post.postId}`}>
-                    <div key={post.postId}>
+                <br />
+                    <div key={post.postId} className="card bg-light">
+                    <div class="card-block">
                         {post.content}
+                        </div>
                     </div>
                 </Link>
             )
@@ -49,14 +54,43 @@ class FeedPage extends React.Component{
     render(){
         return(
             <div>
-                <Link to="/create">
-                    <button>Create Post</button>
-                </Link>
-                <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-                    <button>View Post</button>
-                </Link>
-                {this.state.feed}
+
+                <Navbar />
+            <div className="container">
+            
+                <div className=''>
+                    <div className='card card-1  text-md-center'>
+                        <div className='card-body text-center'>
+                            <h2 style={{color: 'black'}}>Your Feed</h2>
+                            {/* <Link to="/create">
+                            <button className='btn btn-info' type='submit'>Create Post</button> <br />
+                </Link> */}
+                {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+                <button className='btn btn-info' type='submit'>View Post</button>
+                </Link> */}
+                        
+                        {this.state.feed}
+                        
+                            
+                        
+                        
+                        </div>
+                    </div>
+                </div>
             </div>
+            </div>
+            
+
+
+            // <div>
+            //     <Link to="/create">
+            //         <button>Create Post</button>
+            //     </Link>
+            //     <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+            //         <button>View Post</button>
+            //     </Link>
+            //     {this.state.feed}
+            // </div>
         );
     }
 }

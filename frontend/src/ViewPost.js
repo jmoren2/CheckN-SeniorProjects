@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Navbar from './Navbar.js'
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 class ViewPost extends Component{//Initial State
@@ -29,9 +31,14 @@ class ViewPost extends Component{//Initial State
         .then(data => {
             console.log('r: ' + JSON.stringify(data));
             return(//places the body of the post in an input field for editing
-            <div key={data}>
-                <h1>{data.post.title}</h1>
-                <p>{data.post.content}</p>
+            <div key={data} className="card bg-light">
+            <div className="card-block">
+
+                <h3>{data.post.title}</h3>
+                <p>{data.post.content}</p>      
+
+            </div>
+                
             </div>
         )})
         .then(data => {
@@ -72,14 +79,37 @@ class ViewPost extends Component{//Initial State
 
     render(){
         return(
-            <div>
+
+<div>
+
+<Navbar />
+<div className="container">
+
+<div className=''>
+    <div className='card card-1  text-md-center'>
+        <div className='card-body text-center'>
+            <h1 style={{color: 'black'}}>Post</h1>
+            
+        
                 <div>
                     {this.state.postContent}
                 </div>
                 <div>
                     {this.state.postComments}
                 </div>
-            </div>
+
+                <button className='btn btn-info' type='submit'>Reply</button>
+        
+            
+        
+        
+        </div>
+    </div>
+</div>
+</div>
+</div>
+            
+            
         );
     }
 }
