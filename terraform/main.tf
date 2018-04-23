@@ -24,6 +24,18 @@ resource "aws_dynamodb_table" "usersTable" {
   }
 }
 
+resource "aws_dynamodb_table" "tagsTable" {
+  name           = "tags"
+  hash_key       = "tagId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "tagId"
+    type = "S"
+  }
+}
+
 # resource "aws_dynamodb_table" "postsTable" {
 #   name           = "posts"
 #   hash_key       = "postId"
