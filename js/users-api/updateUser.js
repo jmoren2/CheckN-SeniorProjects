@@ -2,7 +2,7 @@
 
 const success = require('./responses.js').singleUserSuccess;
 const fail = require('./responses.js').usersFail;
-module.exports.updatePost = (ddb, event, context, callback) => {
+module.exports.updateUser = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var tableName = "users";
         var item = JSON.parse(event.body);
