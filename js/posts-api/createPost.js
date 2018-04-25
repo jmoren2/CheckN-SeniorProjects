@@ -2,8 +2,8 @@
 
 const uuid = require('uuid');
 const moment = require('moment');
-const success = require('./responses.js').singleCommentSuccess;
-const fail = require('./responses.js').CommentsFail;
+const success = require('./responses.js').singlePostSuccess;
+const fail = require('./responses.js').postsFail;
 
 module.exports.createPost = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
