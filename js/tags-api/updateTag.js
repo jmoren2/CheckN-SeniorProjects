@@ -1,5 +1,4 @@
 'use strict';
-const moment = require('moment');
 const success = require('./responses.js').singleTagSuccess;
 const fail = require('./responses.js').tagsFail;
 module.exports.updateTag = (ddb, event, context, callback) => {
