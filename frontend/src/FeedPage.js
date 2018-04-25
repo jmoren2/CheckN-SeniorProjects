@@ -7,16 +7,19 @@ class FeedPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            feed: <div>Loading...</div>
+            feed: <div>Loading...</div>,
         }
+        this.searchQuery = "search=a";
     }
 
-    componentDidMount(){//Queries the API for a post with specified ID
+    //This is a default method of a React.Component that gets called when the component is first created
+    componentDidMount(){
         this.retrieveFeed();
     }
 
+    //Handles fetching a list of posts based on a searchQuery and updates the State so the feed is rendered
     retrieveFeed(){
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts?search=a`, {
+        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -50,12 +53,27 @@ class FeedPage extends React.Component{
         return feed;
     }
 
+    //This method recieves searchParams (from the Navbar that this method gets passed to)
+    //It then calls the method to turn those params into a usable query and calls retrieveFeed
+    handleSearch = (searchParams) => {
+        var newQuery = this.generateSearchQuery(searchParams);
+        this.searchQuery = newQuery;
+        this.retrieveFeed();
+    }
+
+    //The search query will be constructed here, later allowing for multi-word searches and user searches
+    generateSearchQuery(searchParams){
+        var query = "search=";
+        query += searchParams.words;
+        return query;
+    }
+
     //Temporary link to self
     render(){
         return(
             <div>
 
-                <Navbar />
+                <Navbar searchMethod={this.handleSearch}/>
             <div className="container">
             
                 <div className=''>

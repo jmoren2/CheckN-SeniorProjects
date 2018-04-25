@@ -4,6 +4,24 @@ import FaBeer from 'react-icons/lib/fa/search';
 
 
 class Navbar extends React.Component {
+  constructor(props){
+    super(props);
+  }
+
+  /*
+
+  */
+  generateSearch = (e) => {
+    e.preventDefault();     //Stops the page from reloading
+
+    //Take everything from the form and package it in an object
+    var fields = {
+      words: document.getElementById("searchBox").value
+    }
+    
+    this.props.searchMethod(fields);    //This is a reference to the handleSearch method from FeedPage
+  }
+
     render () {
         return (
             <div className="">
@@ -26,8 +44,8 @@ class Navbar extends React.Component {
       
     </ul>
     <span class="navbar-text">
-    <form class="form-inline">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+    <form class="form-inline" onSubmit={this.generateSearch}>
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchBox"></input>
     <button class="btn btn-default" type="submit">
     <FaBeer /> 
         </button>
