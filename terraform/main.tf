@@ -4,13 +4,13 @@ provider "aws" {
   region     = "us-west-2"
 }
 
-# terraform {
-#   backend "s3" {
-#     bucket = ""
-#     key    = "path/to/my/key"
-#     region = "us-east-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "checkn-terraform-remote"
+    key    = "terraform-state"
+    region = "us-west-2"
+  }
+}
 
 resource "aws_dynamodb_table" "usersTable" {
   name           = "users"
@@ -36,44 +36,26 @@ resource "aws_dynamodb_table" "tagsTable" {
   }
 }
 
-# resource "aws_dynamodb_table" "postsTable" {
-#   name           = "posts"
-#   hash_key       = "postId"
-#   write_capacity = 5
-#   read_capacity  = 5
+resource "aws_dynamodb_table" "postsTable" {
+  name           = "posts"
+  hash_key       = "postId"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "postId"
+    type = "S"
+  }
+}
 
-#   attribute {
-#     name = "postId"
-#     type = "S"
-#   }
-# }
+resource "aws_dynamodb_table" "commentsTable" {
+  name           = "comments"
+  hash_key       = "commentId"
+  write_capacity = 5
+  read_capacity  = 5
 
-
-# resource "aws_dynamodb_table" "commentsTable" {
-#   name           = "comments"
-#   hash_key       = "commentId"
-#   write_capacity = 5
-#   read_capacity  = 5
-
-
-#   attribute {
-#     name = "commentId"
-#     type = "S"
-#   }
-# }
-
-
-# resource "aws_dynamodb_table" "usersTable" {
-#   name           = "users"
-#   hash_key       = "userId"
-#   write_capacity = 5
-#   read_capacity  = 5
-
-
-#   attribute {
-#     name = "userId"
-#     type = "S"
-#   }
-# }
-
+  attribute {
+    name = "commentId"
+    type = "S"
+  }
+}
