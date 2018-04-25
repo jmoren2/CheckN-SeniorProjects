@@ -187,9 +187,7 @@ class FeedPage extends React.Component{
                     <div className='card card-1  text-md-center'>
                         <div className='card-body text-center'>
                             <h2 style={{color: 'black'}}>Your Feed</h2>
-                            {/* <Link to="/create">
-                            <button className='btn btn-info' type='submit'>Create Post</button> <br />
-                </Link> */}
+                            
                                         
                         {this.state.feed}
 
@@ -208,15 +206,6 @@ class FeedPage extends React.Component{
             
 
 
-            // <div>
-            //     <Link to="/create">
-            //         <button>Create Post</button>
-            //     </Link>
-            //     <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-            //         <button>View Post</button>
-            //     </Link>
-            //     {this.state.feed}
-            // </div>
         );
     }
 }
