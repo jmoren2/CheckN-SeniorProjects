@@ -65,9 +65,9 @@ class FeedPage extends React.Component{
                             {/* <Link to="/create">
                             <button className='btn btn-info' type='submit'>Create Post</button> <br />
                 </Link> */}
-                {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+                <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
                 <button className='btn btn-info' type='submit'>View Post</button>
-                </Link> */}
+                </Link>
                         
                         {this.state.feed}
                         

@@ -46,11 +46,14 @@ class ViewPost extends Component{//Initial State
         });//update the state with the above post title and comment
     }
 
-    generateCommentFeed(comments){
+    generateCommentFeed(comments){ //comments are edited here
         var commentFeed = comments.map((comment) => {
             return(
-                <div key={comment.commentId}>
-                    {comment.content}
+                <div key={comment.commentId} className="card bg-light">
+                
+                <div className="card-block"></div>
+                <h1>{comment.content}</h1>
+                    
                 </div>
             )
         })
