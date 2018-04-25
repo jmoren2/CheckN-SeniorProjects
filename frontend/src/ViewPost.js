@@ -3,6 +3,11 @@ import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import {Redirect} from 'react-router-dom';
 
+import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
+import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
+import Neutral from 'react-icons/lib/fa/arrows-h';
+import Moment from 'react-moment';
+
 
 class ViewPost extends Component{//Initial State
     constructor(props){
@@ -38,8 +43,69 @@ class ViewPost extends Component{//Initial State
         })//Saves the response as JSON
         .then(data => {
             console.log('r: ' + JSON.stringify(data));
+
+
+            var pVoters = data.post.positiveVoters;
+            var nVoters = data.post.neutralVoters;
+            var negVoters = data.post.negativeVoters;
+
+            if(pVoters)
+            {
+                var positiveCount = pVoters.length;
+            }
+            else
+            {
+                positiveCount = 0;
+            }
+            if(nVoters)
+            {
+                var neutralCount = nVoters.length;
+            }
+            else
+            {
+                 neutralCount = 0;
+            }
+            if(negVoters)
+            {
+                var negCount = negVoters.length;
+            }
+            else
+            {
+                 negCount = 0;
+            }
+
+
             return(//displays the post title and contents
-            <div key={data} className="card bg-light">
+
+
+<div className="container">
+
+                    
+
+<div className="row">
+
+      <span className="col-sm">
+<button className="btn btn-primary btn-sm" type="submit">
+      <ThumbsUp /> {positiveCount}
+</button>
+<br />
+<button className="btn btn-default btn-sm" type="submit">
+      <Neutral /> {neutralCount}
+</button>
+<br />
+<button className="btn btn-danger btn-sm" type="submit">
+      <ThumbsDown /> {negCount}
+</button>
+</span>
+
+  <div className="col-sm-11">
+
+
+
+<div className="card bg-light h-100">
+          
+
+<div key={data} className="">
             <div className="card-block">
 
                 <h3>{data.post.title}</h3>
@@ -48,6 +114,46 @@ class ViewPost extends Component{//Initial State
             </div>
                 
             </div>
+
+
+
+          
+      <div className="row">
+
+          <div className="col-sm-4">
+          <Moment format="YYYY/MM/DD HH:mm">
+          {data.post.timestamp}
+          </Moment>
+                  
+
+          </div>
+
+                  <div className="col-sm-8">
+
+                           
+                  {data.post.visibilityLevel}
+
+                  </div>
+                  
+
+      </div>
+</div>
+
+
+
+  </div>
+
+</div>
+<br/>
+</div>
+
+            
+            
+            
+
+
+
+
         )})
         .then(data => {
             this.setState({postContent: data});
@@ -60,7 +166,7 @@ class ViewPost extends Component{//Initial State
                 <div key={comment.commentId} className="card bg-light">
                 
                 <div className="card-block"></div>
-                <h1>{comment.content}</h1>
+                <p>{comment.content}</p>
                     
                 </div>
             )
@@ -140,6 +246,9 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                     </div>
+
+                                   <h3 style={{color: 'black'}}>Comments</h3>
+
                                     <div>
                                         {this.state.newComment/*Begins empty until a user presses the "reply" button*/}
                                     </div>

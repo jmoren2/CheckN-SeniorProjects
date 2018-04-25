@@ -38,6 +38,16 @@ class FeedPage extends React.Component{
         })
     }
 
+     voteUp() {
+        console.log("voted up!")
+    }
+    neutralVote() {
+        console.log("neutral vote!")
+    }
+    voteDown() {
+        console.log("down vote!")
+    }
+
     generateFeed(posts){
         
         var feed = posts.map((post) => {
@@ -51,7 +61,7 @@ class FeedPage extends React.Component{
             }
             else
             {
-                var positiveCount = 0;
+                positiveCount = 0;
             }
             if(nVoters)
             {
@@ -59,7 +69,7 @@ class FeedPage extends React.Component{
             }
             else
             {
-                var neutralCount = 0;
+                 neutralCount = 0;
             }
             if(negVoters)
             {
@@ -67,7 +77,7 @@ class FeedPage extends React.Component{
             }
             else
             {
-                var negCount = 0;
+                 negCount = 0;
             }
             
                return(
@@ -79,25 +89,25 @@ class FeedPage extends React.Component{
 
                       <div className="row">
 
-                            <span className="col-sm">
-                      <button class="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp /> {positiveCount}
-                      </button>
+                        <span className="col-sm" >
+                            <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
+                                <ThumbsUp /> {positiveCount}
+                            </button>
                       <br />
-                      <button class="btn btn-default btn-sm" type="submit">
-                            <Neutral /> {neutralCount}
-                      </button>
+                            <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote}>
+                                <Neutral /> {neutralCount}
+                            </button>
                       <br />
-                      <button class="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> {negCount}
-                      </button>
-                      </span>
+                            <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown}>
+                                <ThumbsDown /> {negCount}
+                            </button>
+                        </span>
 
-                        <div className="col-sm-11">
+                    <div className="col-sm-11">
 
                     
                     
-                    <div className="card bg-light">
+                    <div className="card bg-light h-100">
                                 <Link to={`/post/${post.postId}`}>
                                 
                                 <div key={post.postId} >
@@ -119,6 +129,10 @@ class FeedPage extends React.Component{
                                 
                                 </div>
                             </Link>
+
+                            <br/>
+                            <br/>
+
                             <div className="row">
 
                                 <div className="col-sm-4">
@@ -176,9 +190,7 @@ class FeedPage extends React.Component{
                             {/* <Link to="/create">
                             <button className='btn btn-info' type='submit'>Create Post</button> <br />
                 </Link> */}
-                <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-                <button className='btn btn-info' type='submit'>View Post</button>
-                </Link>
+                
                         
                         {this.state.feed}
                         
@@ -189,7 +201,14 @@ class FeedPage extends React.Component{
                     </div>
                 </div>
             </div>
+
+
+            <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+                <button className='btn btn-info' type='submit'>View Post</button>
+                </Link>
             </div>
+
+            
             
 
 
