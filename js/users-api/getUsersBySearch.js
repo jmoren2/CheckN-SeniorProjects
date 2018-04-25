@@ -16,7 +16,7 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
         // todo: look up user first if 'user' field is defined, early exit if not resolved
 
         // use + as AND operator when passing strings, of the form:
-        // /posts?search=key1+key2+...
+        // /users?namesearch=key1+key2+...
         var keyArr = nameSearch.split(/[ +]/);
         console.log(keyArr);
 
@@ -41,10 +41,12 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
             }
         }
 
-        if(numKeys > 0)
-            filter += " OR ";
-        filter += "contains (#content, " + email + ")";
-        numKeys++;
+        if(email) {
+            if (numKeys > 0)
+                filter += " OR ";
+            filter += "contains (#content, " + email + ")";
+            numKeys++;
+        }
 
         console.log("number of search keys:" + numKeys);
 
