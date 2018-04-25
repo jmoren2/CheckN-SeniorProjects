@@ -6,13 +6,13 @@ module.exports.updateUser = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var tableName = "users";
         var item = JSON.parse(event.body);
-        var userId = event.pathParameters.userId
+        var userId = event.pathParameters.userId;
         var params = {
             TableName: tableName,
             Key:{
                 "userId": userId
             },
-        UpdateExpression: "set firstName = :firstName, lastName = :lastName, email = :email, posts = :posts, comments = :comments, votes = :votes, permissions.department = :department, permissions.role = :role, permissions.department = :location",
+        UpdateExpression: "set firstName = :firstName, lastName = :lastName, email = :email, posts = :posts, comments = :comments, votes = :votes, userPermissions = :userPermissions",
         ExpressionAttributeValues:{
             ":firstName":item.firstName,
             ":lastName" : item.lastName,
@@ -20,10 +20,8 @@ module.exports.updateUser = (ddb, event, context, callback) => {
             ":posts" : item.posts,
             ":comments" :item.comments,
             ":votes" : item.votes,
-            ":department" :item.permissions.department,
-            ":role" : item.permissions.role,
-            ":location" : item.permissions.department
-        },   
+            ":userPermissions" :item.userPermissions,
+        },      
         ReturnValues:"UPDATED_NEW"
         };
 
