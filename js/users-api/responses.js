@@ -25,15 +25,6 @@ module.exports.singleUserSuccess = (code, user, callback) => {
         statusCode: code,
         headers: {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials":false,
-            "Access-Control-Allow-Methods":["POST","GET","OPTIONS"],
-            "Access-Control-Allow-Headers":[
-                "Content-Type",
-                "X-Amz-Date",
-                "Authorization",
-                "X-Api-Key",
-                "X-Amz-Security-Token"
-            ],
             "Content-Type":"application/json"
         },
         body: JSON.stringify({
