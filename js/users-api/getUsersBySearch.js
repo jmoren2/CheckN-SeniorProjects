@@ -22,6 +22,7 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
 
         var numKeys = 0;
         var attVals = {};
+        var expAtts = {};
         var filter = "";
 
         // NOTE: dynamoDB is case sensitive. Possible solutions: redundant all lowercase searchable data
@@ -43,27 +44,30 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
             }
         }
 
+        if (numKeys > 0) {
+            expAtts["#firstName"] = "firstName";
+            expAtts["#lastName"] = "lastName";
+        }
+
         if(email) {
             if (numKeys > 0)
                 filter += " OR ";
             filter += "contains (#email, " + email + ")";
             numKeys++;
+            expAtts["#email"] = "email";
         }
 
         console.log("number of search keys:" + numKeys);
 
         if(numKeys > 0) {
             console.log(JSON.stringify(attVals));
+            console.log(JSON.stringify(expAtts));
             console.log(filter);
 
             var params = {
                 TableName: 'users',
                 FilterExpression: filter,
-                ExpressionAttributeNames: {
-                    "#firstName": "firstName",
-                    "#lastName": "lastName",
-                    "#email": "email"
-                },
+                ExpressionAttributeNames: expAtts,
                 ExpressionAttributeValues: attVals
             };
 
