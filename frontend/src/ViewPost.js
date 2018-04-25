@@ -210,13 +210,13 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.newCommentCool(this.state.content) });
+            this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
             console.log(response.comment.Item);
             console.log(response.comment.Item.commentId);
         });
     }
 
-    newCommentCool(content)
+    addNewCommentToTop(content)
     {
         var newComment = 
         <div className="card bg-light" style={{objectFit:'contain'}}>

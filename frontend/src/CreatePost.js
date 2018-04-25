@@ -37,6 +37,11 @@ class CreatePost extends Component{
         });
     }
 
+    postCreatedSuccessfully()
+    {
+
+    }
+
     handleChangeTitle(event) {
         this.setState({title: event.target.value});//Updates the title field as typing occurs
     }
