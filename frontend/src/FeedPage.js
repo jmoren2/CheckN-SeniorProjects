@@ -20,7 +20,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts?search=a`, {
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -108,7 +108,7 @@ class FeedPage extends React.Component{
                     
                     
                     <div className="card bg-light h-100">
-                                <Link to={`/post/${post.postId}`}>
+                                <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
                                 
                                 <div key={post.postId} >
 
@@ -118,7 +118,7 @@ class FeedPage extends React.Component{
                                         
                                 </div>
 
-                                    {post.content} <br />
+                                    {post.title} <br />
                                     
                                     
                                     
@@ -130,7 +130,7 @@ class FeedPage extends React.Component{
                                 </div>
                             </Link>
 
-                            <br/>
+                            
                             <br/>
 
                             <div className="row">
@@ -190,18 +190,14 @@ class FeedPage extends React.Component{
                             {/* <Link to="/create">
                             <button className='btn btn-info' type='submit'>Create Post</button> <br />
                 </Link> */}
-                
-                        
+                                        
                         {this.state.feed}
-                        
-                            
-                        
+
                         
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
                 <button className='btn btn-info' type='submit'>View Post</button>

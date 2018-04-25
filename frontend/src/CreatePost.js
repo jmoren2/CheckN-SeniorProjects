@@ -21,7 +21,7 @@ class CreatePost extends Component{
         const data = {title: this.state.title, content: this.state.content};//What is being sent to the API
         console.log('data: ' + JSON.stringify(data));
 
-        fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts', {
+        fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -31,9 +31,9 @@ class CreatePost extends Component{
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.post.Item.postId, handleSubmitDone: true});
-            console.log(response.post.Item);
-            console.log(response.post.Item.postId);
+            this.setState({returnedId: response.post.postId, handleSubmitDone: true});
+            console.log(response.post);
+            console.log(response.post.postId);
         });
     }
 
