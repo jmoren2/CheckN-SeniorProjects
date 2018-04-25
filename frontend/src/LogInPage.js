@@ -22,8 +22,8 @@ class LogInPage extends React.Component{
                 {/* <Navbar /> */}
                 <div className='card card-1 text-md-center'>
                         <div className='card-body text-center'>
-                            <img height="200" width="200" src={logo} /><br />
-                            <h2 className='text-center' style={{color:'black'}}>CheckN</h2>
+                            <img height="25%" width="25%" src={logo} style={{objectFit:'contain'}} /><br />
+                            <h2 className='text-center'  style={{color:'black'}}>CheckN</h2>
 
                             <form >
                                 <div className='form-group'>

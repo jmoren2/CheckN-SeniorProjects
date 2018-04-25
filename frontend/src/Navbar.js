@@ -3,6 +3,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import FaBeer from 'react-icons/lib/fa/search';
 
 import logo from './images/checknlogo.png';
+import Home from 'react-icons/lib/fa/home';
+import Create from 'react-icons/lib/fa/plus';
+import Profile from 'react-icons/lib/fa/group';
+import Check from 'react-icons/lib/fa/check';
+import Notification from 'react-icons/lib/fa/envelope';
+import Admin from 'react-icons/lib/fa/lock';
+
 
 
 class Navbar extends React.Component {
@@ -24,12 +31,25 @@ class Navbar extends React.Component {
 
   <div id="mySidenav" className="sidenav">
       <a href="javascript:void(0)" className="closebtn"  onClick={closeNav}>&times;</a>
-      <a href="/Feed">Home</a>
-      <a href="/Create">Create Post</a>
-      <a href="/">Profile</a>
-      <a href="/">Tracked Posts</a>
-      <a href="/">Notifications</a>
-      <a href="/">Admin Controls</a>
+      <a href="/Feed">
+      <Home /> 	&nbsp;
+      Home
+      </a>
+      <a href="/Create">
+      <Create /> 	&nbsp;
+      Create Post</a>
+      <a href="/">
+      <Profile />	&nbsp;
+      Profile</a>
+      <a href="/">
+      <Check /> 	&nbsp;
+      Tracked Posts</a>
+      <a href="/">
+      <Notification />	&nbsp;
+      Notifications</a>
+      <a href="/">
+      <Admin />	&nbsp;
+      Admin Controls</a>
       <a href="/">Other</a>
       <a href="/">Logout</a>
 </div>
