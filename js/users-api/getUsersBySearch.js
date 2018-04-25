@@ -36,15 +36,17 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
                 attVals[attKey] = keyArr[i];
                 if(numKeys > 0)
                     filter += " AND ";
-                filter += "contains (#content, " + attKey + ")";
-                numKeys++;
+                filter += "contains (#firstName, " + attKey + ")";
+                filter += " OR ";
+                filter += "contains (#lastName, " + attKey + ")";
+                numKeys += 2;
             }
         }
 
         if(email) {
             if (numKeys > 0)
                 filter += " OR ";
-            filter += "contains (#content, " + email + ")";
+            filter += "contains (#email, " + email + ")";
             numKeys++;
         }
 
@@ -58,7 +60,9 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
                 TableName: 'users',
                 FilterExpression: filter,
                 ExpressionAttributeNames: {
-                    "#content": "content"
+                    "#firstName": "firstName",
+                    "#lastName": "lastName",
+                    "#email": "email"
                 },
                 ExpressionAttributeValues: attVals
             };
