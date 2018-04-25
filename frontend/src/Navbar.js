@@ -17,7 +17,7 @@ class Navbar extends React.Component {
     <ul class="navbar-nav mr-auto">
       
       <li class="nav-item active">
-        <a class="nav-link" href="/Create">Create Post <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/Create">Create a Post <span class="sr-only">(current)</span></a>
       </li>
 
       <li class="nav-item active">
