@@ -12,8 +12,8 @@ class ViewPost extends Component{//Initial State
             postContent: "",
             postComments: "",
             newComment: "",
+            content: "",
             returnedId: null,
-            handleSubmitDone: false
         };
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
@@ -86,9 +86,9 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        console.log('state.newComment: ' + this.state.newComment);
-        const data = {comment: this.state.newComment};//What is being sent to the API
-        console.log('data: ' + JSON.stringify(data));
+        console.log('state.newComment: ' + this.state.content);
+        const data = {content: this.state.content, postId: this.state.postID};//(attaches the comment to the post being commented on)
+        console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
         fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
             method: 'POST',
@@ -100,33 +100,31 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.post.Item.commentId, handleSubmitDone: true});
-            console.log(response.post.Item);
-            console.log(response.post.Item.commentId);
+            this.setState({returnedId: response.comment.Item.commentId, newComment: this.state.content});
+            console.log(response.comment.Item);
+            console.log(response.comment.Item.commentId);
         });
     }
 
     handleChangeComment(event) {
-        this.setState({newComment: event.target.value});//Updates the comment field as typing occurs
+        this.setState({content: event.target.value});//Updates the comment input field as typing occurs
     }
 
     addComment(){
-        <form onSubmit={this.handleSubmit}>
-            <div className='form-group'>
-                <label>Comment: </label>
-                <input value={this.state.newComment} onChange={this.handleChangeComment}  placeholder='Give your comment' className='form-control' /> <br />
-            </div>
-            <button className='btn btn-info' type='submit'>Submit</button>
-        </form>
+        this.setState(//Replaces the empty "newComment" state with the form for a new comment
+            {newComment:
+            <form onSubmit={this.handleSubmit}>
+                <div className='form-group'>
+                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' /> <br />
+                </div>
+                <button className='btn btn-info' type='submit'>Submit</button>
+            </form>}
+        );
     }
 
 
     render(){
-        if (this.state.handleSubmitDone === true){
-            return <Redirect to={`/post/${this.state.postID}`}/>//go to the post's webpage which should include the new comment
-        }
         return(
-
             <div>
             <Navbar />
                 <div className="container">
@@ -134,11 +132,13 @@ class ViewPost extends Component{//Initial State
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
+
                                 <h1 style={{color: 'black'}}>Post</h1>
-                                
-                            
                                     <div>
                                         {this.state.postContent}
+                                    </div>
+                                    <div>
+                                        {this.state.newComment/*Begins empty until a user presses the "reply" button*/}
                                     </div>
                                     <div>
                                         {this.state.postComments}
