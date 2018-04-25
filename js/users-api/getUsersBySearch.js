@@ -15,11 +15,6 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
     if(nameSearch || email) {
         // todo: look up user first if 'user' field is defined, early exit if not resolved
 
-        // use + as AND operator when passing strings, of the form:
-        // /users?namesearch=key1+key2+...
-        var keyArr = nameSearch.split(/[ +]/);
-        console.log(keyArr);
-
         var numKeys = 0;
         var attVals = {};
         var expAtts = {};
@@ -30,29 +25,38 @@ module.exports.getUsersBySearch = (ddb, event, context, callback) => {
 
         // todo: validate e-mail formatting, prioritize e-mail as a search key.
 
-        // dynamically build a filter expression along with attribute values from provided search keys
-        for(var i=0; i < keyArr.length; ++i){
-            if(keyArr[i]){
-                var attKey = ":word" + i;
-                attVals[attKey] = keyArr[i];
-                if(numKeys > 0)
-                    filter += " AND ";
-                filter += "contains (#firstName, " + attKey + ")";
-                filter += " OR ";
-                filter += "contains (#lastName, " + attKey + ")";
-                numKeys += 2;
+        if (nameSearch) {
+            // use + as AND operator when passing strings, of the form:
+            // /users?namesearch=key1+key2+...
+            var keyArr = nameSearch.split(/[ +]/);
+            console.log(keyArr);
+
+            // dynamically build a filter expression along with attribute values from provided search keys
+            for (var i = 0; i < keyArr.length; ++i) {
+                if (keyArr[i]) {
+                    var attKey = ":word" + i;
+                    attVals[attKey] = keyArr[i];
+                    if (numKeys > 0)
+                        filter += " AND ";
+                    filter += "contains (#firstName, " + attKey + ")";
+                    filter += " OR ";
+                    filter += "contains (#lastName, " + attKey + ")";
+                    numKeys += 2;
+                }
+            }
+
+            if (numKeys > 0) {
+                expAtts["#firstName"] = "firstName";
+                expAtts["#lastName"] = "lastName";
             }
         }
 
-        if (numKeys > 0) {
-            expAtts["#firstName"] = "firstName";
-            expAtts["#lastName"] = "lastName";
-        }
-
         if(email) {
+            var attKey = ":emailWord";
+            attVals[attKey] = email;
             if (numKeys > 0)
                 filter += " OR ";
-            filter += "contains (#email, " + email + ")";
+            filter += "contains (#email, " + attKey + ")";
             numKeys++;
             expAtts["#email"] = "email";
         }
