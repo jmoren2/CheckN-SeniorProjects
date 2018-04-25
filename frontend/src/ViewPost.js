@@ -7,6 +7,7 @@ import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
+import Check from 'react-icons/lib/fa/check-circle-o';
 
 
 class ViewPost extends Component{//Initial State
@@ -209,10 +210,32 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.state.content});
+            this.setState({returnedId: response.comment.Item.commentId, newComment: this.newCommentCool(this.state.content) });
             console.log(response.comment.Item);
             console.log(response.comment.Item.commentId);
         });
+    }
+
+    newCommentCool(content)
+    {
+        var newComment = 
+        <div className="card bg-light" style={{objectFit:'contain'}}>
+                
+            <div className="card-block"></div>
+            <div className="row">
+            <div className="col-sm-10">
+            <p>{this.state.content}</p>
+            </div>
+
+            <div style={{fontSize: '12px', paddingTop:'8px'}}  className="text-success col-sm-2">
+                Commented&nbsp;<Check />
+            </div>
+
+
+            </div>
+                    
+        </div>
+        return newComment
     }
 
     handleChangeComment(event) {
@@ -222,7 +245,9 @@ class ViewPost extends Component{//Initial State
     addComment(){
         this.setState(//Replaces the empty "newComment" state with the form for a new comment
             {newComment:
+                
             <form onSubmit={this.handleSubmit}>
+            
                 <div className='form-group'>
                     <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' /> <br />
                 </div>
@@ -249,14 +274,18 @@ class ViewPost extends Component{//Initial State
 
                                    <h3 style={{color: 'black'}}>Comments</h3>
 
-                                    <div>
-                                        {this.state.newComment/*Begins empty until a user presses the "reply" button*/}
-                                    </div>
+
+                                         <div>
+                                             {this.state.newComment}
+                                         </div>
+                                        
                                     <div>
                                         {this.state.postComments}
                                     </div>
-
-                                    <button className='btn btn-info' type='submit' onClick={this.addComment}>Reply</button>
+                                    <a href="#">
+                                    <button className='btn btn-info' type='submit' style={{href:'#'}} onClick={this.addComment}>Reply</button>
+                                    </a>
+                                    
                             </div>
                         </div>
                     </div>
