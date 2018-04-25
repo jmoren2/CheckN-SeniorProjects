@@ -28,6 +28,6 @@ module.exports.createPost = (ddb, event, context, callback) => {
       }
     });
   } else {
-    return fail(500, 'Post creation failed. Error: ' + error, callback)
-  } 
+    return fail(500, 'Post creation failed.', callback)
+  }
 }
