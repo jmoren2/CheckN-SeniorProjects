@@ -26,6 +26,6 @@ module.exports.createUser = (ddb, event, context, callback) => {
       }
     });
   } else {
-    return fail(500, 'User creation failed. Error: ' + error, callback)
+    return fail(500, 'User creation failed.' , callback)
   } 
 }
