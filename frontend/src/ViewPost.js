@@ -87,7 +87,7 @@ class ViewPost extends Component{//Initial State
     handleSubmit(event){
         event.preventDefault();
         console.log('state.newComment: ' + this.state.content);
-        const data = {content: this.state.content, postId: this.state.postID};//(attaches the comment to the post being commented on)
+        const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
         console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
         fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
