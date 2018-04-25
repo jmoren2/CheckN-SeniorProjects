@@ -12,7 +12,7 @@ module.exports.createTag = (ddb, event, context, callback) => {
 
     var tag = {
         Item: body,
-        TableName: 'tag'
+        TableName: 'tags'
 
     }
     
@@ -25,6 +25,6 @@ module.exports.createTag = (ddb, event, context, callback) => {
       }
     });
   } else {
-    return fail(500, 'Tag creation failed. Error: ' + error, callback)
+    return fail(500, 'Tag creation failed.', callback)
   } 
 }
