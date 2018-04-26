@@ -13,7 +13,23 @@ import Admin from 'react-icons/lib/fa/lock';
 
 
 class Navbar extends React.Component {
+  constructor(props){
+    super(props);
+  }
 
+  /*
+
+  */
+  generateSearch = (e) => {
+    e.preventDefault();     //Stops the page from reloading
+
+    //Take everything from the form and package it in an object
+    var fields = {
+      words: document.getElementById("searchBox").value
+    }
+    
+    this.props.searchMethod(fields);    //This is a reference to the handleSearch method from FeedPage
+  }
   
     render () {
 
@@ -26,7 +42,6 @@ class Navbar extends React.Component {
     }
         return (
             <div className="">
-
 
   <div id="mySidenav" className="sidenav">
       <a href="javascript:void(0)" className="closebtn"  onClick={closeNav}>&times;</a>
@@ -80,8 +95,8 @@ class Navbar extends React.Component {
                 </ul>
 
                 <span className="navbar-text">
-                    <form className="form-inline">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                    <form className="form-inline" onSubmit={this.generateSearch}>
+                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchBox"></input>
                         
                         <button className="btn btn-default" type="submit">
                             <FaBeer /> 
