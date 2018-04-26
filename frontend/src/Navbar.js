@@ -18,10 +18,9 @@ class Navbar extends React.Component {
     render () {
 
       function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("mySidenav").style.width = "400px";
     }
     
-    /* Close/hide the sidenav */
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
     }
