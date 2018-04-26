@@ -3,6 +3,12 @@ import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import {Redirect} from 'react-router-dom';
 
+import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
+import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
+import Neutral from 'react-icons/lib/fa/arrows-h';
+import Moment from 'react-moment';
+import Check from 'react-icons/lib/fa/check-circle-o';
+
 
 class ViewPost extends Component{//Initial State
     constructor(props){
@@ -27,7 +33,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrievePost(){
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -38,8 +44,69 @@ class ViewPost extends Component{//Initial State
         })//Saves the response as JSON
         .then(data => {
             console.log('r: ' + JSON.stringify(data));
+
+
+            var pVoters = data.post.positiveVoters;
+            var nVoters = data.post.neutralVoters;
+            var negVoters = data.post.negativeVoters;
+
+            if(pVoters)
+            {
+                var positiveCount = pVoters.length;
+            }
+            else
+            {
+                positiveCount = 0;
+            }
+            if(nVoters)
+            {
+                var neutralCount = nVoters.length;
+            }
+            else
+            {
+                 neutralCount = 0;
+            }
+            if(negVoters)
+            {
+                var negCount = negVoters.length;
+            }
+            else
+            {
+                 negCount = 0;
+            }
+
+
             return(//displays the post title and contents
-            <div key={data} className="card bg-light">
+
+
+<div className="container">
+
+                    
+
+<div className="row">
+
+      <span className="col-sm">
+<button className="btn btn-primary btn-sm" type="submit">
+      <ThumbsUp /> {positiveCount}
+</button>
+<br />
+<button className="btn btn-default btn-sm" type="submit">
+      <Neutral /> {neutralCount}
+</button>
+<br />
+<button className="btn btn-danger btn-sm" type="submit">
+      <ThumbsDown /> {negCount}
+</button>
+</span>
+
+  <div className="col-sm-11">
+
+
+
+<div className="card bg-light h-100">
+          
+
+<div key={data} className="">
             <div className="card-block">
 
                 <h3>{data.post.title}</h3>
@@ -48,17 +115,60 @@ class ViewPost extends Component{//Initial State
             </div>
                 
             </div>
+
+
+
+          
+      <div className="row">
+
+          <div className="col-sm-4">
+          <Moment format="YYYY/MM/DD HH:mm">
+          {data.post.timestamp}
+          </Moment>
+                  
+
+          </div>
+
+                  <div className="col-sm-8">
+
+                           
+                  {data.post.visibilityLevel}
+
+                  </div>
+                  
+
+      </div>
+</div>
+
+
+
+  </div>
+
+</div>
+<br/>
+</div>
+
+            
+            
+            
+
+
+
+
         )})
         .then(data => {
             this.setState({postContent: data});
         });//update the state with the above post title and content
     }
 
-    generateCommentFeed(comments){
+    generateCommentFeed(comments){ //comments are edited here
         var commentFeed = comments.map((comment) => {
             return(
-                <div key={comment.commentId}>
-                    {comment.content}
+                <div key={comment.commentId} className="card bg-light">
+                
+                <div className="card-block"></div>
+                <p>{comment.content}</p>
+                    
                 </div>
             )
         })
@@ -66,7 +176,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrieveComments(){
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -90,7 +200,7 @@ class ViewPost extends Component{//Initial State
         const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
         console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -100,10 +210,32 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.state.content});
+            this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
             console.log(response.comment.Item);
             console.log(response.comment.Item.commentId);
         });
+    }
+
+    addNewCommentToTop(content)
+    {
+        var newComment = 
+        <div className="card bg-light" style={{objectFit:'contain'}}>
+                
+            <div className="card-block"></div>
+            <div className="row">
+            <div className="col-sm-10">
+            <p>{this.state.content}</p>
+            </div>
+
+            <div style={{fontSize: '12px', paddingTop:'8px'}}  className="text-success col-sm-2">
+                Commented&nbsp;<Check />
+            </div>
+
+
+            </div>
+                    
+        </div>
+        return newComment
     }
 
     handleChangeComment(event) {
@@ -113,7 +245,9 @@ class ViewPost extends Component{//Initial State
     addComment(){
         this.setState(//Replaces the empty "newComment" state with the form for a new comment
             {newComment:
+                
             <form onSubmit={this.handleSubmit}>
+            
                 <div className='form-group'>
                     <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' /> <br />
                 </div>
@@ -137,14 +271,21 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                     </div>
-                                    <div>
-                                        {this.state.newComment/*Begins empty until a user presses the "reply" button*/}
-                                    </div>
+
+                                   <h3 style={{color: 'black'}}>Comments</h3>
+
+
+                                         <div>
+                                             {this.state.newComment}
+                                         </div>
+                                        
                                     <div>
                                         {this.state.postComments}
                                     </div>
-
-                                    <button className='btn btn-info' type='submit' onClick={this.addComment}>Reply</button>
+                                    <a href="#">
+                                    <button className='btn btn-info' type='submit' style={{href:'#'}} onClick={this.addComment}>Reply</button>
+                                    </a>
+                                    
                             </div>
                         </div>
                     </div>
