@@ -2,6 +2,10 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Navbar from './Navbar.js'
+import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
+import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
+import Neutral from 'react-icons/lib/fa/arrows-h';
+import Moment from 'react-moment';
 
 class FeedPage extends React.Component{
     constructor(props){
@@ -19,7 +23,7 @@ class FeedPage extends React.Component{
 
     //Handles fetching a list of posts based on a searchQuery and updates the State so the feed is rendered
     retrieveFeed(){
-        fetch(`https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -37,18 +41,139 @@ class FeedPage extends React.Component{
         })
     }
 
+     voteUp() {
+        console.log("voted up!")
+    }
+    neutralVote() {
+        console.log("neutral vote!")
+    }
+    voteDown() {
+        console.log("down vote!")
+    }
+
     generateFeed(posts){
+        
         var feed = posts.map((post) => {
-            return(
-                <Link to={`/post/${post.postId}`}>
-                <br />
-                    <div key={post.postId} className="card bg-light">
-                    <div class="card-block">
-                        {post.content}
-                        </div>
+            var pVoters = post.positiveVoters;
+            var nVoters = post.neutralVoters;
+            var negVoters = post.negativeVoters;
+
+            if(pVoters)
+            {
+                var positiveCount = pVoters.length;
+            }
+            else
+            {
+                positiveCount = 0;
+            }
+            if(nVoters)
+            {
+                var neutralCount = nVoters.length;
+            }
+            else
+            {
+                 neutralCount = 0;
+            }
+            if(negVoters)
+            {
+                var negCount = negVoters.length;
+            }
+            else
+            {
+                 negCount = 0;
+            }
+            
+               return(
+
+                    //individual feed item
+                    <div className="container">
+
+                    
+
+                      <div className="row">
+
+                        <span className="col-sm" >
+                            <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
+                                <ThumbsUp /> {positiveCount}
+                            </button>
+                      <br />
+                            <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote}>
+                                <Neutral /> {neutralCount}
+                            </button>
+                      <br />
+                            <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown}>
+                                <ThumbsDown /> {negCount}
+                            </button>
+                        </span>
+
+                    <div className="col-sm-11">
+
+                    
+                    
+                    <div className="card bg-light h-100">
+                                <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
+                                
+                                <div key={post.postId} >
+
+                                <div class="card-block">
+                                <div>
+                                    
+                                        
+                                </div>
+
+                                    {post.title} <br />
+                                    
+                                    
+                                    
+                                                                    
+                                    
+                                </div>
+                                
+                                
+                                </div>
+                            </Link>
+
+                            
+                            <br/>
+
+                            <div className="row">
+
+                                <div className="col-sm-4">
+                                <Moment format="YYYY/MM/DD HH:mm">
+                                {post.timestamp}
+                                </Moment>
+                                        
+
+                                </div>
+
+                                        <div className="col-sm-8">
+
+                                                 
+                                        {post.visibilityLevel}
+
+                                        </div>
+                                        
+
+                            </div>
                     </div>
-                </Link>
+
+
+
+                        </div>
+
+                      </div>
+                      <br/>
+                    </div>
+    
+                    
+                
+            
+            
+            
             )
+            
+            
+            
         })
         return feed;
     }
@@ -80,35 +205,25 @@ class FeedPage extends React.Component{
                     <div className='card card-1  text-md-center'>
                         <div className='card-body text-center'>
                             <h2 style={{color: 'black'}}>Your Feed</h2>
-                            {/* <Link to="/create">
-                            <button className='btn btn-info' type='submit'>Create Post</button> <br />
-                </Link> */}
-                {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-                <button className='btn btn-info' type='submit'>View Post</button>
-                </Link> */}
-                        
-                        {this.state.feed}
-                        
                             
-                        
+                                        
+                        {this.state.feed}
+
                         
                         </div>
                     </div>
                 </div>
             </div>
+
+            <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+                <button className='btn btn-info' type='submit'>View Post</button>
+                </Link>
             </div>
+
+            
             
 
 
-            // <div>
-            //     <Link to="/create">
-            //         <button>Create Post</button>
-            //     </Link>
-            //     <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-            //         <button>View Post</button>
-            //     </Link>
-            //     {this.state.feed}
-            // </div>
         );
     }
 }

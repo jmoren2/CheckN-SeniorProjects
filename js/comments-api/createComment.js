@@ -1,12 +1,46 @@
 'use strict';
 
+const uuid = require('uuid');
+const moment = require('moment');
+const fail = require('../comments-api/responses').CommentsFail;
+const success = require('../comments-api/responses').singleCommentSuccess;
+
 module.exports.createComment = (ddb, event, context, callback) => {
-    var response = {
-        statusCode: 500,
-        body: JSON.stringify({
-            statusCode: 500,
-            message: 'endpoint not implemented yet'
-        })
-    }
-    return callback(null, response);
+    if (event.body !== null && event.body !== undefined) {
+
+        var body = JSON.parse(event.body);
+        body.commentId = uuid.v4();
+        var now = moment().toISOString();
+        body.timestamp = now;
+    
+        var comment = {
+            Item: body,
+            TableName: 'comments'
+    
+        }
+        
+        ddb.put(comment, function(error, data) {
+            if(error)
+            {
+                var failMessage = {message: 'Failed to add comment. Error: ' + error};
+
+                fail(500, failMessage, callback ); 
+
+            }
+            else
+            {
+
+                success(200, comment, callback);
+            }
+
+          });
+    
+    
+        }
+        else
+        {
+            var creationFail = {message: 'Comment creation failed. Error: ' + error};
+
+            fail(500, creationFail, callback ); 
+      }
 }
