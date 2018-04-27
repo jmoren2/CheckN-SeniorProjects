@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import logo from './images/checknlogo.png';
+import clientLogo from './images/nikeCheck.jpg'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -22,8 +23,21 @@ class LogInPage extends React.Component{
                 {/* <Navbar /> */}
                 <div className='card card-1 text-md-center'>
                         <div className='card-body text-center'>
-                            <img height="25%" width="25%" src={logo} style={{objectFit:'contain'}} /><br />
-                            <h2 className='text-center'  style={{color:'black'}}>CheckN</h2>
+                            <img height="25%" width="25%" src={clientLogo} style={{objectFit:'contain'}} /><br />
+
+                            <div className="row">
+
+                                <div className="mx-auto">
+
+                                    <div className="">
+                                <h2 className=''  style={{color:'black'}}>CheckN</h2>
+                                <img height="10%" width="10%" src={logo} style={{objectFit:'contain'}} />
+                                </div>
+
+                                    </div>
+
+
+                            </div>
 
                             <form >
                                 <div className='form-group'>
