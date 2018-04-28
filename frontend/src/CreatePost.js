@@ -8,9 +8,16 @@ class CreatePost extends Component{
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.returnedID = null;
-        this.state = {title: '', content: '', returnedId: null, handleSubmitDone: false};
+        this.state = {
+                    title: '', 
+                    content: '',
+                    tagArray: '', 
+                    tagButtons: '',
+                    returnedId: null, 
+                    handleSubmitDone: false};
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
+        this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -18,7 +25,13 @@ class CreatePost extends Component{
         event.preventDefault();
         console.log('state.title: ' + this.state.title);
         console.log('state.content: ' + this.state.content);
-        const data = {title: this.state.title, content: this.state.content};//What is being sent to the API
+        console.log('state.tagString: ' + this.state.tagArray);
+        //What is being sent to the API
+        const data = {
+            title: this.state.title, 
+            content: this.state.content,
+            tags: this.state.tagArray
+        };
         console.log('data: ' + JSON.stringify(data));
 
         fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
@@ -50,6 +63,26 @@ class CreatePost extends Component{
         this.setState({content: event.target.value});//Updates the content field as typing occurs
     }
 
+    handleChangeTags(event) {
+        //lowercases the tags and splits them
+        var newTags = event.target.value.toLowerCase();
+        newTags = newTags.split(" ");
+
+        //Checks if the last string is empty and removes it
+        if (newTags[newTags.length - 1] === '')
+            newTags.splice([newTags.length - 1], 1);
+
+        //Update tagArray which will be sent to the data and tagButtons which acts as a preview
+        this.setState({
+            tagArray: newTags,
+            tagButtons: newTags.map((tag) => {
+                return (<button>
+                       {tag}
+                       </button>);
+            })
+        });
+    }
+
     render(){
         if (this.state.handleSubmitDone === true){
             return <Redirect to={`/post/${this.state.returnedId}`}/>//go to the post's webpage
@@ -78,6 +111,16 @@ class CreatePost extends Component{
                                     <label>Content: </label>
                                     <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
                                 </div>
+
+                                <div className='form-group'>
+                                    <label>Tags:</label>
+                                    <input onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                    <span>
+                                        <label>Tag Preview: </label>
+                                        {this.state.tagButtons}
+                                    </span>
+                                </div>
+                                
                                 
 
 
