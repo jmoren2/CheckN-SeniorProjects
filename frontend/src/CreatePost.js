@@ -11,7 +11,7 @@ class CreatePost extends Component{
         this.state = {
                     title: '', 
                     content: '',
-                    tagArray: '', 
+                    tagArray: [], 
                     tagButtons: '',
                     returnedId: null, 
                     handleSubmitDone: false};
@@ -73,6 +73,7 @@ class CreatePost extends Component{
             newTags.splice([newTags.length - 1], 1);
 
         //Update tagArray which will be sent to the data and tagButtons which acts as a preview
+        //maybe if these stay as buttons they can delete the tag when clicked
         this.setState({
             tagArray: newTags,
             tagButtons: newTags.map((tag) => {
