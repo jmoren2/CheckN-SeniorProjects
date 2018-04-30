@@ -36,6 +36,9 @@ class LogInPage extends React.Component{
                                 <Link to="/feed">
                                 <button className='btn btn-info' type='submit'>Login</button>
                                 </Link>
+                                <Link to="/register">
+                                <button className='btn btn-info' type='submit'>Register</button>
+                                </Link>
                             </div>
                          </div>
                 </div>
