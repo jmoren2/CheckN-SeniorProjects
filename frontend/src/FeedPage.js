@@ -84,14 +84,9 @@ class FeedPage extends React.Component{
             }
             
                return(
-
                     //individual feed item
                     <div className="container">
-
-                    
-
                       <div className="row">
-
                         <span className="col-sm" >
                             <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
                                 <ThumbsUp /> {positiveCount}
@@ -105,75 +100,34 @@ class FeedPage extends React.Component{
                                 <ThumbsDown /> {negCount}
                             </button>
                         </span>
-
                     <div className="col-sm-11">
-
-                    
-                    
                     <div className="card bg-light h-100">
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
-                                
                                 <div key={post.postId} >
-
                                 <div class="card-block">
                                 <div>
-                                    
-                                        
                                 </div>
-
                                     {post.title} <br />
-                                    
-                                    
-                                    
-                                                                    
-                                    
                                 </div>
-                                
-                                
                                 </div>
                             </Link>
-
-                            
                             <br/>
-
                             <div className="row">
-
                                 <div className="col-sm-4">
                                 <Moment format="YYYY/MM/DD HH:mm">
                                 {post.timestamp}
                                 </Moment>
-                                        
-
                                 </div>
-
                                         <div className="col-sm-8">
-
-                                                 
                                         {post.visibilityLevel}
-
                                         </div>
-                                        
-
                             </div>
                     </div>
-
-
-
-                        </div>
-
+                    </div>
                       </div>
                       <br/>
                     </div>
-    
-                    
-                
-            
-            
-            
             )
-            
-            
-            
         })
         return feed;
     }
@@ -219,11 +173,6 @@ class FeedPage extends React.Component{
                 <button className='btn btn-info' type='submit'>View Post</button>
                 </Link>
             </div>
-
-            
-            
-
-
         );
     }
 }
