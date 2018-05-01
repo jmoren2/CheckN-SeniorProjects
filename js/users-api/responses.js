@@ -34,7 +34,7 @@ module.exports.singleUserSuccess = (code, user, callback) => {
     })
 }
 
-module.exports.multiPostSuccess = (code, users, callback) => {
+module.exports.multiUserSuccess = (code, users, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
