@@ -407,28 +407,21 @@ class ViewPost extends Component{//Initial State
         var newComment = 
 
         <div>
-        <div className="card bg-light" style={{objectFit:'contain'}}>
+                <div className="card bg-light" style={{objectFit:'contain'}}>
                 
-                <div className="card-block">
-                
-    
-                <p> {this.state.content} </p>
-                
-                 x 
-                
-                
-                
-                </div>
-                
-    
-    
-                
-                        
-            </div>
+                    <div className="card-block">
+                    
         
-        <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
-        Commented&nbsp;<Check />
-    </div>
+                    <p style={{paddingTop:'8px'}}> {this.state.content} </p>
+                    
+                    
+                    </div>
+                        
+                </div>
+        
+                <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
+                Commented&nbsp;<Check />
+                </div>
     
     </div>
         
