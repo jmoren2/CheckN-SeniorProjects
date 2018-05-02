@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
+import App from './index.js';
 
 class RegisterUser extends Component{
     constructor(props){
@@ -16,6 +17,10 @@ class RegisterUser extends Component{
         this.handleChangeLast = this.handleChangeLast.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    passUser = (passThrough) => {
+        passThrough = this.state.returnedId;
     }
 
     handleSubmit(event){
@@ -44,6 +49,7 @@ class RegisterUser extends Component{
             this.setState({returnedId: response.user.userId, handleSubmitDone: true});
             console.log(response.user);
             console.log(response.user.userId);
+            <App userID={this.passUser}/>//Sending userID back up to index for sharing between pages
         });
     }
 
@@ -76,8 +82,6 @@ class RegisterUser extends Component{
                     <h2 className='text-center' style={{color:'black'}}>Register New User</h2>
 
             <form onSubmit={this.handleSubmit}>
-
-
                                 <div className='form-group'>
                                     <label>firstName: </label>
                                     <input value={this.state.firstName} onChange={this.handleChangeFirst} placeholder='First Name' className='form-control' /> <br />
@@ -92,24 +96,15 @@ class RegisterUser extends Component{
                                     <label>lastName: </label>
                                     <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' /> <br />
                                 </div>
-                                
-                                
 
                 <button className='btn btn-info' type='submit'>Submit</button>
+
             </form>
-
-
             </div>
             </div>
             </div>
             </div>
             </div>
-            
-        
-    
-    
-    
-    
         );
     }
 }

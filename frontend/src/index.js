@@ -21,11 +21,11 @@ class App extends React.Component {
         return(
             <Router>
                 <div>
-                    <Route exact path="/" component={LogInPage}/>
-                    <Route path="/login" component={LogInPage}/>
-                    <Route path="/feed" component={FeedPage}/>
-                    <Route path="/post/:postID" component={ViewPost}/>
-                    <Route path="/create" component={CreatePost}/>
+                    <Route exact path="/" render={() => <LogInPage userID={this.props.userID}/>}/>
+                    <Route path="/login" render={() => <LogInPage userID={this.props.userID}/>}/>
+                    <Route path="/feed" render={() => <FeedPage userID={this.props.userID}/>}/>
+                    <Route path="/post/:postID" render={() => <ViewPost userID={this.props.userID}/>}/>
+                    <Route path="/create" render={() => <CreatePost userID={this.props.userID}/>}/>
                     <Route path="/register" component={RegisterUser}/>
                 </div>
             </Router>
