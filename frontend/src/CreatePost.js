@@ -30,7 +30,8 @@ class CreatePost extends Component{
         const data = {
             title: this.state.title, 
             content: this.state.content,
-            tags: this.state.tagArray
+            tags: this.state.tagArray,
+            userId: this.props.location.user.userId
         };
         //console.log('data: ' + JSON.stringify(data));
 
