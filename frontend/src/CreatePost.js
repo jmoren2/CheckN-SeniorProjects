@@ -8,7 +8,21 @@ class CreatePost extends Component{
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.returnedID = null;
-        this.state = {title: '', content: '', returnedId: null, handleSubmitDone: false};
+        this.state = {
+            title: '',
+            content: '',
+
+            tags:[],
+            positiveVoters:[],
+            neutralVoters: [],
+            negativeVoters: [],
+            state:'OPEN',
+            visibilityLevel: [],
+            pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
+        
+        
+        returnedId: null, handleSubmitDone: false
+        };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +32,19 @@ class CreatePost extends Component{
         event.preventDefault();
         console.log('state.title: ' + this.state.title);
         console.log('state.content: ' + this.state.content);
-        const data = {title: this.state.title, content: this.state.content};//What is being sent to the API
+        const data = 
+        {
+            title: this.state.title, 
+            content: this.state.content,
+            positiveVoters: this.state.positiveVoters,
+            neutralVoters: this.state.neutralVoters,
+            negativeVoters: this.state.negativeVoters,
+            pinnedId: this.state.pinnedId,
+            state: this.state.state,
+            tags: this.state.tags,
+            visibilityLevel: this.state.visibilityLevel
+
+        };//What is being sent to the API
         console.log('data: ' + JSON.stringify(data));
 
         fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
@@ -44,6 +70,7 @@ class CreatePost extends Component{
 
     handleChangeTitle(event) {
         this.setState({title: event.target.value});//Updates the title field as typing occurs
+
     }
 
     handleChangeContent(event) {

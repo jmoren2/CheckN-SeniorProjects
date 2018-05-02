@@ -31,7 +31,7 @@ class LogInPage extends React.Component{
 
                                     <div className="">
                                 <h2 className=''  style={{color:'black'}}>CheckN</h2>
-                                <img height="10%" width="10%" src={logo} style={{objectFit:'contain'}} />
+                                <img height="15%" width="15%" src={logo} style={{objectFit:'contain'}} />
                                 </div>
 
                                     </div>

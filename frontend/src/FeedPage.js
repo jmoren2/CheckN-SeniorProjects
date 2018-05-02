@@ -11,19 +11,20 @@ class FeedPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            feed: <div>Loading...</div>,
+            feed: <div>Loading...</div>
         }
-        this.searchQuery = "search=a";
     }
 
-    //This is a default method of a React.Component that gets called when the component is first created
-    componentDidMount(){
+    componentDidMount(){//Queries the API for a post with specified ID
+       this.retrieveFeed();
+    }
+    componentDidUpdate()
+    {
         this.retrieveFeed();
     }
 
-    //Handles fetching a list of posts based on a searchQuery and updates the State so the feed is rendered
     retrieveFeed(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -33,7 +34,7 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
-            console.log('comments: ' + JSON.stringify(feedData));
+            //console.log('comments: ' + JSON.stringify(feedData));
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -41,19 +42,192 @@ class FeedPage extends React.Component{
         })
     }
 
-     voteUp() {
+     voteUp(post) {
         console.log("voted up!")
+
+        
+
+        console.log(JSON.parse(JSON.stringify(post)));
+
+        var postToBeVotedOn = post.postId;
+        var idToVote = null;
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+        
+
+        if(post.positiveVoters)
+        {
+
+            
+            post['positiveVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.positiveVoters = [];
+                post['positiveVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+        // TODO
+        //grab actual user id
+
+        
+       // console.log(post)
+       
+       fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+        method: 'PUT',
+        body: JSON.stringify(post)
+    })
+    .then(result => {
+        console.log('result: ' + JSON.stringify(result));
+        return result.json()
+    })
+    .then(response => {
+        console.log('response: ' + JSON.stringify(response));``
+
+    });
+
+
+    
+
+
     }
-    neutralVote() {
-        console.log("neutral vote!")
+
+
+    neutralVote(post) {
+        console.log("voted neutral!")
+
+        
+
+        console.log(JSON.parse(JSON.stringify(post)));
+        var postToBeVotedOn = post.postId;
+        var idToVote = null;
+
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+        
+
+        if(post.neutralVoters)
+        {
+
+            
+            post['neutralVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.neutralVoters = [];
+                post['neutralVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+                method: 'PUT',
+                body: JSON.stringify(post)
+            })
+            .then(result => {
+                console.log('result: ' + JSON.stringify(result));
+                return result.json()
+            })
+            .then(response => {
+                console.log('response: ' + JSON.stringify(response));``
+        
+            });
     }
-    voteDown() {
-        console.log("down vote!")
+
+
+
+    voteDown(post) {
+        console.log("voted down!")
+
+
+        console.log(JSON.parse(JSON.stringify(post)));
+        var postToBeVotedOn = post.postId;
+        var idToVote
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+
+        
+
+        if(post.negativeVoters)
+        {
+
+            
+            post['negativeVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.negativeVoters = [];
+                post['negativeVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+                method: 'PUT',
+                body: JSON.stringify(post)
+            })
+            .then(result => {
+                console.log('result: ' + JSON.stringify(result));
+                return result.json()
+            })
+            .then(response => {
+                console.log('response: ' + JSON.stringify(response));``
+        
+            });
     }
 
     generateFeed(posts){
         
         var feed = posts.map((post) => {
+            
+
             var pVoters = post.positiveVoters;
             var nVoters = post.neutralVoters;
             var negVoters = post.negativeVoters;
@@ -93,15 +267,15 @@ class FeedPage extends React.Component{
                       <div className="row">
 
                         <span className="col-sm" >
-                            <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
+                            <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp.bind(this, post)}>
                                 <ThumbsUp /> {positiveCount}
                             </button>
                       <br />
-                            <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote}>
+                            <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote.bind(this, post)}>
                                 <Neutral /> {neutralCount}
                             </button>
                       <br />
-                            <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown}>
+                            <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown.bind(this, post)}>
                                 <ThumbsDown /> {negCount}
                             </button>
                         </span>
@@ -178,27 +352,12 @@ class FeedPage extends React.Component{
         return feed;
     }
 
-    //This method recieves searchParams (from the Navbar that this method gets passed to)
-    //It then calls the method to turn those params into a usable query and calls retrieveFeed
-    handleSearch = (searchParams) => {
-        var newQuery = this.generateSearchQuery(searchParams);
-        this.searchQuery = newQuery;
-        this.retrieveFeed();
-    }
-
-    //The search query will be constructed here, later allowing for multi-word searches and user searches
-    generateSearchQuery(searchParams){
-        var query = "search=";
-        query += searchParams.words;
-        return query;
-    }
-
     //Temporary link to self
     render(){
         return(
             <div>
 
-                <Navbar searchMethod={this.handleSearch}/>
+                <Navbar />
             <div className="container">
             
                 <div className=''>
@@ -215,9 +374,9 @@ class FeedPage extends React.Component{
                 </div>
             </div>
 
-            <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+            {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
                 <button className='btn btn-info' type='submit'>View Post</button>
-                </Link>
+                </Link> */}
             </div>
 
             
