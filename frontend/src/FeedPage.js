@@ -160,7 +160,6 @@ class FeedPage extends React.Component{
                         <div className='card-body text-center'>
                             <h2 style={{color: 'black'}}>Your Feed</h2>
                             
-                                        
                         {this.state.feed}
 
                         
@@ -169,7 +168,7 @@ class FeedPage extends React.Component{
                 </div>
             </div>
 
-            <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+            <Link to={{pathname: '/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1', user: this.props.location.user}}>
                 <button className='btn btn-info' type='submit'>View Post</button>
                 </Link>
             </div>

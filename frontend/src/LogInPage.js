@@ -24,7 +24,7 @@ class LogInPage extends React.Component{
                         <div className='card-body text-center'>
                             <img height="25%" width="25%" src={logo} style={{objectFit:'contain'}} /><br />
                             <h2 className='text-center'  style={{color:'black'}}>CheckN</h2>
-                            {console.log(this.props.userID)/*This should display the user ID after registration*/}
+                            {/*console.log(this.props.location.user.userId)/*This should display the user ID from the given user object*/}
 
                             <form >
                                 <div className='form-group'>
@@ -34,7 +34,7 @@ class LogInPage extends React.Component{
                             </form>
 
                             <div className=''>
-                                <Link to="/feed">
+                                <Link to={{pathname: '/feed', user: this.props.location.user}}>
                                 <button className='btn btn-info' type='submit'>Login</button>
                                 </Link>
                                 <Link to="/register">

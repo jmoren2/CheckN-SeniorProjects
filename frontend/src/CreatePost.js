@@ -23,30 +23,30 @@ class CreatePost extends Component{
 
     handleSubmit(event){
         event.preventDefault();
-        console.log('state.title: ' + this.state.title);
-        console.log('state.content: ' + this.state.content);
-        console.log('state.tagString: ' + this.state.tagArray);
+        //console.log('state.title: ' + this.state.title);
+        //console.log('state.content: ' + this.state.content);
+        //console.log('state.tagString: ' + this.state.tagArray);
         //What is being sent to the API
         const data = {
             title: this.state.title, 
             content: this.state.content,
             tags: this.state.tagArray
         };
-        console.log('data: ' + JSON.stringify(data));
+        //console.log('data: ' + JSON.stringify(data));
 
         fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
         .then(result => {
-            console.log('result: ' + JSON.stringify(result));
+            //console.log('result: ' + JSON.stringify(result));
             return result.json()
         })
         .then(response => {
-            console.log('response: ' + JSON.stringify(response));
+            //console.log('response: ' + JSON.stringify(response));
             this.setState({returnedId: response.post.postId, handleSubmitDone: true});
-            console.log(response.post);
-            console.log(response.post.postId);
+            //console.log(response.post);
+            //console.log(response.post.postId);
         });
     }
 
@@ -86,7 +86,7 @@ class CreatePost extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return <Redirect to={`/post/${this.state.returnedId}`}/>//go to the post's webpage
+            return <Redirect to={{pathname: `/post/${this.state.returnedId}`, user: this.props.location.user}}/>//go to the post's webpage
         }
         return(
             <div>
@@ -101,7 +101,6 @@ class CreatePost extends Component{
                     <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
 
             <form onSubmit={this.handleSubmit}>
-
 
                                 <div className='form-group'>
                                     <label>Title: </label>
@@ -121,27 +120,17 @@ class CreatePost extends Component{
                                         {this.state.tagButtons}
                                     </span>
                                 </div>
-                                
-                                
-
 
                 {/*<Link to={`/post/${this.state.returnedId}`}>*/}
                 <button className='btn btn-info' type='submit'>Submit</button>
                 {/*</Link>*/}
+
             </form>
-
-
             </div>
             </div>
             </div>
             </div>
             </div>
-            
-        
-    
-    
-    
-    
         );
     }
 }

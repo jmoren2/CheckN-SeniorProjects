@@ -11,7 +11,7 @@ class RegisterUser extends Component{
                     firstName: '', 
                     lastName: '',
                     email: '',
-                    returnedId: null, 
+                    returnedUser: null, 
                     handleSubmitDone: false};
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
@@ -19,37 +19,32 @@ class RegisterUser extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    passUser = (passThrough) => {//Sends the created user ID back up to the App props in index.js
-        passThrough = this.state.returnedId;
-    }
-
     handleSubmit(event){
         event.preventDefault();
-        console.log('state.firstName: ' + this.state.firstName);
-        console.log('state.lastName: ' + this.state.lastName);
-        console.log('state.email: ' + this.state.email);
+        //console.log('state.firstName: ' + this.state.firstName);
+        //console.log('state.lastName: ' + this.state.lastName);
+        //console.log('state.email: ' + this.state.email);
         //What is being sent to the API
         const data = {
             firstName: this.state.firstName, 
             lastName: this.state.lastName,
             email: this.state.email
         };
-        console.log('data: ' + JSON.stringify(data));
+        //console.log('data: ' + JSON.stringify(data));
 
         fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/users/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
         .then(result => {
-            console.log('result: ' + JSON.stringify(result));
+            //console.log('result: ' + JSON.stringify(result));
             return result.json()
         })
         .then(response => {
-            console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.user.userId, handleSubmitDone: true});
-            console.log(response.user);
-            console.log(response.user.userId);
-            <App userID={this.passUser}/>//Sending userID back up to index for sharing between pages
+            //console.log('response: ' + JSON.stringify(response));
+            this.setState({returnedUser: response.user, handleSubmitDone: true});
+            //console.log(response.user);
+            //console.log(response.user.userId);
         });
     }
 
@@ -67,7 +62,7 @@ class RegisterUser extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return <Redirect to={`/login`}/>//go to the login page with our user ID
+            return <Redirect to={{pathname: `/login`, user: this.state.returnedUser}}/>//go to the login page with our user ID
         }
         return(
             <div>

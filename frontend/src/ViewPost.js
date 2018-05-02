@@ -186,7 +186,7 @@ class ViewPost extends Component{//Initial State
             return commentResults.json();
         })
         .then(commentData => {
-            console.log('comments: ' + JSON.stringify(commentData));
+            //console.log('comments: ' + JSON.stringify(commentData));
             return(this.generateCommentFeed(commentData.comments));
         })
         .then(commentFeed => {
@@ -196,23 +196,23 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        console.log('state.newComment: ' + this.state.content);
+        //console.log('state.newComment: ' + this.state.content);
         const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
-        console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
+        //console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
         fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
         .then(result => {
-            console.log('result: ' + JSON.stringify(result));
+            //console.log('result: ' + JSON.stringify(result));
             return result.json()
         })
         .then(response => {
-            console.log('response: ' + JSON.stringify(response));
+            //console.log('response: ' + JSON.stringify(response));
             this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
-            console.log(response.comment.Item);
-            console.log(response.comment.Item.commentId);
+            //console.log(response.comment.Item);
+            //console.log(response.comment.Item.commentId);
         });
     }
 
