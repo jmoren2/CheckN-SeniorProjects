@@ -10,6 +10,9 @@ provider:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
 
+plugins:
+  - serverless-nested-stack
+
 package:
   individually: true
   exclude:
