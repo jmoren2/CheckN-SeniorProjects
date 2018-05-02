@@ -19,7 +19,7 @@ class RegisterUser extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    passUser = (passThrough) => {
+    passUser = (passThrough) => {//Sends the created user ID back up to the App props in index.js
         passThrough = this.state.returnedId;
     }
 
@@ -66,9 +66,9 @@ class RegisterUser extends Component{
     }
 
     render(){
-        /*if (this.state.handleSubmitDone === true){
-            return <Redirect to={`/login`}/>//go to the login page
-        }*/
+        if (this.state.handleSubmitDone === true){
+            return <Redirect to={`/login`}/>//go to the login page with our user ID
+        }
         return(
             <div>
 

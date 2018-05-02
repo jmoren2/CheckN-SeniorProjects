@@ -21,16 +21,18 @@ class App extends React.Component {
         return(
             <Router>
                 <div>
-                    <Route exact path="/" render={() => <LogInPage userID={this.props.userID}/>}/>
+                    <Route exact path="/" render={() => <LogInPage userID={this.props.userID}/>}/>{/*Passes a userID to the page*/}
                     <Route path="/login" render={() => <LogInPage userID={this.props.userID}/>}/>
                     <Route path="/feed" render={() => <FeedPage userID={this.props.userID}/>}/>
                     <Route path="/post/:postID" render={() => <ViewPost userID={this.props.userID}/>}/>
                     <Route path="/create" render={() => <CreatePost userID={this.props.userID}/>}/>
-                    <Route path="/register" component={RegisterUser}/>
+                    <Route path="/register" component={RegisterUser}/>{/*Left this one alone since you shouldn't be registering if already signed in*/}
                 </div>
             </Router>
         );
     }
 }
+
+export default App;
 
 ReactDOM.render(<App />, document.getElementById('root'));

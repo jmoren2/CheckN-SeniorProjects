@@ -24,6 +24,7 @@ class LogInPage extends React.Component{
                         <div className='card-body text-center'>
                             <img height="25%" width="25%" src={logo} style={{objectFit:'contain'}} /><br />
                             <h2 className='text-center'  style={{color:'black'}}>CheckN</h2>
+                            {console.log(this.props.userID)/*This should display the user ID after registration*/}
 
                             <form >
                                 <div className='form-group'>
