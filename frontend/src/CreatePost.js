@@ -47,7 +47,7 @@ class CreatePost extends Component{
         };//What is being sent to the API
         console.log('data: ' + JSON.stringify(data));
 
-        fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)
         })

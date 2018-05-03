@@ -85,7 +85,7 @@ class ViewPost extends Component{//Initial State
         
        // console.log(post)
        
-       fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+       fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
         method: 'PUT',
         body: JSON.stringify(post)
     })
@@ -147,7 +147,7 @@ class ViewPost extends Component{//Initial State
             }
 
 
-            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -204,7 +204,7 @@ class ViewPost extends Component{//Initial State
             }
 
 
-            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -219,7 +219,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrievePost(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -362,7 +362,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrieveComments(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -386,7 +386,7 @@ class ViewPost extends Component{//Initial State
         const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
         //console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })

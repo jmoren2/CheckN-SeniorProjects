@@ -24,7 +24,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -90,7 +90,7 @@ class FeedPage extends React.Component{
         
        // console.log(post)
        
-       fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+       fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
         method: 'PUT',
         body: JSON.stringify(post)
     })
@@ -152,7 +152,7 @@ class FeedPage extends React.Component{
             }
 
 
-            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -209,7 +209,7 @@ class FeedPage extends React.Component{
             }
 
 
-            fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
