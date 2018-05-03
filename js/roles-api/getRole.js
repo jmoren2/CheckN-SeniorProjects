@@ -22,8 +22,12 @@ module.exports.getRole = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return getRoleFail(500,'get Role by role failed. Error: ' + err, callback);
-                else
-                    return getSingleRoleSuccess(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                        return getRoleFail(404,'No Role Found',callback);
+                    else
+                        return getSingleRoleSuccess(200, data.Item, callback);
+                }
             });
         }
         else

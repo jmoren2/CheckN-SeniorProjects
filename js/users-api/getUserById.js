@@ -22,8 +22,12 @@ module.exports.getUserById = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return getUserFail(500,'get user by userId failed. Error: ' + err, callback);
-                else
-                    return getSingleUserSuccess(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                        return getUserFail(404, 'No User Found', callback);
+                    else
+                        return getSingleUserSuccess(200, data.Item, callback);
+                }
             });
         }
         else

@@ -22,8 +22,12 @@ module.exports.getCommentsByPostId = (ddb, event, context, callback) => {
             ddb.scan(params, function(err, data) {
                 if(err)
                     return getCommentsFail(500,'get Comments by postId failed. Error: ' + err, callback);
-                else
-                    return multiCommentSuccess(200, data.Items, callback);
+                else {
+                    if(data.Items == null)
+                        return getCommentsFail(404, 'No Comments found', callback);
+                    else
+                        return multiCommentSuccess(200, data.Items, callback);
+                }
             });
         }
         else

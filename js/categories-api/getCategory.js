@@ -22,8 +22,12 @@ module.exports.getCategory = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return getCategoryFail(500,'get Category by Category failed. Error: ' + err, callback);
-                else
-                    return getSingleCategorySuccess(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                      return getCategoryFail(404, 'No Category Found', callback);
+                    else
+                      return getSingleCategorySuccess(200, data.Item, callback);
+                }
             });
         }
         else

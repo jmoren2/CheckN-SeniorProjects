@@ -22,8 +22,12 @@ module.exports.getDepartment = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return getDepartmentFail(500,'get Department by name failed. Error: ' + err, callback);
-                else
-                    return getSingleDepartmentSuccess(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                        return getDepartmentFail(404, 'No Department Found', callback);
+                    else
+                        return getSingleDepartmentSuccess(200, data.Item, callback);
+                }
             });
         }
         else
