@@ -2,7 +2,7 @@
 const getSingleDepartmentSuccess = require('./responses').singleDepartmentSuccess;
 const getDepartmentFail = require('./responses').DepartmentsFail;
 
-module.exports.getDepartmentByName = (ddb, event, context, callback) => {
+module.exports.getDepartment = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.department !== undefined && 
             event.pathParameters.department !== null && 

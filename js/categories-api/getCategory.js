@@ -2,14 +2,14 @@
 const getSingleCategorySuccess = require('./responses').singleCategorySuccess;
 const getCategoryFail = require('./responses').CategoriesFail;
 
-module.exports.getCategoryById = (ddb, event, context, callback) => {
+module.exports.getCategory = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.category !== undefined && 
             event.pathParameters.category !== null && 
             event.pathParameters.category !== "") {
             console.log("Received proxy: " + event.pathParameters.category);
 
-            var category = event.pathParameters.postId;
+            var category = event.pathParameters.category;
             var params = {
                 TableName: "categories",
                 Key: {

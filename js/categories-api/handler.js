@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.getCategory = (event, context, callback) => {
-  const getCategory = require('./getCategoriesById').getCategory
+  const getCategory = require('./getCategory').getCategory
   getCategory(ddb, event, context, callback);
 };
 

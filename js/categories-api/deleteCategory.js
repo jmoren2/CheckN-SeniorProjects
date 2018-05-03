@@ -12,7 +12,7 @@ module.exports.deleteCategory = (ddb, event, context, callback) => {
             var params = {
                 TableName: "categories",
                 Key: {
-                    "categoryId" : category
+                    "category" : category
                 }
             };
 

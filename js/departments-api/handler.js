@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.getDepartment = (event, context, callback) => {
-  const getDepartment = require('./getDepartmentByName').getDepartment
+  const getDepartment = require('./getDepartment').getDepartment
   getDepartment(ddb, event, context, callback);
 };
 
