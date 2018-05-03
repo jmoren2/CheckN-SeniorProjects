@@ -505,8 +505,8 @@ functions:
         - js/categories-api/handler.js
         - js/categories-api/responses.js
 
-  getCategoriesBySearch:
-    handler: js/categories-api/handler.getCategoriesBySearch
+  getAllCategories:
+    handler: js/categories-api/handler.getAllCategories
     events:
       - http:
           path: categories
@@ -514,7 +514,7 @@ functions:
           cors: true
     package:
       include:
-        - js/categories-api/getCategoriesBySearch.js
+        - js/categories-api/getAllCategories.js
         - js/categories-api/handler.js
         - js/categories-api/responses.js
 
