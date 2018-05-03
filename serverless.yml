@@ -10,6 +10,10 @@ provider:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
 
+plugins:
+  # - serverless-nested-stack
+  - serverless-plugin-split-stacks
+
 package:
   individually: true
   exclude:
@@ -284,141 +288,141 @@ functions:
         - js/comments-api/responses.js
         - node_modules/moment/**
         
-  ################### Location Api ###################
-  getLocationsByPostId:
-    handler: js/locations-api/handler.getLocationByPostId
-    events:
-      - http:
-          path: posts/{postId}/locations
-          method: get
-          cors: true
-    package:
-      include:
-        - js/locations-api/getLocationsByPostId.js
-        - js/locations-api/handler.js
-        - js/locations-api/responses.js
+  # ################### Location Api ###################
+  # getLocationsByPostId:
+  #   handler: js/locations-api/handler.getLocationByPostId
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations
+  #         method: get
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/getLocationsByPostId.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
 
-  getLocationsBySearch:
-    handler: js/locations-api/handler.getLocationsBySearch
-    events:
-      - http:
-          path: locations
-          method: get
-          cors: true
-    package:
-      include:
-        - js/locations-api/getLocationsBySearch.js
-        - js/locations-api/handler.js
-        - js/locations-api/responses.js
+  # getLocationsBySearch:
+  #   handler: js/locations-api/handler.getLocationsBySearch
+  #   events:
+  #     - http:
+  #         path: locations
+  #         method: get
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/getLocationsBySearch.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
 
-  deleteLocation:
-    handler: js/locations-api/handler.deleteLocation
-    events:
-      - http:
-          path: posts/{postId}/locations/{locationId}
-          method: delete
-          cors: true
-    package:
-      include:
-        - js/locations-api/deleteLocation.js
-        - js/locations-api/handler.js
-        - js/locations-api/responses.js
+  # deleteLocation:
+  #   handler: js/locations-api/handler.deleteLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations/{locationId}
+  #         method: delete
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/deleteLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
 
-  createLocation:
-    handler: js/locations-api/handler.createLocation
-    events:
-      - http:
-          path: posts/{postId}/locations
-          method: post
-          cors: true
-    package:
-      include:
-        - js/locations-api/createLocation.js
-        - js/locations-api/handler.js
-        - js/locations-api/responses.js
-        - node_modules/moment/**
+  # createLocation:
+  #   handler: js/locations-api/handler.createLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations
+  #         method: post
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/createLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+  #       - node_modules/moment/**
 
-  updateLocation:
-    handler: js/locations-api/handler.updateLocation
-    events:
-      - http:
-          path: posts/{postId}/locations/{locationId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/locations-api/updateLocation.js
-        - js/locations-api/handler.js
-        - js/locations-api/responses.js
-        - node_modules/moment/**
+  # updateLocation:
+  #   handler: js/locations-api/handler.updateLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations/{locationId}
+  #         method: put
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/updateLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+  #       - node_modules/moment/**
 
-################### Roles Api ###################
-  getRolesByPostId:
-    handler: js/roles-api/handler.getRolesByPostId
-    events:
-      - http:
-          path: posts/{postId}/roles
-          method: get
-          cors: true
-    package:
-      include:
-        - js/roles-api/getRolesByPostId.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
+# ################### Roles Api ###################
+#   getRolesByPostId:
+#     handler: js/roles-api/handler.getRolesByPostId
+#     events:
+#       - http:
+#           path: posts/{postId}/roles
+#           method: get
+#           cors: true
+#     package:
+#       include:
+#         - js/roles-api/getRolesByPostId.js
+#         - js/roles-api/handler.js
+#         - js/roles-api/responses.js
 
-  getRolesBySearch:
-    handler: js/roles-api/handler.getRolesBySearch
-    events:
-      - http:
-          path: roles
-          method: get
-          cors: true
-    package:
-      include:
-        - js/roles-api/getRolesBySearch.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
+#   getRolesBySearch:
+#     handler: js/roles-api/handler.getRolesBySearch
+#     events:
+#       - http:
+#           path: roles
+#           method: get
+#           cors: true
+#     package:
+#       include:
+#         - js/roles-api/getRolesBySearch.js
+#         - js/roles-api/handler.js
+#         - js/roles-api/responses.js
 
-  deleteRole:
-    handler: js/roles-api/handler.deleteRole
-    events:
-      - http:
-          path: posts/{postId}/roles/{roleId}
-          method: delete
-          cors: true
-    package:
-      include:
-        - js/roles-api/deleteRole.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
+#   deleteRole:
+#     handler: js/roles-api/handler.deleteRole
+#     events:
+#       - http:
+#           path: posts/{postId}/roles/{roleId}
+#           method: delete
+#           cors: true
+#     package:
+#       include:
+#         - js/roles-api/deleteRole.js
+#         - js/roles-api/handler.js
+#         - js/roles-api/responses.js
 
-  createRole:
-    handler: js/roles-api/handler.createRole
-    events:
-      - http:
-          path: posts/{postId}/roles
-          method: post
-          cors: true
-    package:
-      include:
-        - js/roles-api/createRole.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
-        - node_modules/moment/**
+#   createRole:
+#     handler: js/roles-api/handler.createRole
+#     events:
+#       - http:
+#           path: posts/{postId}/roles
+#           method: post
+#           cors: true
+#     package:
+#       include:
+#         - js/roles-api/createRole.js
+#         - js/roles-api/handler.js
+#         - js/roles-api/responses.js
+#         - node_modules/moment/**
 
-  updateRole:
-    handler: js/roles-api/handler.updateRole
-    events:
-      - http:
-          path: posts/{postId}/roles/{roleId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/roles-api/updateRole.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
-        - node_modules/moment/**
+#   updateRole:
+#     handler: js/roles-api/handler.updateRole
+#     events:
+#       - http:
+#           path: posts/{postId}/roles/{roleId}
+#           method: put
+#           cors: true
+#     package:
+#       include:
+#         - js/roles-api/updateRole.js
+#         - js/roles-api/handler.js
+#         - js/roles-api/responses.js
+#         - node_modules/moment/**
 
 ################### Departments Api ###################
   getDepartmentsByPostId:
