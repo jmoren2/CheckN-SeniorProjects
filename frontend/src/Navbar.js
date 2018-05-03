@@ -10,6 +10,8 @@ import Check from 'react-icons/lib/fa/check';
 import Notification from 'react-icons/lib/fa/envelope';
 import Admin from 'react-icons/lib/fa/lock';
 
+import {Redirect, Link} from 'react-router-dom';
+
 
 
 class Navbar extends React.Component {
@@ -45,27 +47,27 @@ class Navbar extends React.Component {
 
   <div id="mySidenav" className="sidenav">
       <a href="javascript:void(0)" className="closebtn"  onClick={closeNav}>&times;</a>
-      <a href="/Feed">
+      <Link to="/feed">
       <Home /> 	&nbsp;
       Home
-      </a>
-      <a href="/Create">
+      </Link>
+      <Link to="/create">
       <Create /> 	&nbsp;
-      Create Post</a>
-      <a href="/">
+      Create Post</Link>
+      <Link to="/">
       <Profile />	&nbsp;
-      Profile</a>
-      <a href="/">
+      Profile</Link>
+      <Link to="/">
       <Check /> 	&nbsp;
-      Tracked Posts</a>
-      <a href="/">
+      Tracked Posts</Link>
+      <Link to="/">
       <Notification />	&nbsp;
-      Notifications</a>
-      <a href="/">
+      Notifications</Link>
+      <Link to="/">
       <Admin />	&nbsp;
-      Admin Controls</a>
-      <a href="/">Other</a>
-      <a href="/">Logout</a>
+      Admin Controls</Link>
+      <Link to="/">Other</Link>
+      <Link to="/">Logout</Link>
 </div>
 
 

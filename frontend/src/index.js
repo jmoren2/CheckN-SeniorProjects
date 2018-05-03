@@ -16,6 +16,7 @@ class App extends React.Component {
 
         }
         this.userData = null;
+        console.log("index constructor");
     }
 
     //This function sets this.userData
@@ -33,7 +34,7 @@ class App extends React.Component {
                 <div>
                     <Route exact path="/" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
                     <Route path="/login" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
-                    <Route path="/feed" component={() => (<FeedPage userData={this.userData}/>)}/>
+                    <Route path="/feed" component={props => (<FeedPage userData={this.userData} {...props}/>)}/>
                     <Route path="/post/:postID" component={props => (<ViewPost userData={this.userData} {...props}/>)}/>
                     <Route path="/create" component={() => (<CreatePost userData={this.userData}/>)}/>
                     <Route path="/register" component={() => (<RegisterUser/>)}/>

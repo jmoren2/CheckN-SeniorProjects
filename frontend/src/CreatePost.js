@@ -14,11 +14,15 @@ class CreatePost extends Component{
                     tagArray: [], 
                     tagButtons: '',
                     returnedId: null, 
-                    handleSubmitDone: false};
+                    handleSubmitDone: false,
+                    user: props.userData,
+                };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log("in create post with this user:");
+        console.log(props.userData);
     }
 
     handleSubmit(event){
