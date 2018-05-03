@@ -437,8 +437,8 @@ functions:
         - js/departments-api/handler.js
         - js/departments-api/responses.js
 
-  getDepartmentsBySearch:
-    handler: js/departments-api/handler.getDepartmentsBySearch
+  getAllDepartments:
+    handler: js/departments-api/handler.getAllDepartments
     events:
       - http:
           path: departments
@@ -446,7 +446,7 @@ functions:
           cors: true
     package:
       include:
-        - js/departments-api/getDepartmentsBySearch.js
+        - js/departments-api/getAllDepartments.js
         - js/departments-api/handler.js
         - js/departments-api/responses.js
 

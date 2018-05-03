@@ -7,9 +7,9 @@ module.exports.getDepartmentsByPostId = (event, context, callback) => {
   getDepartmentsByPostId(ddb, event, context, callback);
 };
 
-module.exports.getDepartmentsBySearch = (event, context, callback) => {
-  const getDepartmentsBySearch = require('./getDepartmentsBySearch').getDepartmentsBySearch
-  getDepartmentsBySearch(ddb, event, context, callback);
+module.exports.getAllDepartments = (event, context, callback) => {
+  const getAllDepartments = require('./getAllDepartments').getAllDepartments;
+  getAllDepartments(ddb, event, context, callback);
 };
 
 module.exports.createDepartment = (event, context, callback) => {
