@@ -1,6 +1,11 @@
 module.exports.RolesFail = (code, msg, callback) => {
     return callback(null, {
         statusCode: code,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({
             statusCode: code,
             message: msg
@@ -10,13 +15,23 @@ module.exports.RolesFail = (code, msg, callback) => {
 
 module.exports.deleteRoleSuccess = (callback) => {
     return callback(null, {
-        statusCode: 204
+        statusCode: 204,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+        }
     });
 }
 
 module.exports.singleRoleSuccess = (code, role, callback) => {
     return callback(null, {
         statusCode: code,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({
             statusCode: code,
             role: role
@@ -27,6 +42,11 @@ module.exports.singleRoleSuccess = (code, role, callback) => {
 module.exports.multiRoleSuccess = (code, roles, callback) => {
     return callback(null, {
         statusCode: code,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({
             statusCode: code,
             roles: roles,

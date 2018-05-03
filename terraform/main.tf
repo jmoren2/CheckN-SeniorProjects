@@ -25,12 +25,12 @@ resource "aws_dynamodb_table" "usersTable" {
 
 resource "aws_dynamodb_table" "tagsTable" {
   name           = "tags"
-  hash_key       = "tagId"
+  hash_key       = "tag"
   write_capacity = 5
   read_capacity  = 5
 
   attribute {
-    name = "tagId"
+    name = "tag"
     type = "S"
   }
 }
