@@ -19,10 +19,12 @@ class LogInPage extends React.Component{
     }
 
     handleChangeEmail(event) {
+        //DOESN'T WORK IF YOU COPY/PASTE AN EMAIL
         this.setState({email: event.target.value});//Updates the firstName field as typing occurs
     }
 
     handleChangePassword(event) {
+        //DOESN'T WORK IF YOU COPY/PASTE A PASSWORD
         this.setState({password: event.target.value});//Updates the lastName field as typing occurs
     }
 
@@ -40,8 +42,9 @@ class LogInPage extends React.Component{
             return result.json();
         })
         .then(response => {
-            console.log('user object: ' + JSON.stringify(response));
-            return(response.user);
+            console.log('user object: ' + JSON.stringify(response.users[0]));
+            console.log('ARRAY SELECTION' + JSON.stringify(response.users[0]));
+            return(JSON.stringify(response.users[0]));
         })
         .then(validUser => {
             console.log('SUBMIT HANDLED');
