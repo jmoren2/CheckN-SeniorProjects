@@ -43,8 +43,8 @@ class LogInPage extends React.Component{
             console.log('comments: ' + JSON.stringify(response));
             return(response.user);
         })
-        .then(returnedUser => {
-            this.setState({returnedUser: returnedUser, handleSubmitDone: true});
+        .then(validUser => {
+            this.setState({returnedUser: validUser, handleSubmitDone: true});
         })
         .catch(error => {
             console.log(error);
