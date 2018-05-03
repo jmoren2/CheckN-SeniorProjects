@@ -370,7 +370,7 @@ functions:
         - js/roles-api/handler.js
         - js/roles-api/responses.js
 
-  getAllRole:
+  getAllRoles:
     handler: js/roles-api/handler.getAllRoles
     events:
       - http:
