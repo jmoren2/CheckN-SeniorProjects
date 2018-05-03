@@ -6,8 +6,11 @@ module.exports.createRole = (ddb, event, context, callback) => {
     if (event.body !== null && event.body !== undefined) {
         var body = JSON.parse(event.body);
 
+        // only take role field
+        var insert = body.role;
+
         var role = {
-            Item: body,
+            Item: {'role' : insert},
             TableName: 'roles'
         };
 
@@ -16,7 +19,7 @@ module.exports.createRole = (ddb, event, context, callback) => {
                 return fail(500, 'createRole failed. Error: ' + error, callback);
             else {
                 console.log('data: ' + data);
-                return success(200, body, callback);
+                return success(200, role.Item, callback);
             }
         });
     }
