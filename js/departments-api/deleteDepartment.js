@@ -4,15 +4,15 @@ const deleteDepartmentSuccess = require('./responses').deleteDepartmentSuccess;
 
 module.exports.deleteDepartment = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.departmentId !== undefined && 
-            event.pathParameters.departmentId !== null && 
-            event.pathParameters.departmentId !== "") {
+        if (event.pathParameters.department !== undefined && 
+            event.pathParameters.department !== null && 
+            event.pathParameters.department !== "") {
             
-            var id = event.pathParameters.departmentId;
+            var name = event.pathParameters.department;
             var params = {
                 TableName: "departments",
                 Key: {
-                    "departmentId" : id
+                    "department" : name
                 }
             };
 

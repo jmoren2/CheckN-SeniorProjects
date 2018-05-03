@@ -4,16 +4,16 @@ const getRoleFail = require('./responses').RolesFail;
 
 module.exports.getRole = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.roleId !== undefined && 
-            event.pathParameters.roleId !== null && 
-            event.pathParameters.roleId !== "") {
-            console.log("Received proxy: " + event.pathParameters.roleId);
+        if (event.pathParameters.role !== undefined && 
+            event.pathParameters.role !== null && 
+            event.pathParameters.role !== "") {
+            console.log("Received proxy: " + event.pathParameters.role);
 
-            var id = event.pathParameters.roleId;
+            var role = event.pathParameters.role;
             var params = {
                 TableName: "roles",
                 Key: {
-                    "roleId": id 
+                    "role": role 
                 }
             };
 
@@ -21,14 +21,14 @@ module.exports.getRole = (ddb, event, context, callback) => {
     
             ddb.get(params, function(err, data) {
                 if(err)
-                    return getRoleFail(500,'get Role by roleId failed. Error: ' + err, callback);
+                    return getRoleFail(500,'get Role by role failed. Error: ' + err, callback);
                 else
                     return getSingleRoleSuccess(200, data.Item, callback);
             });
         }
         else
-            return getRoleFail(400, 'get Role by roleId failed.', callback);
+            return getRoleFail(400, 'get Role by role failed.', callback);
     }
     else
-        return getRoleFail(400,'get Role by roleId failed', callback);
+        return getRoleFail(400,'get Role by role failed', callback);
 }

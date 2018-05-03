@@ -2,9 +2,9 @@
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.getRolesByPostId = (event, context, callback) => {
-  const getRolesByPostId = require('./getRolesByPostId').getRolesByPostId
-  getRolesByPostId(ddb, event, context, callback);
+module.exports.getRole = (event, context, callback) => {
+  const getRole = require('./getRole').getRole
+  getRole(ddb, event, context, callback);
 };
 
 module.exports.getRolesBySearch = (event, context, callback) => {
