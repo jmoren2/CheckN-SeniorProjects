@@ -17,7 +17,7 @@ module.exports.updateComment = (ddb, event, context, callback) => {
             Key:{
                 "commentId": commentId
             },
-        UpdateExpression: "set content = :content, #time =:timestamp, userId = :userId, positiveVoters = :positiveVoters, neturalVoters = :neutralVoters , negativeVoters = :negativeVoters",
+        UpdateExpression: "set content = :content, #time =:timestamp, userId = :userId, positiveVoters = :positiveVoters, neutralVoters = :neutralVoters , negativeVoters = :negativeVoters",
         ExpressionAttributeValues:{
             ":content":item.content,
             ":timestamp":updatedTimeStamp,
