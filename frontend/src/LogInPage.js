@@ -11,7 +11,7 @@ class LogInPage extends React.Component{
             email: "",
             password: "",
             returnedUser: null,
-            handleSubmitDone: false,
+            handleSubmitDone: false
         }
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -40,20 +40,22 @@ class LogInPage extends React.Component{
             return result.json();
         })
         .then(response => {
-            console.log('comments: ' + JSON.stringify(response));
+            console.log('user object: ' + JSON.stringify(response));
             return(response.user);
         })
         .then(validUser => {
+            console.log('SUBMIT HANDLED');
             this.setState({returnedUser: validUser, handleSubmitDone: true});
         })
         .catch(error => {
             console.log(error);
-        });
+        })
     }
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return <Redirect to={{pathname: `/feed`, user: this.state.returnedUser}}/>//go to the feed page with our user ID
+            console.log("GOT INTO THE END STATE BEFORE REDIRECTING");
+        return (<Redirect to={{pathname: `/feed`, user: this.state.returnedUser}}/>);//go to the feed page with our user ID
         }
         return(
             <div id="LoginPageContainer" className="h-100 w-50">
