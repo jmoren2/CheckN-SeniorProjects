@@ -31,7 +31,7 @@ class RegisterUser extends Component{
         };
         console.log('data: ' + JSON.stringify(data));
 
-        fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/users/', {
+        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/dev/users/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -41,7 +41,7 @@ class RegisterUser extends Component{
         })
         .then(response => {
             console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.user.userId, handleSubmitDone: true});
+            this.setState({handleSubmitDone: true});
             console.log(response.user);
             console.log(response.user.userId);
         });

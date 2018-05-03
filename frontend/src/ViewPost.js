@@ -20,6 +20,7 @@ class ViewPost extends Component{//Initial State
             newComment: "",
             content: "",
             returnedId: null,
+            currentUser: props.userData,
         };
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
@@ -28,12 +29,14 @@ class ViewPost extends Component{//Initial State
     }
 
     componentDidMount(){//Queries the API for a post and its comments with specified ID
+        console.log("Now i'm on a post with user:");
+        console.log(this.state.currentUser);
         this.retrievePost();
         this.retrieveComments();
     }
 
     retrievePost(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -176,7 +179,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrieveComments(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -200,7 +203,7 @@ class ViewPost extends Component{//Initial State
         const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
         console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
 
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })

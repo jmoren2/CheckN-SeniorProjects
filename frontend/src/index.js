@@ -15,18 +15,28 @@ class App extends React.Component {
         this.state = {
 
         }
+        this.userData = null;
     }
+
+    //This function sets this.userData
+    //Pass it as a parameter to any other page and call it with props.(whatever name you give it)
+    setUserData = (user) => {
+        console.log("getUserData is setting index's user to:");
+        console.log(user);
+        this.userData = user;
+    }
+
 
     render(){
         return(
             <Router>
                 <div>
-                    <Route exact path="/" component={LogInPage}/>
-                    <Route path="/login" component={LogInPage}/>
-                    <Route path="/feed" component={FeedPage}/>
-                    <Route path="/post/:postID" component={ViewPost}/>
-                    <Route path="/create" component={CreatePost}/>
-                    <Route path="/register" component={RegisterUser}/>
+                    <Route exact path="/" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
+                    <Route path="/login" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
+                    <Route path="/feed" component={() => (<FeedPage userData={this.userData}/>)}/>
+                    <Route path="/post/:postID" component={() => (<ViewPost userData={this.userData}/>)}/>
+                    <Route path="/create" component={() => (<CreatePost userData={this.userData}/>)}/>
+                    <Route path="/register" component={() => (<RegisterUser/>)}/>
                 </div>
             </Router>
         );
