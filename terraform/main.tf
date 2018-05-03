@@ -25,12 +25,12 @@ resource "aws_dynamodb_table" "usersTable" {
 
 resource "aws_dynamodb_table" "tagsTable" {
   name           = "tags"
-  hash_key       = "tagId"
+  hash_key       = "tag"
   write_capacity = 5
   read_capacity  = 5
 
   attribute {
-    name = "tagId"
+    name = "tag"
     type = "S"
   }
 }
@@ -56,5 +56,50 @@ resource "aws_dynamodb_table" "commentsTable" {
   attribute {
     name = "commentId"
     type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "rolesTable" {
+  name           = "roles"
+  hash_key       = "role"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "role"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "departmentsTable" {
+  name           = "departments"
+  hash_key       = "department"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "department"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "categoriesTable" {
+  name           = "categories"
+  hash_key       = "category"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "category"
+    type = "S"
+  }
+}
+
+resource "aws_elasticsearch_domain" "checkN-dev" {
+  domain_name = "checkN-dev-domain"
+
+  cluster_config {
+    instance_type  = "t2.small.elasticsearch"
+    instance_count = 2
   }
 }
