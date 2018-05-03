@@ -361,7 +361,7 @@ functions:
     handler: js/roles-api/handler.getRole
     events:
       - http:
-          path: posts/{postId}/roles
+          path: /roles/{role}
           method: get
           cors: true
     package:
@@ -370,11 +370,24 @@ functions:
         - js/roles-api/handler.js
         - js/roles-api/responses.js
 
+  getAllRole:
+    handler: js/roles-api/handler.getAllRoles
+    events:
+      - http:
+          path: roles
+          method: get
+          cors: true
+    package:
+      include:
+        - js/roles-api/getAllRoles.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
+
   deleteRole:
     handler: js/roles-api/handler.deleteRole
     events:
       - http:
-          path: posts/{postId}/roles/{roleId}
+          path: roles/{role}
           method: delete
           cors: true
     package:
@@ -387,7 +400,7 @@ functions:
     handler: js/roles-api/handler.createRole
     events:
       - http:
-          path: posts/{postId}/roles
+          path: roles
           method: post
           cors: true
     package:
@@ -397,26 +410,12 @@ functions:
         - js/roles-api/responses.js
         - node_modules/moment/**
 
-  updateRole:
-    handler: js/roles-api/handler.updateRole
-    events:
-      - http:
-          path: posts/{postId}/roles/{roleId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/roles-api/updateRole.js
-        - js/roles-api/handler.js
-        - js/roles-api/responses.js
-        - node_modules/moment/**
-
 ################### Departments Api ###################
   getDepartment:
     handler: js/departments-api/handler.getDepartment
     events:
       - http:
-          path: posts/{postId}/departments
+          path: departments/{department}
           method: get
           cors: true
     package:
@@ -425,11 +424,24 @@ functions:
         - js/departments-api/handler.js
         - js/departments-api/responses.js
 
+getAllDepartments:
+    handler: js/departments-api/handler.getAllDepartments
+    events:
+      - http:
+          path: departments
+          method: get
+          cors: true
+    package:
+      include:
+        - js/departments-api/getAllDepartments.js
+        - js/departments-api/handler.js
+        - js/departments-api/responses.js
+
   deleteDepartment:
     handler: js/departments-api/handler.deleteDepartment
     events:
       - http:
-          path: posts/{postId}/departments/{departmentId}
+          path: departments/{department}
           method: delete
           cors: true
     package:
@@ -442,7 +454,7 @@ functions:
     handler: js/departments-api/handler.createDepartment
     events:
       - http:
-          path: posts/{postId}/departments
+          path: departments
           method: post
           cors: true
     package:
@@ -452,26 +464,12 @@ functions:
         - js/departments-api/responses.js
         - node_modules/moment/**
 
-  updateDepartment:
-    handler: js/departments-api/handler.updateDepartment
-    events:
-      - http:
-          path: posts/{postId}/departments/{departmentId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/departments-api/updateDepartment.js
-        - js/departments-api/handler.js
-        - js/departments-api/responses.js
-        - node_modules/moment/**
-
 ################### Categories Api ###################
   getCategory:
     handler: js/categories-api/handler.getCategory
     events:
       - http:
-          path: posts/{postId}/categories
+          path: categories/{category}
           method: get
           cors: true
     package:
@@ -480,11 +478,24 @@ functions:
         - js/categories-api/handler.js
         - js/categories-api/responses.js
 
+  getAllCategories:
+    handler: js/categories-api/handler.getAllCategories
+    events:
+      - http:
+          path: categories
+          method: get
+          cors: true
+    package:
+      include:
+        - js/categories-api/getAllCategories.js
+        - js/categories-api/handler.js
+        - js/categories-api/responses.js
+
   deleteCategory:
     handler: js/categories-api/handler.deleteCategory
     events:
       - http:
-          path: posts/{postId}/categories/{categoryId}
+          path: categories/{category}
           method: delete
           cors: true
     package:
@@ -497,26 +508,12 @@ functions:
     handler: js/categories-api/handler.createCategory
     events:
       - http:
-          path: posts/{postId}/categories
+          path: categories
           method: post
           cors: true
     package:
       include:
         - js/categories-api/createCategory.js
-        - js/categories-api/handler.js
-        - js/categories-api/responses.js
-        - node_modules/moment/**
-
-  updateCategory:
-    handler: js/categories-api/handler.updateCategory
-    events:
-      - http:
-          path: posts/{postId}/categories/{categoryId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/categories-api/updateCategory.js
         - js/categories-api/handler.js
         - js/categories-api/responses.js
         - node_modules/moment/**
