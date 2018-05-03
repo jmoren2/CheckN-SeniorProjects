@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "aws-sdk": "^2.209.0",
-    "moment": "^2.22.0"
+    "moment": "^2.22.0",
+    "serverless-nested-stack": "0.0.7"
+  },
+  "devDependencies": {
+    "serverless-nested-stack": "0.0.7",
+    "serverless-plugin-split-stacks": "^1.4.1"
   }
 }
