@@ -34,7 +34,7 @@ class App extends React.Component {
                     <Route exact path="/" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
                     <Route path="/login" component={() => (<LogInPage indexUserMethod={this.setUserData}/>)}/>
                     <Route path="/feed" component={() => (<FeedPage userData={this.userData}/>)}/>
-                    <Route path="/post/:postID" component={() => (<ViewPost userData={this.userData}/>)}/>
+                    <Route path="/post/:postID" component={props => (<ViewPost userData={this.userData} {...props}/>)}/>
                     <Route path="/create" component={() => (<CreatePost userData={this.userData}/>)}/>
                     <Route path="/register" component={() => (<RegisterUser/>)}/>
                 </div>

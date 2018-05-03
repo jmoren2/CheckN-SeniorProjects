@@ -13,6 +13,8 @@ import Check from 'react-icons/lib/fa/check-circle-o';
 class ViewPost extends Component{//Initial State
     constructor(props){
         super(props);
+        console.log("these are my props");
+        console.log(props);
         this.state = {
             postID: props.match.params.postID,
             postContent: "",
