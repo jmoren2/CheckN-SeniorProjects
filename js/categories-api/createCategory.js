@@ -4,7 +4,7 @@
 const success = require('./responses.js').singleCategorySuccess;
 const fail = require('./responses.js').CategoriesFail;
 
-module.exports.createCategories = (ddb, event, context, callback) => {
+module.exports.createCategory = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
 
     var body = JSON.parse(event.body);
