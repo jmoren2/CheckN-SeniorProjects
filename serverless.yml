@@ -356,73 +356,73 @@ functions:
   #       - js/locations-api/responses.js
   #       - node_modules/moment/**
 
-# ################### Roles Api ###################
-#   getRolesByPostId:
-#     handler: js/roles-api/handler.getRolesByPostId
-#     events:
-#       - http:
-#           path: posts/{postId}/roles
-#           method: get
-#           cors: true
-#     package:
-#       include:
-#         - js/roles-api/getRolesByPostId.js
-#         - js/roles-api/handler.js
-#         - js/roles-api/responses.js
+################### Roles Api ###################
+  getRolesByPostId:
+    handler: js/roles-api/handler.getRolesByPostId
+    events:
+      - http:
+          path: posts/{postId}/roles
+          method: get
+          cors: true
+    package:
+      include:
+        - js/roles-api/getRolesByPostId.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
 
-#   getRolesBySearch:
-#     handler: js/roles-api/handler.getRolesBySearch
-#     events:
-#       - http:
-#           path: roles
-#           method: get
-#           cors: true
-#     package:
-#       include:
-#         - js/roles-api/getRolesBySearch.js
-#         - js/roles-api/handler.js
-#         - js/roles-api/responses.js
+  getRolesBySearch:
+    handler: js/roles-api/handler.getRolesBySearch
+    events:
+      - http:
+          path: roles
+          method: get
+          cors: true
+    package:
+      include:
+        - js/roles-api/getRolesBySearch.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
 
-#   deleteRole:
-#     handler: js/roles-api/handler.deleteRole
-#     events:
-#       - http:
-#           path: posts/{postId}/roles/{roleId}
-#           method: delete
-#           cors: true
-#     package:
-#       include:
-#         - js/roles-api/deleteRole.js
-#         - js/roles-api/handler.js
-#         - js/roles-api/responses.js
+  deleteRole:
+    handler: js/roles-api/handler.deleteRole
+    events:
+      - http:
+          path: posts/{postId}/roles/{roleId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/roles-api/deleteRole.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
 
-#   createRole:
-#     handler: js/roles-api/handler.createRole
-#     events:
-#       - http:
-#           path: posts/{postId}/roles
-#           method: post
-#           cors: true
-#     package:
-#       include:
-#         - js/roles-api/createRole.js
-#         - js/roles-api/handler.js
-#         - js/roles-api/responses.js
-#         - node_modules/moment/**
+  createRole:
+    handler: js/roles-api/handler.createRole
+    events:
+      - http:
+          path: posts/{postId}/roles
+          method: post
+          cors: true
+    package:
+      include:
+        - js/roles-api/createRole.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
+        - node_modules/moment/**
 
-#   updateRole:
-#     handler: js/roles-api/handler.updateRole
-#     events:
-#       - http:
-#           path: posts/{postId}/roles/{roleId}
-#           method: put
-#           cors: true
-#     package:
-#       include:
-#         - js/roles-api/updateRole.js
-#         - js/roles-api/handler.js
-#         - js/roles-api/responses.js
-#         - node_modules/moment/**
+  updateRole:
+    handler: js/roles-api/handler.updateRole
+    events:
+      - http:
+          path: posts/{postId}/roles/{roleId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/roles-api/updateRole.js
+        - js/roles-api/handler.js
+        - js/roles-api/responses.js
+        - node_modules/moment/**
 
 ################### Departments Api ###################
   getDepartmentsByPostId:
