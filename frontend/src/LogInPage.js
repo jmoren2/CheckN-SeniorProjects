@@ -42,7 +42,7 @@ class LogInPage extends React.Component{
             return result.json();
         })
         .then(response => {
-            console.log('user object: ' + JSON.stringify(response.users[0]));
+            console.log('user objects: ' + JSON.stringify(response.users));
             console.log('ARRAY SELECTION' + JSON.stringify(response.users[0]));
             return(JSON.stringify(response.users[0]));
         })
