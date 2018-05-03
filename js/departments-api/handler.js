@@ -2,9 +2,9 @@
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.getDepartmentsByPostId = (event, context, callback) => {
-  const getDepartmentsByPostId = require('./getDepartmentsByPostId').getDepartmentsByPostId
-  getDepartmentsByPostId(ddb, event, context, callback);
+module.exports.getDepartment = (event, context, callback) => {
+  const getDepartment = require('./getDepartmentByName').getDepartment
+  getDepartment(ddb, event, context, callback);
 };
 
 module.exports.getDepartmentsBySearch = (event, context, callback) => {

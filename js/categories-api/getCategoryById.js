@@ -4,16 +4,16 @@ const getCategoryFail = require('./responses').CategoriesFail;
 
 module.exports.getCategoryById = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.categoryId !== undefined && 
-            event.pathParameters.categoryId !== null && 
-            event.pathParameters.categoryId !== "") {
-            console.log("Received proxy: " + event.pathParameters.categoryId);
+        if (event.pathParameters.category !== undefined && 
+            event.pathParameters.category !== null && 
+            event.pathParameters.category !== "") {
+            console.log("Received proxy: " + event.pathParameters.category);
 
-            var id = event.pathParameters.categoryId;
+            var category = event.pathParameters.postId;
             var params = {
                 TableName: "categories",
                 Key: {
-                    "categoryId": id 
+                    "category": category 
                 }
             };
 
@@ -21,14 +21,14 @@ module.exports.getCategoryById = (ddb, event, context, callback) => {
     
             ddb.get(params, function(err, data) {
                 if(err)
-                    return getCategoryFail(500,'get Category by CategoryId failed. Error: ' + err, callback);
+                    return getCategoryFail(500,'get Category by Category failed. Error: ' + err, callback);
                 else
                     return getSingleCategorySuccess(200, data.Item, callback);
             });
         }
         else
-            return getCategoryFail(400, 'get Category by roleCategoryId failed.', callback);
+            return getCategoryFail(400, 'get Category by roleCategory failed.', callback);
     }
     else
-        return getCategoryFail(400,'get Category by CategoryId failed', callback);
+        return getCategoryFail(400,'get Category by Category failed', callback);
 }

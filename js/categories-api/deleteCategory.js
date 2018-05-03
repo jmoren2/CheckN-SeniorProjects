@@ -4,15 +4,15 @@ const deleteCategoryFail = require('./responses').CategoriesFail;
 
 module.exports.deleteCategory = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.categoryId !== undefined && 
-            event.pathParameters.categoryId !== null && 
-            event.pathParameters.categoryId !== "") {
+        if (event.pathParameters.category !== undefined && 
+            event.pathParameters.category !== null && 
+            event.pathParameters.category !== "") {
             
-            var id = event.pathParameters.categoryId;
+            var category = event.pathParameters.category;
             var params = {
                 TableName: "categories",
                 Key: {
-                    "categoryId" : id
+                    "categoryId" : category
                 }
             };
 

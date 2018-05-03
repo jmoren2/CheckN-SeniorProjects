@@ -4,15 +4,15 @@ const deleteRoleSuccess = require('./responses').deleteRoleSuccess;
 
 module.exports.deleteRole = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.roleId !== undefined && 
-            event.pathParameters.roleId !== null && 
-            event.pathParameters.roleId !== "") {
+        if (event.pathParameters.role !== undefined && 
+            event.pathParameters.role !== null && 
+            event.pathParameters.role !== "") {
             
-            var id = event.pathParameters.roleId;
+            var role = event.pathParameters.role;
             var params = {
                 TableName: "roles",
                 Key: {
-                    "roleId" : id
+                    "role" : role
                 }
             };
 
