@@ -29,7 +29,7 @@ class RegisterUser extends Component{
             email: this.state.email
         };
 
-        fetch('https://95sbuermt6.execute-api.us-west-2.amazonaws.com/dev/users/', {
+        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -37,7 +37,8 @@ class RegisterUser extends Component{
             return result.json()
         })
         .then(response => {
-            this.setState({returnedUser: response.user, handleSubmitDone: true});
+            console.log("response.user object: " + response.user);
+            this.setState({handleSubmitDone: true});
         });
     }
 

@@ -45,7 +45,8 @@ class LogInPage extends React.Component{
             return(JSON.stringify(response.users[0]));
         })
         .then(validUser => {
-            this.setState({returnedUser: validUser, handleSubmitDone: true});
+            this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js
+            this.setState({handleSubmitDone: true});
         })
         .catch(error => {
             console.log(error);

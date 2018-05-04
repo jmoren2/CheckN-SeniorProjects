@@ -32,7 +32,7 @@ class CreatePost extends Component{
             userId: this.props.userObj.userId
         };
 
-        fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
         })

@@ -24,7 +24,7 @@ class FeedPage extends React.Component{
 
     //Handles fetching a list of posts based on a searchQuery and updates the State so the feed is rendered
     retrieveFeed(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
