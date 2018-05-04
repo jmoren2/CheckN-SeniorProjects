@@ -26,12 +26,12 @@ class App extends React.Component {
         return(
             <Router>
                 <div>
-                    <Route exact path="/" component={() => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj}/>)}/>{/*Passes a potentially null user object to the login page to check if login is necessary*/}
-                    <Route path="/login" component={() => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj}/>)}/>{/*Set the user object with this.props.indexUserMethod()*/}
-                    <Route path="/feed" component={() => (<FeedPage userObj={this.userObj}/>)}/>{/*Access with this.props.userObj*/}
-                    <Route path="/post/:postID" component={() => (<ViewPost userObj={this.userObj}/>)}/>
-                    <Route path="/create" component={() => (<CreatePost userObj={this.userObj}/>)}/>
-                    <Route path="/register" component={() => (<RegisterUser userObj={this.userObj}/>)}/>{/*Shouldn't be at this page if signed-in*/}
+                    <Route exact path="/" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} {...props}/>)}/>{/*Passes a potentially null user object to the login page to check if login is necessary*/}
+                    <Route path="/login" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} {...props}/>)}/>{/*Set the user object with this.props.indexUserMethod()*/}
+                    <Route path="/feed" component={props => (<FeedPage userObj={this.userObj} {...props}/>)}/>{/*Access with this.props.userObj*/}
+                    <Route path="/post/:postID" component={props => (<ViewPost userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/create" component={props => (<CreatePost userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                 </div>
             </Router>
         );
