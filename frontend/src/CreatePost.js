@@ -19,35 +19,28 @@ class CreatePost extends Component{
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     handleSubmit(event){
         event.preventDefault();
-        //console.log('state.title: ' + this.state.title);
-        //console.log('state.content: ' + this.state.content);
-        //console.log('state.tagString: ' + this.state.tagArray);
         //What is being sent to the API
         const data = {
             title: this.state.title, 
             content: this.state.content,
             tags: this.state.tagArray,
-            userId: this.props.location.user.userId
+            userId: this.props.userObj.userId
         };
-        //console.log('data: ' + JSON.stringify(data));
 
         fetch('https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
-            body: JSON.stringify(data)
-        })
-        .then(result => {
-            //console.log('result: ' + JSON.stringify(result));
-            return result.json()
+            body: JSON.stringify(data)//Stringify the data being sent
         })
         .then(response => {
-            //console.log('response: ' + JSON.stringify(response));
-            this.setState({returnedId: response.post.postId, handleSubmitDone: true});
-            //console.log(response.post);
-            //console.log(response.post.postId);
+            return response.json()//Turn the response into a JSON object
+        })
+        .then(result => {
+            this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }
 
@@ -87,50 +80,44 @@ class CreatePost extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return <Redirect to={{pathname: `/post/${this.state.returnedId}`, user: this.props.location.user}}/>//go to the post's webpage
+        return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
         }
         return(
             <div>
-
             <Navbar />
+                <div className="container">
+                    <div className=''>
+                        <div className='card card-1  text-md-center'>
+                            <div className='card-body text-center'>
+                                <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
+                                <form onSubmit={this.handleSubmit}>
 
-            <div className="container">
-            
-            <div className=''>
-                <div className='card card-1  text-md-center'>
-                    <div className='card-body text-center'>
-                    <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
+                                    <div className='form-group'>
+                                        <label>Title: </label>
+                                        <input value={this.state.title} onChange={this.handleChangeTitle} placeholder='Enter the title' className='form-control' /> <br />
+                                    </div>
 
-            <form onSubmit={this.handleSubmit}>
+                                    <div className='form-group'>
+                                        <label>Content: </label>
+                                        <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
+                                    </div>
 
-                                <div className='form-group'>
-                                    <label>Title: </label>
-                                    <input value={this.state.title} onChange={this.handleChangeTitle} placeholder='Enter the title' className='form-control' /> <br />
-                                </div>
+                                    <div className='form-group'>
+                                        <label>Tags:</label>
+                                        <input onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                        <span>
+                                            <label>Tag Preview: </label>
+                                            {this.state.tagButtons}
+                                        </span>
+                                    </div>
 
-                                <div className='form-group'>
-                                    <label>Content: </label>
-                                    <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
-                                </div>
+                                    <button className='btn btn-info' type='submit'>Submit</button>
 
-                                <div className='form-group'>
-                                    <label>Tags:</label>
-                                    <input onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
-                                    <span>
-                                        <label>Tag Preview: </label>
-                                        {this.state.tagButtons}
-                                    </span>
-                                </div>
-
-                {/*<Link to={`/post/${this.state.returnedId}`}>*/}
-                <button className='btn btn-info' type='submit'>Submit</button>
-                {/*</Link>*/}
-
-            </form>
-            </div>
-            </div>
-            </div>
-            </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

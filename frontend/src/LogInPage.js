@@ -16,6 +16,7 @@ class LogInPage extends React.Component{
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     handleChangeEmail(event) {
@@ -28,9 +29,8 @@ class LogInPage extends React.Component{
         this.setState({password: event.target.value});//Updates the lastName field as typing occurs
     }
 
-    handleSubmit(){
-        console.log("I'M HERE");
-        console.log(this.state.email);
+    handleSubmit(event){
+        event.preventDefault();
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.email}`, {
                 headers: {
                     'content-type': 'application/json'
@@ -38,16 +38,13 @@ class LogInPage extends React.Component{
                 method: 'GET',
         })
         .then(result => {
-            console.log(JSON.stringify(result));
             return result.json();
         })
         .then(response => {
-            console.log('user objects: ' + JSON.stringify(response.users));
-            console.log('ARRAY SELECTION' + JSON.stringify(response.users[0]));
+            //NEEDS A CASE FOR IF NO USER IS FOUND
             return(JSON.stringify(response.users[0]));
         })
         .then(validUser => {
-            console.log('SUBMIT HANDLED');
             this.setState({returnedUser: validUser, handleSubmitDone: true});
         })
         .catch(error => {
@@ -56,48 +53,34 @@ class LogInPage extends React.Component{
     }
 
     render(){
-        if (this.state.handleSubmitDone === true){
-            console.log("GOT INTO THE END STATE BEFORE REDIRECTING");
-        return (<Redirect to={{pathname: `/feed`, user: this.state.returnedUser}}/>);//go to the feed page with our user ID
+        if (this.state.handleSubmitDone === true || this.props.userObj != null){
+            return(<Redirect to='/feed'/>);//go to the feed page with our user object
         }
         return(
             <div id="LoginPageContainer" className="h-100 w-50">
                 <div className="container">
-                {/* <Navbar /> */}
-                <div className='card card-1 text-md-center'>
+                    <div className='card card-1 text-md-center'>
                         <div className='card-body text-center'>
                             <img height="25%" width="25%" src={logo} style={{objectFit:'contain'}} /><br />
                             <h2 className='text-center'  style={{color:'black'}}>CheckN</h2>
-                            {/*console.log(this.props.location.user.userId)/*This should display the user ID from the given user object*/}
 
                             <form onSubmit={this.handleSubmit}>
                                 <div className='form-group'>
-                                <input value={this.state.email} onChange={this.handleChangeEmail} placeholder='Email' className='form-control' /> <br />
-                                <input value={this.state.password} onChange={this.handleChangePassword}  placeholder='Password' className='form-control' />
-                            </div>
-                                {/* <Link to={{pathname: '/feed', user: this.props.location.user}}> */}
+                                    <input value={this.state.email} onChange={this.handleChangeEmail} placeholder='Email' className='form-control' /> <br />
+                                    <input value={this.state.password} onChange={this.handleChangePassword}  placeholder='Password' className='form-control' />
+                                </div>
                                 <button className='btn btn-info' type='submit'>Login</button>
-                                {/* </Link> */}
                             </form>
 
                             <div className=''>
-                                
                                 <Link to="/register">
                                 <button className='btn btn-info'>Register</button>
                                 </Link>
                             </div>
                          </div>
+                    </div>
                 </div>
-                </div>
-                </div>
-               
-            /* // </div>
-            // <div id="LoginPageContainer">
-            //     <img src={logo} /><br />
-            //     <Link to="/feed">
-            //         <button>Log In</button>
-            //     </Link>
-            // </div> */
+            </div>
         );
     }
 }
