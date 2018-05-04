@@ -34,7 +34,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrievePost(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -142,7 +142,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrieveComments(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -163,7 +163,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId};//attaches the comment to the post being commented on
 
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })

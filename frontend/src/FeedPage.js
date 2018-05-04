@@ -34,7 +34,6 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
-            console.log('comments: ' + JSON.stringify(feedData));
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -158,23 +157,22 @@ class FeedPage extends React.Component{
             <div>
 
                 <Navbar searchMethod={this.handleSearch}/>
-            <div className="container">
-            
-                <div className=''>
-                    <div className='card card-1  text-md-center'>
-                        <div className='card-body text-center'>
-                            <h2 style={{color: 'black'}}>Your Feed</h2>
-                            
-                        {this.state.feed}
+                <div className="container">
+                
+                    <div className=''>
+                        <div className='card card-1  text-md-center'>
+                            <div className='card-body text-center'>
+                                <h2 style={{color: 'black'}}>Your Feed</h2>
+                                
+                            {this.state.feed}
 
-                        
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
-                <button className='btn btn-info' type='submit'>View Test Post</button>
+                <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
+                    <button className='btn btn-info' type='submit'>View Test Post</button>
                 </Link>
             </div>
         );
