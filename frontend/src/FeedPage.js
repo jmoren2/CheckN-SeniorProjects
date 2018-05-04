@@ -14,6 +14,7 @@ class FeedPage extends React.Component{
             feed: <div>Loading...</div>,
         }
         this.searchQuery = "search=a";
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     //This is a default method of a React.Component that gets called when the component is first created
@@ -23,7 +24,7 @@ class FeedPage extends React.Component{
 
     //Handles fetching a list of posts based on a searchQuery and updates the State so the feed is rendered
     retrieveFeed(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -33,7 +34,6 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
-            console.log('comments: ' + JSON.stringify(feedData));
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -83,97 +83,55 @@ class FeedPage extends React.Component{
                  negCount = 0;
             }
             
-               return(
-
-                    //individual feed item
-                    <div className="container">
-
-                    
-
-                      <div className="row">
-
-                        <span className="col-sm" >
-                            <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
-                                <ThumbsUp /> {positiveCount}
-                            </button>
-                      <br />
-                            <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote}>
-                                <Neutral /> {neutralCount}
-                            </button>
-                      <br />
-                            <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown}>
-                                <ThumbsDown /> {negCount}
-                            </button>
-                        </span>
-
+            return(
+            //individual feed item
+            <div className="container">
+                <div className="row">
+                    <span className="col-sm" >
+                        <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp}>
+                            <ThumbsUp /> {positiveCount}
+                        </button>
+                    <br />
+                        <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote}>
+                            <Neutral /> {neutralCount}
+                        </button>
+                    <br />
+                        <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown}>
+                            <ThumbsDown /> {negCount}
+                        </button>
+                    </span>
                     <div className="col-sm-11">
-
-                    
-                    
-                    <div className="card bg-light h-100">
+                        <div className="card bg-light h-100">
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
-                                
-                                <div key={post.postId} >
-
-                                <div class="card-block">
-                                <div>
-                                    
-                                        
-                                </div>
-
-                                    {post.title} <br />
-                                    
-                                    
-                                    
-                                                                    
-                                    
-                                </div>
-                                
-                                
-                                </div>
-                            </Link>
-
-                            
+                                    <div key={post.postId} >
+                                        <div class="card-block">
+                                            <div>
+                                            </div>
+                                            {post.title} <br />
+                                        </div>
+                                    </div>
+                                </Link>
                             <br/>
-
                             <div className="row">
 
                                 <div className="col-sm-4">
                                 <Moment format="YYYY/MM/DD HH:mm">
                                 {post.timestamp}
                                 </Moment>
-                                        
-
                                 </div>
 
-                                        <div className="col-sm-8">
-
-                                                 
-                                        {post.visibilityLevel}
-
-                                        </div>
-                                        
+                                <div className="col-sm-8">
+                                {post.visibilityLevel}
+                                </div>
 
                             </div>
-                    </div>
-
-
 
                         </div>
-
-                      </div>
-                      <br/>
                     </div>
-    
-                    
-                
-            
-            
-            
+                </div>
+                <br/>
+            </div>
             )
-            
-            
-            
         })
         return feed;
     }
@@ -199,31 +157,24 @@ class FeedPage extends React.Component{
             <div>
 
                 <Navbar searchMethod={this.handleSearch}/>
-            <div className="container">
-            
-                <div className=''>
-                    <div className='card card-1  text-md-center'>
-                        <div className='card-body text-center'>
-                            <h2 style={{color: 'black'}}>Your Feed</h2>
-                            
-                                        
-                        {this.state.feed}
+                <div className="container">
+                
+                    <div className=''>
+                        <div className='card card-1  text-md-center'>
+                            <div className='card-body text-center'>
+                                <h2 style={{color: 'black'}}>Your Feed</h2>
+                                
+                            {this.state.feed}
 
-                        
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-                <button className='btn btn-info' type='submit'>View Post</button>
+                <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
+                    <button className='btn btn-info' type='submit'>View Test Post</button>
                 </Link>
             </div>
-
-            
-            
-
-
         );
     }
 }

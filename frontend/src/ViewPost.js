@@ -25,6 +25,7 @@ class ViewPost extends Component{//Initial State
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addComment = this.addComment.bind(this);
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){//Queries the API for a post and its comments with specified ID
@@ -33,7 +34,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrievePost(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -74,91 +75,56 @@ class ViewPost extends Component{//Initial State
             {
                  negCount = 0;
             }
-
-
             return(//displays the post title and contents
+            <div className="container">
 
+                <div className="row">
+                    <span className="col-sm">
+                        <button className="btn btn-primary btn-sm" type="submit">
+                            <ThumbsUp /> {positiveCount}
+                        </button>
+                        <br />
+                        <button className="btn btn-default btn-sm" type="submit">
+                        <   Neutral /> {neutralCount}
+                        </button>
+                        <br />
+                        <button className="btn btn-danger btn-sm" type="submit">
+                            <ThumbsDown /> {negCount}
+                        </button>
+                    </span>
 
-<div className="container">
+                    <div className="col-sm-11">
+                        <div className="card bg-light h-100">
 
-                    
+                            <div key={data} className="">
+                                <div className="card-block">
+                                    <h3>{data.post.title}</h3>
+                                    <p>{data.post.content}</p>
+                                </div>
+                            </div>
 
-<div className="row">
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <Moment format="YYYY/MM/DD HH:mm">
+                                        {data.post.timestamp}
+                                    </Moment>
+                                </div>
+                                <div className="col-sm-8">
+                                    {data.post.visibilityLevel}
+                                </div>
+                            </div>
 
-      <span className="col-sm">
-<button className="btn btn-primary btn-sm" type="submit">
-      <ThumbsUp /> {positiveCount}
-</button>
-<br />
-<button className="btn btn-default btn-sm" type="submit">
-      <Neutral /> {neutralCount}
-</button>
-<br />
-<button className="btn btn-danger btn-sm" type="submit">
-      <ThumbsDown /> {negCount}
-</button>
-</span>
+                        </div>
+                    </div>
 
-  <div className="col-sm-11">
-
-
-
-<div className="card bg-light h-100">
-          
-
-<div key={data} className="">
-            <div className="card-block">
-
-                <h3>{data.post.title}</h3>
-                <p>{data.post.content}</p>
-
+                </div>
+                <br/>
             </div>
-                
-            </div>
-
-
-
-          
-      <div className="row">
-
-          <div className="col-sm-4">
-          <Moment format="YYYY/MM/DD HH:mm">
-          {data.post.timestamp}
-          </Moment>
-                  
-
-          </div>
-
-                  <div className="col-sm-8">
-
-                           
-                  {data.post.visibilityLevel}
-
-                  </div>
-                  
-
-      </div>
-</div>
-
-
-
-  </div>
-
-</div>
-<br/>
-</div>
-
-            
-            
-            
-
-
-
-
-        )})
+            );
+        })
         .then(data => {
-            this.setState({postContent: data});
-        });//update the state with the above post title and content
+            this.setState({postContent: data});//update the state with the above post title and content
+        });
     }
 
     generateCommentFeed(comments){ //comments are edited here
@@ -176,7 +142,7 @@ class ViewPost extends Component{//Initial State
     }
 
     retrieveComments(){
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -186,7 +152,6 @@ class ViewPost extends Component{//Initial State
             return commentResults.json();
         })
         .then(commentData => {
-            console.log('comments: ' + JSON.stringify(commentData));
             return(this.generateCommentFeed(commentData.comments));
         })
         .then(commentFeed => {
@@ -196,23 +161,17 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        console.log('state.newComment: ' + this.state.content);
-        const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
-        console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
+        const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId};//attaches the comment to the post being commented on
 
-        fetch(`https://vlhke8b5m9.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
         .then(result => {
-            console.log('result: ' + JSON.stringify(result));
             return result.json()
         })
         .then(response => {
-            console.log('response: ' + JSON.stringify(response));
             this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
-            console.log(response.comment.Item);
-            console.log(response.comment.Item.commentId);
         });
     }
 
@@ -223,19 +182,16 @@ class ViewPost extends Component{//Initial State
                 
             <div className="card-block"></div>
             <div className="row">
-            <div className="col-sm-10">
-            <p>{this.state.content}</p>
-            </div>
-
-            <div style={{fontSize: '12px', paddingTop:'8px'}}  className="text-success col-sm-2">
-                Commented&nbsp;<Check />
-            </div>
-
-
+                <div className="col-sm-10">
+                    <p>{this.state.content}</p>
+                </div>
+                <div style={{fontSize: '12px', paddingTop:'8px'}}  className="text-success col-sm-2">
+                    Commented&nbsp;<Check />
+                </div>
             </div>
                     
         </div>
-        return newComment
+        return newComment;
     }
 
     handleChangeComment(event) {
