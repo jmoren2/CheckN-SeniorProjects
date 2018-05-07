@@ -7,9 +7,9 @@ module.exports.getRole = (event, context, callback) => {
   getRole(ddb, event, context, callback);
 };
 
-module.exports.getRolesBySearch = (event, context, callback) => {
-  const getRolesBySearch = require('./getRolesBySearch').getRolesBySearch
-  getRolesBySearch(ddb, event, context, callback);
+module.exports.getAllRoles = (event, context, callback) => {
+  const getAllRoles = require('./getAllRoles').getAllRoles;
+  getAllRoles(ddb, event, context, callback);
 };
 
 module.exports.createRole = (event, context, callback) => {
