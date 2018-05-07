@@ -35,7 +35,7 @@ module.exports.getResponseById = (event, context, callback) => {
 };
 
 module.exports.createResponse = (event, context, callback) => {
-    const createResponse = require('./response/createResponse').createResponse;
+    const createResponse = require('./responses/createResponse').createResponse;
     createResponse(ddb, event, context, callback);
 };
 
