@@ -587,7 +587,7 @@ functions:
         - node_modules/moment/**
 
 ################### Survey Responses Api ###################
-  getSurveyById:
+  getResponseById:
     handler: js/survey-api/handler.getResponseById
     events:
       - http:
