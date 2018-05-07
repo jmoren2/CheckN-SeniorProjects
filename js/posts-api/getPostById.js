@@ -24,8 +24,12 @@ module.exports.getPostById = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return fail(500,'get post by postId failed. Error: ' + err, callback);
-                else
-                    return success(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                        return fail(404, 'No Post Found', callback);
+                    else
+                        return success(200, data.Item, callback);
+                }
             });
         }
         else

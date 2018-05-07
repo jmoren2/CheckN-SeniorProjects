@@ -22,8 +22,12 @@ module.exports.getTagById = (ddb, event, context, callback) => {
             ddb.get(params, function(err, data) {
                 if(err)
                     return getTagFail(500,'get Tag by tagId failed. Error: ' + err, callback);
-                else
-                    return getSingleTagSuccess(200, data.Item, callback);
+                else {
+                    if(data.Item == null)
+                        return getTagFail(404, 'No Tag Found', callback);
+                    else
+                        return getSingleTagSuccess(200, data.Item, callback);
+                }
             });
         }
         else
