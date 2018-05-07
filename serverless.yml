@@ -517,3 +517,139 @@ functions:
         - js/categories-api/handler.js
         - js/categories-api/responses.js
         - node_modules/moment/**
+
+################### Surveys Api ###################
+  getSurveyById:
+    handler: js/survey-api/handler.getSurveyById
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/getSurveyById.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  getSurveysBySearch:
+    handler: js/survey-api/handler.getSurveysBySearch
+    events:
+      - http:
+          path: surveys
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/getSurveysBySearch.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  deleteSurvey:
+    handler: js/survey-api/handler.deleteSurvey
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/survey-api/deleteSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  createSurvey:
+    handler: js/survey-api/handler.createSurvey
+    events:
+      - http:
+          path: surveys
+          method: post  
+          cors: true      
+    package:
+      include:
+        - js/survey-api/createSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+  updateSurvey:
+    handler: js/survey-api/handler.updateSurvey
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/survey-api/updateSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+################### Survey Responses Api ###################
+  getSurveyById:
+    handler: js/survey-api/handler.getResponseById
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/getResponseById.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  getResponsesBySearch:
+    handler: js/survey-api/handler.getResponsesBySearch
+    events:
+      - http:
+          path: surveys/{surveyId}/responses
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/getResponsesBySearch.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  deleteResponse:
+    handler: js/survey-api/handler.deleteResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/survey-api/deleteResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  createResponse:
+    handler: js/survey-api/handler.createResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: post  
+          cors: true      
+    package:
+      include:
+        - js/survey-api/createResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+  updateResponse:
+    handler: js/survey-api/handler.updateResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/survey-api/updateResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
