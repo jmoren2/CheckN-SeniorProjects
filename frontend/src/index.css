@@ -48,6 +48,32 @@ body {
   margin-left: 50px;
 }
 
+.voteButton {
+  font-size: 24;
+  padding: 14px 60px;
+  border-radius: 12px;
+  border: none;
+  margin: 20px;
+  /*opacity: 0.6;*/
+  transition: 0.3s;
+}
+
+/*.voteButton:hover {opacity: 1}*/
+
+.thumbsUp {
+  color: white;
+  background-color: blue;
+}
+
+.neutral {
+  color: gray;
+  background-color: lightgray;
+}
+.thumbsDown {
+  color: white;
+  background-color: red;
+}
+
 @media screen and (max-height: 450px) {
 .sidenav {padding-top: 15px;}
 .sidenav a {font-size: 18px;}

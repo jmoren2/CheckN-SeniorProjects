@@ -8,6 +8,7 @@ import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
+import './index.css'
 
 
 class ViewPost extends Component{//Initial State
@@ -20,6 +21,7 @@ class ViewPost extends Component{//Initial State
             newComment: "",
             content: "",
             returnedId: null,
+            votePhrase: "Please vote and add a comment if you'd like."
         };
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
@@ -212,11 +214,37 @@ class ViewPost extends Component{//Initial State
         );
     }
 
+    //Returns the response box
+    responseBox(){
+        return(
+                <div>
+                <label>{this.state.votePhrase}</label>
+                <form>
+                    <div className='form-group'>
+                    <span>
+                        <button className="voteButton thumbsUp" style={{opacity: '0.6'}}>
+                            <ThumbsUp size={30}/>
+                        </button>
+                        <button className="voteButton neutral">
+                            <Neutral size={30}/>
+                        </button>
+                        <button className="voteButton thumbsDown">
+                            <ThumbsDown size={30}/>
+                        </button>
+                    </span>
+                        <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
+                    <button className='btn btn-primary' type='submit'>Submit</button>
+                    </div>
+                </form>
+                </div>
+        );
+    }
+
 
     render(){
         return(
             <div>
-            <Navbar />
+                <Navbar />
                 <div className="container">
 
                     <div className=''>
@@ -226,6 +254,10 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
+                                    </div>
+
+                                    <div>
+                                        {this.responseBox()}
                                     </div>
 
                                    <h3 style={{color: 'black'}}>Comments</h3>
