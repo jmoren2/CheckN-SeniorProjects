@@ -44,9 +44,6 @@ class FeedPage extends React.Component{
 
      voteUp(post) {
         console.log("voted up!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
 
         var postToBeVotedOn = post.postId;
@@ -62,8 +59,6 @@ class FeedPage extends React.Component{
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
-
-        
 
         if(post.positiveVoters)
         {
@@ -87,8 +82,6 @@ class FeedPage extends React.Component{
         // TODO
         //grab actual user id
 
-        
-       // console.log(post)
        
        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
         method: 'PUT',
@@ -103,18 +96,11 @@ class FeedPage extends React.Component{
 
     });
 
-
-    
-
-
     }
 
 
     neutralVote(post) {
         console.log("voted neutral!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
         var postToBeVotedOn = post.postId;
         var idToVote = null;
@@ -131,12 +117,8 @@ class FeedPage extends React.Component{
             idToVote = post.userId;
         }
 
-        
-
         if(post.neutralVoters)
         {
-
-            
             post['neutralVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
@@ -166,8 +148,6 @@ class FeedPage extends React.Component{
             });
     }
 
-
-
     voteDown(post) {
         console.log("voted down!")
 
@@ -186,9 +166,6 @@ class FeedPage extends React.Component{
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
-
-
-        
 
         if(post.negativeVoters)
         {
@@ -261,9 +238,6 @@ class FeedPage extends React.Component{
 
                     //individual feed item
                     <div className="container">
-
-                    
-
                       <div className="row">
 
                         <span className="col-sm" >
@@ -280,9 +254,7 @@ class FeedPage extends React.Component{
                             </button>
                         </span>
 
-                    <div className="col-sm-11">
-
-                    
+                    <div className="col-sm-11">      
                     
                     <div className="card bg-light h-100">
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
@@ -290,16 +262,8 @@ class FeedPage extends React.Component{
                                 <div key={post.postId} >
 
                                 <div class="card-block">
-                                <div>
-                                    
-                                        
-                                </div>
 
-                                    {post.title} <br />
-                                    
-                                    
-                                    
-                                                                    
+                                    {post.title} <br />                        
                                     
                                 </div>
                                 
@@ -330,24 +294,14 @@ class FeedPage extends React.Component{
 
                             </div>
                     </div>
-
-
-
                         </div>
 
                       </div>
                       <br/>
                     </div>
-    
-                    
-                
-            
-            
-            
+
             )
-            
-            
-            
+  
         })
         return feed;
     }
@@ -378,10 +332,6 @@ class FeedPage extends React.Component{
                 <button className='btn btn-info' type='submit'>View Post</button>
                 </Link> */}
             </div>
-
-            
-            
-
 
         );
     }

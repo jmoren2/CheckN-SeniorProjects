@@ -16,8 +16,6 @@ class LogInPage extends React.Component{
     render(){
         return(
 
-            
-
             <div id="LoginPageContainer" className="h-100 w-50">
                 <div className="container">
                 {/* <Navbar /> */}
@@ -55,14 +53,7 @@ class LogInPage extends React.Component{
                 </div>
                 </div>
                 </div>
-               
-            /* // </div>
-            // <div id="LoginPageContainer">
-            //     <img src={logo} /><br />
-            //     <Link to="/feed">
-            //         <button>Log In</button>
-            //     </Link>
-            // </div> */
+
         );
     }
 }

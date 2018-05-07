@@ -63,11 +63,6 @@ class CreatePost extends Component{
         });
     }
 
-    postCreatedSuccessfully()
-    {
-
-    }
-
     handleChangeTitle(event) {
         this.setState({title: event.target.value});//Updates the title field as typing occurs
 
@@ -104,10 +99,7 @@ class CreatePost extends Component{
                                 <div className='form-group'>
                                     <label>Content: </label>
                                     <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
-                                </div>
-                                
-
-
+                                </div>       
                 {/*<Link to={`/post/${this.state.returnedId}`}>*/}
                 <button className='btn btn-info' type='submit'>Submit</button>
                 {/*</Link>*/}

@@ -161,12 +161,8 @@ class ViewPost extends Component{//Initial State
             });
     }
 
-
-
     voteDown(post) {
         console.log("voted down!")
-
-
         console.log(JSON.parse(JSON.stringify(post)));
         var postToBeVotedOn = post.postId;
         var idToVote = null;
@@ -183,12 +179,8 @@ class ViewPost extends Component{//Initial State
         }
 
 
-        
-
         if(post.negativeVoters)
-        {
-
-            
+        {            
             post['negativeVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
@@ -302,9 +294,6 @@ class ViewPost extends Component{//Initial State
                 
             </div>
 
-
-
-          
       <div className="row">
 
           <div className="col-sm-4">
@@ -326,20 +315,11 @@ class ViewPost extends Component{//Initial State
       </div>
 </div>
 
-
-
   </div>
 
 </div>
 <br/>
 </div>
-
-            
-            
-            
-
-
-
 
         )})
         .then(data => {
@@ -425,8 +405,6 @@ class ViewPost extends Component{//Initial State
     
     </div>
         
-
-
         return newComment
     }
 

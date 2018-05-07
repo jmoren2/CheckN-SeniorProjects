@@ -17,9 +17,7 @@ class Navbar extends React.Component {
     super(props);
   }
 
-  /*
 
-  */
   generateSearch = (e) => {
     e.preventDefault();     //Stops the page from reloading
 
@@ -109,16 +107,6 @@ class Navbar extends React.Component {
           </div>
 </nav>
 
-{/* <nav class="navbar navbar-light bg-light justify-content-between">
-  <a class="navbar-brand" href='/'>CheckN</a>
-  
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-    <button class="btn btn-default" type="submit">
-    <FaBeer /> 
-        </button>
-  </form>
-</nav> */}
             </div>
         )
     }
