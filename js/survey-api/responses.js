@@ -20,7 +20,7 @@ module.exports.deleteSurveySuccess = (callback) => {
     });
 }
 
-module.exports.singleSurveySuccess = (code, comment, callback) => {
+module.exports.singleSurveySuccess = (code, survey, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -30,12 +30,12 @@ module.exports.singleSurveySuccess = (code, comment, callback) => {
         },
         body: JSON.stringify({
             statusCode: code,
-            comment: comment
+            survey: survey
         })
     })
 }
 
-module.exports.multiSurveySuccess = (code, comments, callback) => {
+module.exports.multiSurveySuccess = (code, surveys, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -45,8 +45,8 @@ module.exports.multiSurveySuccess = (code, comments, callback) => {
         },
         body: JSON.stringify({
             statusCode: code,
-            comments: comments,
-            count: comments.length
+            surveys: surveys,
+            count: surveys.length
         })
     })
 }
@@ -73,7 +73,7 @@ module.exports.deleteResponseSuccess = (callback) => {
     });
 }
 
-module.exports.singleResponseSuccess = (code, comment, callback) => {
+module.exports.singleResponseSuccess = (code, response, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -83,12 +83,12 @@ module.exports.singleResponseSuccess = (code, comment, callback) => {
         },
         body: JSON.stringify({
             statusCode: code,
-            comment: comment
+            response: response
         })
     })
 }
 
-module.exports.multiResponseSuccess = (code, comments, callback) => {
+module.exports.multiResponseSuccess = (code, responses, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -98,8 +98,8 @@ module.exports.multiResponseSuccess = (code, comments, callback) => {
         },
         body: JSON.stringify({
             statusCode: code,
-            comments: comments,
-            count: comments.length
+            responses: responses,
+            count: responses.length
         })
     })
 }
