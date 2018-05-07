@@ -95,8 +95,37 @@ resource "aws_dynamodb_table" "categoriesTable" {
   }
 }
 
-resource "aws_elasticsearch_domain" "checkN-dev" {
-  domain_name = "checkN-dev-domain"
+resource "aws_dynamodb_table" "surveysTable" {
+  name           = "surveys"
+  hash_key       = "surveyId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "surveyId"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "surveyResponsesTable" {
+  name           = "surveyResponses"
+  hash_key       = "responseId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "responseId"
+    type = "S"
+  }
+}
+
+resource "aws_elasticsearch_domain" "checkNDomain" {
+  domain_name = "checkn-dev"
+
+  ebs_options {
+    ebs_enabled = true
+    volume_size = 10
+  }
 
   cluster_config {
     instance_type  = "t2.small.elasticsearch"
