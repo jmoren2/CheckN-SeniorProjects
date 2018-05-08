@@ -7,9 +7,9 @@ module.exports.getCategory = (event, context, callback) => {
   getCategory(ddb, event, context, callback);
 };
 
-module.exports.getCategoriesBySearch = (event, context, callback) => {
-  const getCategoriesBySearch = require('./getCategoriesBySearch').getCategoriesBySearch
-  getCategoriesBySearch(ddb, event, context, callback);
+module.exports.getAllCategories = (event, context, callback) => {
+  const getAllCategories = require('./getAllCategories').getAllCategories;
+  getAllCategories(ddb, event, context, callback);
 };
 
 module.exports.createCategory = (event, context, callback) => {
