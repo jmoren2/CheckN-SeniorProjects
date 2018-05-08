@@ -73,14 +73,6 @@ module.exports.deleteResponseSuccess = (callback) => {
     });
 }
 
-<<<<<<< HEAD
-module.exports.singleResponseSuccess = (code, category, callback) => {
-    return callback(null, {
-        statusCode: code,
-        body: JSON.stringify({
-            statusCode: code,
-            category: category
-=======
 module.exports.singleResponseSuccess = (code, response, callback) => {
     return callback(null, {
         statusCode: code,
@@ -92,22 +84,10 @@ module.exports.singleResponseSuccess = (code, response, callback) => {
         body: JSON.stringify({
             statusCode: code,
             response: response
->>>>>>> 973a08ec362f0a996bd010808f7bf2515ee6f3b3
         })
     })
 }
 
-<<<<<<< HEAD
-module.exports.singleSurveySuccess = (code, category, callback) => {
-    return callback(null, {
-        statusCode: code,
-        body: JSON.stringify({
-            statusCode: code,
-            category: category
-        })
-    })
-}
-=======
 module.exports.multiResponseSuccess = (code, responses, callback) => {
     return callback(null, {
         statusCode: code,
@@ -123,4 +103,3 @@ module.exports.multiResponseSuccess = (code, responses, callback) => {
         })
     })
 }
->>>>>>> 973a08ec362f0a996bd010808f7bf2515ee6f3b3
