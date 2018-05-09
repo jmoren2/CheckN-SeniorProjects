@@ -8,6 +8,7 @@ import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
+import './index.css'
 
 
 class ViewPost extends Component{//Initial State
@@ -20,11 +21,15 @@ class ViewPost extends Component{//Initial State
             newComment: "",
             content: "",
             returnedId: null,
+            votePhrase: "Please vote and add a comment if you'd like.",
+            voteChoice: 'none'
         };
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.addComment = this.addComment.bind(this);
+        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){//Queries the API for a post and its comments with specified ID
@@ -252,79 +257,56 @@ class ViewPost extends Component{//Initial State
             {
                  negCount = 0;
             }
-
-
             return(//displays the post title and contents
+            <div className="container">
 
+                <div className="row">
+                    <span className="col-sm">
+                        <button className="btn btn-primary btn-sm" type="submit">
+                            <ThumbsUp /> {positiveCount}
+                        </button>
+                        <br />
+                        <button className="btn btn-default btn-sm" type="submit">
+                        <   Neutral /> {neutralCount}
+                        </button>
+                        <br />
+                        <button className="btn btn-danger btn-sm" type="submit">
+                            <ThumbsDown /> {negCount}
+                        </button>
+                    </span>
 
-<div className="container">
+                    <div className="col-sm-11">
+                        <div className="card bg-light h-100">
 
-                    
+                            <div key={data} className="">
+                                <div className="card-block">
+                                    <h3>{data.post.title}</h3>
+                                    <p>{data.post.content}</p>
+                                </div>
+                            </div>
 
-<div className="row">
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <Moment format="YYYY/MM/DD HH:mm">
+                                        {data.post.timestamp}
+                                    </Moment>
+                                </div>
+                                <div className="col-sm-8">
+                                    {data.post.visibilityLevel}
+                                </div>
+                            </div>
 
-      <span className="col-sm">
-<button className="btn btn-primary btn-sm" type="submit" onClick={this.voteUp.bind(this, data.post)}>
-      <ThumbsUp /> {positiveCount}
-</button>
-<br />
-<button className="btn btn-default btn-sm" type="submit" onClick={this.neutralVote.bind(this, data.post)}>
-      <Neutral /> {neutralCount}
-</button>
-<br />
-<button className="btn btn-danger btn-sm" type="submit" onClick={this.voteDown.bind(this, data.post)}>
-      <ThumbsDown /> {negCount}
-</button>
-</span>
+                        </div>
+                    </div>
 
-  <div className="col-sm-11">
-
-
-
-<div className="card bg-light h-100">
-          
-
-<div key={data} className="">
-            <div className="card-block">
-
-                <h3>{data.post.title}</h3>
-                <p>{data.post.content}</p>
-
+                </div>
+                <br/>
             </div>
-                
-            </div>
-
-      <div className="row">
-
-          <div className="col-sm-4">
-          <Moment format="YYYY/MM/DD HH:mm">
-          {data.post.timestamp}
-          </Moment>
-                  
-
-          </div>
-
-                  <div className="col-sm-8">
-
-                           
-                  {data.post.visibilityLevel}
-
-                  </div>
-                  
-
-      </div>
-</div>
-
-  </div>
-
-</div>
-<br/>
-</div>
-
-        )})
+            );
+        })
         .then(data => {
-            this.setState({postContent: data});
-        });//update the state with the above post title and content
+            this.setState({postContent: data});//update the state with the above post title and content
+        });
     }
 
     generateCommentFeed(comments){ //comments are edited here
@@ -352,7 +334,6 @@ class ViewPost extends Component{//Initial State
             return commentResults.json();
         })
         .then(commentData => {
-            //console.log('comments: ' + JSON.stringify(commentData));
             return(this.generateCommentFeed(commentData.comments));
         })
         .then(commentFeed => {
@@ -362,30 +343,23 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        //console.log('state.newComment: ' + this.state.content);
-        const data = {content: this.state.content, postId: this.state.postID};//attaches the comment to the post being commented on
-        //console.log('data: ' + JSON.stringify(data));//content and postID are sent along to the API
+        const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
         .then(result => {
-            //console.log('result: ' + JSON.stringify(result));
             return result.json()
         })
         .then(response => {
-            //console.log('response: ' + JSON.stringify(response));``
             this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
-            //console.log(response.comment.Item);
-            //console.log(response.comment.Item.commentId);
         });
     }
 
     addNewCommentToTop(content)
     {
         var newComment = 
-
         <div>
                 <div className="card bg-light" style={{objectFit:'contain'}}>
                 
@@ -412,25 +386,52 @@ class ViewPost extends Component{//Initial State
         this.setState({content: event.target.value});//Updates the comment input field as typing occurs
     }
 
-    addComment(){
-        this.setState(//Replaces the empty "newComment" state with the form for a new comment
-            {newComment:
-                
-            <form onSubmit={this.handleSubmit}>
-            
-                <div className='form-group'>
-                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' /> <br />
+    //Returns the response box
+    //put inside of a method to later have this return nothing if the user already voted
+    responseBox(){
+        return(
+                <div>
+                <label>{this.state.votePhrase}</label>
+                <form onSubmit={this.handleSubmit}>
+                    <div className='form-group'>
+                    <span>
+                        <button id='POSITIVE' className="btn btn-primary votebtn" style={{opacity: this.opacities['POSITIVE'], border: this.borders['POSITIVE']}} onClick={this.voteSelected}>
+                            <ThumbsUp size={30}/>
+                        </button>
+                        <button id='NEUTRAL' className="btn btn-default votebtn" style={{opacity: this.opacities['NEUTRAL'], border: this.borders['NEUTRAL']}} onClick={this.voteSelected}>
+                            <Neutral size={30}/>
+                        </button>
+                        <button id='NEGATIVE' className="btn btn-danger votebtn" style={{opacity: this.opacities['NEGATIVE'], border: this.borders['NEGATIVE']}} onClick={this.voteSelected}>
+                            <ThumbsDown size={30}/>
+                        </button>
+                    </span>
+                        <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
+                    <button id='submitVoteButton' className='btn btn-primary' type='submit' disabled>Submit</button>
+                    </div>
+                </form>
                 </div>
-                <button className='btn btn-info' type='submit'>Submit</button>
-            </form>}
         );
     }
 
+    //Handles a click on post vote event
+    voteSelected = (e) => {
+        e.preventDefault();
+        //This basically resets the opacities and borders of all buttons, then sets up the selected one
+        this.opacities = {POSITIVE: '0.4', NEUTRAL: '0.4', NEGATIVE: '0.4'};
+        this.opacities[e.target.id] = '1';
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+        this.borders[e.target.id] = '4px solid black';
+        this.setState({
+            voteChoice: e.target.id
+        });
+        //enable submitting now that there is a vote
+        document.getElementById("submitVoteButton").disabled = false;
+    }
 
     render(){
         return(
             <div>
-            <Navbar />
+                <Navbar />
                 <div className="container">
 
                     <div className=''>
@@ -442,19 +443,18 @@ class ViewPost extends Component{//Initial State
                                         {this.state.postContent}
                                     </div>
 
+                                    <div>
+                                        {this.responseBox()}
+                                    </div>
+
                                    <h3 style={{color: 'black'}}>Comments</h3>
 
-
-                                         <div>
-                                             {this.state.newComment}
-                                         </div>
-                                        
+                                    <div>
+                                        {this.state.newComment}
+                                    </div>
                                     <div>
                                         {this.state.postComments}
                                     </div>
-                                    <a href="#">
-                                    <button className='btn btn-info' type='submit' style={{href:'#'}} onClick={this.addComment}>Reply</button>
-                                    </a>
                                     
                             </div>
                         </div>
