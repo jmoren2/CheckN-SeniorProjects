@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aws-sdk": "^2.235.1",
     "bootstrap": "^4.1.0",
     "material-ui": "^0.20.0",
     "moment": "^2.22.1",
