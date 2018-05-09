@@ -8,6 +8,7 @@ import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
+import './index.css'
 
 
 class ViewPost extends Component{//Initial State
@@ -20,11 +21,14 @@ class ViewPost extends Component{//Initial State
             newComment: "",
             content: "",
             returnedId: null,
+            votePhrase: "Please vote and add a comment if you'd like.",
+            voteChoice: 'none'
         };
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.addComment = this.addComment.bind(this);
+        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
     }
 
@@ -161,7 +165,7 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId};//attaches the comment to the post being commented on
+        const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
@@ -198,25 +202,52 @@ class ViewPost extends Component{//Initial State
         this.setState({content: event.target.value});//Updates the comment input field as typing occurs
     }
 
-    addComment(){
-        this.setState(//Replaces the empty "newComment" state with the form for a new comment
-            {newComment:
-                
-            <form onSubmit={this.handleSubmit}>
-            
-                <div className='form-group'>
-                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' /> <br />
+    //Returns the response box
+    //put inside of a method to later have this return nothing if the user already voted
+    responseBox(){
+        return(
+                <div>
+                <label>{this.state.votePhrase}</label>
+                <form onSubmit={this.handleSubmit}>
+                    <div className='form-group'>
+                    <span>
+                        <button id='POSITIVE' className="btn btn-primary votebtn" style={{opacity: this.opacities['POSITIVE'], border: this.borders['POSITIVE']}} onClick={this.voteSelected}>
+                            <ThumbsUp size={30}/>
+                        </button>
+                        <button id='NEUTRAL' className="btn btn-default votebtn" style={{opacity: this.opacities['NEUTRAL'], border: this.borders['NEUTRAL']}} onClick={this.voteSelected}>
+                            <Neutral size={30}/>
+                        </button>
+                        <button id='NEGATIVE' className="btn btn-danger votebtn" style={{opacity: this.opacities['NEGATIVE'], border: this.borders['NEGATIVE']}} onClick={this.voteSelected}>
+                            <ThumbsDown size={30}/>
+                        </button>
+                    </span>
+                        <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
+                    <button id='submitVoteButton' className='btn btn-primary' type='submit' disabled>Submit</button>
+                    </div>
+                </form>
                 </div>
-                <button className='btn btn-info' type='submit'>Submit</button>
-            </form>}
         );
     }
 
+    //Handles a click on post vote event
+    voteSelected = (e) => {
+        e.preventDefault();
+        //This basically resets the opacities and borders of all buttons, then sets up the selected one
+        this.opacities = {POSITIVE: '0.4', NEUTRAL: '0.4', NEGATIVE: '0.4'};
+        this.opacities[e.target.id] = '1';
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+        this.borders[e.target.id] = '4px solid black';
+        this.setState({
+            voteChoice: e.target.id
+        });
+        //enable submitting now that there is a vote
+        document.getElementById("submitVoteButton").disabled = false;
+    }
 
     render(){
         return(
             <div>
-            <Navbar />
+                <Navbar />
                 <div className="container">
 
                     <div className=''>
@@ -228,19 +259,18 @@ class ViewPost extends Component{//Initial State
                                         {this.state.postContent}
                                     </div>
 
+                                    <div>
+                                        {this.responseBox()}
+                                    </div>
+
                                    <h3 style={{color: 'black'}}>Comments</h3>
 
-
-                                         <div>
-                                             {this.state.newComment}
-                                         </div>
-                                        
+                                    <div>
+                                        {this.state.newComment}
+                                    </div>
                                     <div>
                                         {this.state.postComments}
                                     </div>
-                                    <a href="#">
-                                    <button className='btn btn-info' type='submit' style={{href:'#'}} onClick={this.addComment}>Reply</button>
-                                    </a>
                                     
                             </div>
                         </div>
