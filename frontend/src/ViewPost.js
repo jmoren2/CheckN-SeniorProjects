@@ -37,6 +37,184 @@ class ViewPost extends Component{//Initial State
         this.retrieveComments();
     }
 
+    componentDidUpdate(){
+        this.retrievePost();
+        //this.retrieveComments();
+    }
+
+    voteUp(post) {
+        console.log("voted up!")
+
+        
+
+        console.log(JSON.parse(JSON.stringify(post)));
+
+        var postToBeVotedOn = post.postId;
+        var idToVote = null;
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+        
+
+        if(post.positiveVoters)
+        {
+
+            
+            post['positiveVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.positiveVoters = [];
+                post['positiveVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+        // TODO
+        //grab actual user id
+
+        
+       // console.log(post)
+       
+       fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+        method: 'PUT',
+        body: JSON.stringify(post)
+    })
+    .then(result => {
+        console.log('result: ' + JSON.stringify(result));
+        return result.json()
+    })
+    .then(response => {
+        console.log('response: ' + JSON.stringify(response));``
+
+    });
+
+
+    
+
+
+    }
+
+
+    neutralVote(post) {
+        console.log("voted neutral!")
+
+        
+
+        console.log(JSON.parse(JSON.stringify(post)));
+        var postToBeVotedOn = post.postId;
+        var idToVote = null;
+
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+        
+
+        if(post.neutralVoters)
+        {
+
+            
+            post['neutralVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.neutralVoters = [];
+                post['neutralVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+                method: 'PUT',
+                body: JSON.stringify(post)
+            })
+            .then(result => {
+                console.log('result: ' + JSON.stringify(result));
+                return result.json()
+            })
+            .then(response => {
+                console.log('response: ' + JSON.stringify(response));``
+        
+            });
+    }
+
+    voteDown(post) {
+        console.log("voted down!")
+        console.log(JSON.parse(JSON.stringify(post)));
+        var postToBeVotedOn = post.postId;
+        var idToVote = null;
+
+        if(post.userId)
+        {
+
+            idToVote = post.userId;
+
+        }
+        else{
+            post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
+            idToVote = post.userId;
+        }
+
+
+        if(post.negativeVoters)
+        {            
+            post['negativeVoters'].push(idToVote);
+            console.log('added voter')
+            console.log(post)
+            
+        }
+        else
+            {
+                post.negativeVoters = [];
+                post['negativeVoters'].push(idToVote);
+                console.log('array created');
+                console.log('added voter');
+                console.log(post);
+            }
+
+
+            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+                method: 'PUT',
+                body: JSON.stringify(post)
+            })
+            .then(result => {
+                console.log('result: ' + JSON.stringify(result));
+                return result.json()
+            })
+            .then(response => {
+                console.log('response: ' + JSON.stringify(response));``
+        
+            });
+    }
+
     retrievePost(){
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
@@ -48,7 +226,7 @@ class ViewPost extends Component{//Initial State
             return results.json();
         })//Saves the response as JSON
         .then(data => {
-            console.log('r: ' + JSON.stringify(data));
+            //console.log('r: ' + JSON.stringify(data));
 
 
             var pVoters = data.post.positiveVoters;
@@ -182,20 +360,26 @@ class ViewPost extends Component{//Initial State
     addNewCommentToTop(content)
     {
         var newComment = 
-        <div className="card bg-light" style={{objectFit:'contain'}}>
+        <div>
+                <div className="card bg-light" style={{objectFit:'contain'}}>
                 
-            <div className="card-block"></div>
-            <div className="row">
-                <div className="col-sm-10">
-                    <p>{this.state.content}</p>
-                </div>
-                <div style={{fontSize: '12px', paddingTop:'8px'}}  className="text-success col-sm-2">
-                    Commented&nbsp;<Check />
-                </div>
-            </div>
+                    <div className="card-block">
                     
-        </div>
-        return newComment;
+        
+                    <p style={{paddingTop:'8px'}}> {this.state.content} </p>
+                    
+                    
+                    </div>
+                        
+                </div>
+        
+                <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
+                Commented&nbsp;<Check />
+                </div>
+    
+    </div>
+        
+        return newComment
     }
 
     handleChangeComment(event) {

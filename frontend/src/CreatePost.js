@@ -6,15 +6,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 class CreatePost extends Component{
     constructor(props){
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.returnedID = null;
         this.state = {
                     title: '', 
                     content: '',
-                    tagArray: [], 
+                    tagArray: [],
+                    positiveVoters:[],
+                    neutralVoters: [],
+                    negativeVoters: [],
                     tagButtons: '',
+                    state:'OPEN',
+                    visibilityLevel: [],
+                    pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
                     returnedId: null, 
-                    handleSubmitDone: false};
+                    handleSubmitDone: false
+        };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
@@ -28,6 +33,11 @@ class CreatePost extends Component{
         const data = {
             title: this.state.title, 
             content: this.state.content,
+            positiveVoters: this.state.positiveVoters,
+            neutralVoters: this.state.neutralVoters,
+            negativeVoters: this.state.negativeVoters,
+            pinnedId: this.state.pinnedId,
+            state: this.state.state,
             tags: this.state.tagArray,
             userId: this.props.userObj.userId
         };
@@ -44,13 +54,9 @@ class CreatePost extends Component{
         });
     }
 
-    postCreatedSuccessfully()
-    {
-
-    }
-
     handleChangeTitle(event) {
         this.setState({title: event.target.value});//Updates the title field as typing occurs
+
     }
 
     handleChangeContent(event) {
