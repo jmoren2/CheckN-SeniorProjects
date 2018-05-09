@@ -33,6 +33,7 @@ functions:
         - js/posts-api/getPostById.js
         - js/posts-api/handler.js
         - js/posts-api/responses.js
+        - node_modules/**
 
   getPostsBySearch:
     handler: js/posts-api/handler.getPostsBySearch
@@ -46,6 +47,7 @@ functions:
         - js/posts-api/getPostsBySearch.js
         - js/posts-api/handler.js
         - js/posts-api/responses.js
+        - node_modules/**
 
   deletePost:
     handler: js/posts-api/handler.deletePost
@@ -73,6 +75,7 @@ functions:
         - js/posts-api/handler.js
         - js/posts-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
   updatePost:
     handler: js/posts-api/handler.updatePost

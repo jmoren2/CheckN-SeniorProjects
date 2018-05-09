@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "aws-sdk": "^2.209.0",
+    "elasticsearch": "^13.3.1",
+    "http-aws-es": "^4.0.0",
     "moment": "^2.22.0",
     "serverless-nested-stack": "0.0.7"
   },
