@@ -9,7 +9,7 @@ module.exports.createResponse = (ddb, event, context, callback) => {
 
     var body = JSON.parse(event.body);
     body.responseId = uuid.v4();
-
+    body.surveyId = event.pathParameters.surveyId
     var response = {
         Item: body,
         TableName: 'surveyResponses'

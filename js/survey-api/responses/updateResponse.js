@@ -11,10 +11,9 @@ module.exports.updateResponse = (ddb, event, context, callback) => {
             Key:{
                 "responseId": responseId
             },
-        UpdateExpression: "set userId = :userId, responses = :responses",
+        UpdateExpression: "responses = :responses",
         ExpressionAttributeValues:{
-            ":responses":item.responses,
-            ":userId" : item.userId
+            ":responses":item.responses
         },    
         ReturnValues:"UPDATED_NEW"
         };
