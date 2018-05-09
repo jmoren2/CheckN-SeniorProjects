@@ -3,7 +3,7 @@ const response = require('../responses.js').singleResponseSuccess;
 const fail = require('../responses').singleResponseSuccess;
 module.exports.updateResponse = (ddb, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
-        var tableName = "responses";
+        var tableName = "surveyResponses";
         var item = JSON.parse(event.body);
         var surveyId = event.pathParameters.responseId
         var params = {

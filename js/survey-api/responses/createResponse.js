@@ -12,7 +12,7 @@ module.exports.createResponse = (ddb, event, context, callback) => {
 
     var response = {
         Item: body,
-        TableName: 'responses'
+        TableName: 'surveyResponses'
 
     }
     
