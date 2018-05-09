@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js'
-import 'bootstrap/dist/css/bootstrap.css';
+import Question from './Question.js'
+//import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
     constructor(props){
@@ -42,6 +43,7 @@ class CreatePost extends Component{
             userId: this.props.userObj.userId
         };
 
+        /*
         fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
@@ -51,7 +53,7 @@ class CreatePost extends Component{
         })
         .then(result => {
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
-        });
+        });*/
     }
 
     handleChangeTitle(event) {
@@ -115,6 +117,9 @@ class CreatePost extends Component{
                                             {this.state.tagButtons}
                                         </span>
                                     </div>
+
+                                    <button>This will be the add survey button</button>
+                                    <Question/>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
