@@ -13,6 +13,8 @@ class FeedPage extends React.Component{
         this.state = {
             feed: <div>Loading...</div>
         }
+        this.searchQuery = "search=a";
+        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
@@ -24,7 +26,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -34,7 +36,6 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
-            //console.log('comments: ' + JSON.stringify(feedData));
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -234,6 +235,7 @@ class FeedPage extends React.Component{
                  negCount = 0;
             }
             
+
                return(
 
                     //individual feed item
@@ -262,46 +264,34 @@ class FeedPage extends React.Component{
                                 <div key={post.postId} >
 
                                 <div class="card-block">
-
-                                    {post.title} <br />                        
-                                    
+                                    {post.title} <br />                                         
                                 </div>
-                                
-                                
                                 </div>
-                            </Link>
-
-                            
+                            </Link>                     
                             <br/>
-
                             <div className="row">
 
                                 <div className="col-sm-4">
                                 <Moment format="YYYY/MM/DD HH:mm">
                                 {post.timestamp}
                                 </Moment>
-                                        
-
                                 </div>
 
-                                        <div className="col-sm-8">
-
-                                                 
-                                        {post.visibilityLevel}
-
-                                        </div>
-                                        
+                                <div className="col-sm-8">
+                                {post.visibilityLevel}
+                                </div>
 
                             </div>
-                    </div>
-                        </div>
 
-                      </div>
-                      <br/>
                     </div>
+
+                        </div>
+                    </div>
+
 
             )
   
+
         })
         return feed;
     }
@@ -311,28 +301,26 @@ class FeedPage extends React.Component{
         return(
             <div>
 
-                <Navbar />
-            <div className="container">
-            
-                <div className=''>
-                    <div className='card card-1  text-md-center'>
-                        <div className='card-body text-center'>
-                            <h2 style={{color: 'black'}}>Your Feed</h2>
-                            
-                                        
-                        {this.state.feed}
 
-                        
+                <Navbar searchMethod={this.handleSearch}/>
+                <div className="container">
+                
+                    <div className=''>
+                        <div className='card card-1  text-md-center'>
+                            <div className='card-body text-center'>
+                                <h2 style={{color: 'black'}}>Your Feed</h2>
+                                
+                            {this.state.feed}
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
-                <button className='btn btn-info' type='submit'>View Post</button>
-                </Link> */}
+                <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
+                    <button className='btn btn-info' type='submit'>View Test Post</button>
+                </Link>
             </div>
-
         );
     }
 }
