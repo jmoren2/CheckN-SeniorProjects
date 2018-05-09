@@ -61,8 +61,6 @@ class RegisterUser extends Component{
         return(
             <div>
 
-                <Navbar />
-
                 <div className="container">
                 
                     <div className=''>
@@ -73,18 +71,18 @@ class RegisterUser extends Component{
                                 <form onSubmit={this.handleSubmit}>
 
                                     <div className='form-group'>
-                                        <label>firstName: </label>
-                                        <input value={this.state.firstName} onChange={this.handleChangeFirst} placeholder='First Name' className='form-control' /> <br />
+                                        <label>First Name: </label>
+                                        <input value={this.state.firstName} onChange={this.handleChangeFirst} placeholder='First Name' className='form-control' required /> <br />
                                     </div>
 
                                     <div className='form-group'>
-                                        <label>lastName: </label>
-                                        <input value={this.state.lastName} onChange={this.handleChangeLast}  placeholder='Last Name' className='form-control' /> <br />
+                                        <label>Last Name: </label>
+                                        <input value={this.state.lastName} onChange={this.handleChangeLast}  placeholder='Last Name' className='form-control' required/> <br />
                                     </div>
 
                                     <div className='form-group'>
-                                        <label>email: </label>
-                                        <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' /> <br />
+                                        <label>Email: </label>
+                                        <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' required/> <br />
                                     </div>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>

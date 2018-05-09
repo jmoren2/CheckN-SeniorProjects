@@ -16,6 +16,7 @@ import Admin from 'react-icons/lib/fa/lock';
 class Navbar extends React.Component {
   constructor(props){
     super(props);
+
   }
   generateSearch = (e) => {
     e.preventDefault();     //Stops the page from reloading

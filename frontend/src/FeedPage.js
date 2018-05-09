@@ -1,21 +1,30 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect, Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Navbar from './Navbar.js'
 import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
-
+import TimeAgo from 'react-timeago'
 class FeedPage extends React.Component{
     constructor(props){
         super(props);
+
+        if(this.props.userObj === null)
+        {
+            window.location.href = '/login';
+            console.log('hello')
+        }
         this.state = {
             feed: <div>Loading...</div>
         }
         this.searchQuery = "search=a";
         console.log("The user object passed in is: " + props.userObj);
+    
     }
+
+ 
 
     componentDidMount(){//Queries the API for a post with specified ID
        this.retrieveFeed();
@@ -238,6 +247,8 @@ class FeedPage extends React.Component{
 
                return(
 
+                    
+
                     //individual feed item
                     <div className="container">
                       <div className="row">
@@ -272,9 +283,10 @@ class FeedPage extends React.Component{
                             <div className="row">
 
                                 <div className="col-sm-4">
-                                <Moment format="YYYY/MM/DD HH:mm">
-                                {post.timestamp}
-                                </Moment>
+                                Posted: &nbsp;
+                                <TimeAgo date={post.timestamp}>
+                                 
+                                </TimeAgo>
                                 </div>
 
                                 <div className="col-sm-8">
@@ -296,11 +308,19 @@ class FeedPage extends React.Component{
         return feed;
     }
 
+    
     //Temporary link to self
     render(){
+
+       // test = this.props.userObj
+
+       
+
         return(
             <div>
-
+            
+            
+                    
 
                 <Navbar searchMethod={this.handleSearch}/>
                 <div className="container">
@@ -317,9 +337,9 @@ class FeedPage extends React.Component{
                     </div>
                 </div>
 
-                <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
+                {/* <Link to='/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1'>
                     <button className='btn btn-info' type='submit'>View Test Post</button>
-                </Link>
+                </Link> */}
             </div>
         );
     }

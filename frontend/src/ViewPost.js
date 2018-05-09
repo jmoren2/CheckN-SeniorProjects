@@ -14,6 +14,12 @@ import './index.css'
 class ViewPost extends Component{//Initial State
     constructor(props){
         super(props);
+
+        if(this.props.userObj === null)
+        {
+            window.location.href = '/login';
+            console.log('hello')
+        }
         this.state = {
             postID: props.match.params.postID,
             postContent: "",
@@ -353,6 +359,7 @@ class ViewPost extends Component{//Initial State
             return result.json()
         })
         .then(response => {
+            console.log(response)
             this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
