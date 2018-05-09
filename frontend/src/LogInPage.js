@@ -21,12 +21,10 @@ class LogInPage extends React.Component{
     }
 
     handleChangeEmail(event) {
-        //DOESN'T WORK IF YOU COPY/PASTE AN EMAIL
         this.setState({email: event.target.value});//Updates the firstName field as typing occurs
     }
 
     handleChangePassword(event) {
-        //DOESN'T WORK IF YOU COPY/PASTE A PASSWORD
         this.setState({password: event.target.value});//Updates the lastName field as typing occurs
     }
 
@@ -43,7 +41,7 @@ class LogInPage extends React.Component{
         })
         .then(response => {
             //NEEDS A CASE FOR IF NO USER IS FOUND
-            return(JSON.stringify(response.users[0]));
+            return(response.users[0]);
         })
         .then(validUser => {
             this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js

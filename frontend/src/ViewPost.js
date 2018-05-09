@@ -12,7 +12,7 @@ import './index.css'
 
 
 class ViewPost extends Component{//Initial State
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             postID: props.match.params.postID,
@@ -24,64 +24,51 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none'
         };
-        this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
         this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
         this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
     }
 
-    componentDidMount(){//Queries the API for a post and its comments with specified ID
+    componentDidMount() {//Queries the API for a post and its comments with specified ID
         this.retrievePost();
         this.retrieveComments();
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         this.retrievePost();
         //this.retrieveComments();
     }
 
     voteUp(post) {
         console.log("voted up!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
 
         var postToBeVotedOn = post.postId;
         var idToVote = null;
 
-        if(post.userId)
-        {
-
+        if(post.userId) {
             idToVote = post.userId;
-
         }
-        else{
+        else {
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
 
-        
-
-        if(post.positiveVoters)
-        {
-
-            
+        if(post.positiveVoters) {
             post['positiveVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
-            
         }
-        else
-            {
-                post.positiveVoters = [];
-                post['positiveVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.positiveVoters = [];
+            post['positiveVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
 
         // TODO
@@ -91,37 +78,25 @@ class ViewPost extends Component{//Initial State
        // console.log(post)
        
        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-        method: 'PUT',
-        body: JSON.stringify(post)
-    })
-    .then(result => {
-        console.log('result: ' + JSON.stringify(result));
-        return result.json()
-    })
-    .then(response => {
-        console.log('response: ' + JSON.stringify(response));``
-
-    });
-
-
-    
-
-
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));``
+        });
     }
-
 
     neutralVote(post) {
         console.log("voted neutral!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
+
         var postToBeVotedOn = post.postId;
         var idToVote = null;
-
-
-        if(post.userId)
-        {
+        if(post.userId) {
 
             idToVote = post.userId;
 
@@ -129,12 +104,9 @@ class ViewPost extends Component{//Initial State
         else{
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
-        }
+        }       
 
-        
-
-        if(post.neutralVoters)
-        {
+        if(post.neutralVoters) {
 
             
             post['neutralVoters'].push(idToVote);
@@ -142,28 +114,25 @@ class ViewPost extends Component{//Initial State
             console.log(post)
             
         }
-        else
-            {
-                post.neutralVoters = [];
-                post['neutralVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.neutralVoters = [];
+            post['neutralVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
-
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-                method: 'PUT',
-                body: JSON.stringify(post)
-            })
-            .then(result => {
-                console.log('result: ' + JSON.stringify(result));
-                return result.json()
-            })
-            .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
-        
-            });
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));``
+        });
     }
 
     voteDown(post) {
@@ -172,47 +141,40 @@ class ViewPost extends Component{//Initial State
         var postToBeVotedOn = post.postId;
         var idToVote = null;
 
-        if(post.userId)
-        {
-
+        if(post.userId) {
             idToVote = post.userId;
 
         }
-        else{
+        else {
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
-
-
-        if(post.negativeVoters)
-        {            
+        if(post.negativeVoters) {            
             post['negativeVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
             
         }
-        else
-            {
-                post.negativeVoters = [];
-                post['negativeVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.negativeVoters = [];
+            post['negativeVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
 
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-                method: 'PUT',
-                body: JSON.stringify(post)
-            })
-            .then(result => {
-                console.log('result: ' + JSON.stringify(result));
-                return result.json()
-            })
-            .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
-        
-            });
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));
+        });
     }
 
     retrievePost(){
@@ -226,7 +188,6 @@ class ViewPost extends Component{//Initial State
             return results.json();
         })//Saves the response as JSON
         .then(data => {
-            //console.log('r: ' + JSON.stringify(data));
 
 
             var pVoters = data.post.positiveVoters;
@@ -361,23 +322,16 @@ class ViewPost extends Component{//Initial State
     {
         var newComment = 
         <div>
-                <div className="card bg-light" style={{objectFit:'contain'}}>
-                
-                    <div className="card-block">
-                    
-        
+            <div className="card bg-light" style={{objectFit:'contain'}}>
+                <div className="card-block">
                     <p style={{paddingTop:'8px'}}> {this.state.content} </p>
-                    
-                    
-                    </div>
-                        
                 </div>
-        
-                <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
-                Commented&nbsp;<Check />
-                </div>
+            </div>
     
-    </div>
+            <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
+            Commented&nbsp;<Check />
+            </div>
+        </div>
         
         return newComment
     }
