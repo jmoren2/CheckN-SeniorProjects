@@ -528,7 +528,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/getSurveyById.js
+        - js/survey-api/survey/getSurveyById.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -541,7 +541,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/getSurveysBySearch.js
+        - js/survey-api/survey/getSurveysBySearch.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -554,7 +554,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/deleteSurvey.js
+        - js/survey-api/survey/deleteSurvey.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -567,7 +567,7 @@ functions:
           cors: true      
     package:
       include:
-        - js/survey-api/createSurvey.js
+        - js/survey-api/survey/createSurvey.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
         - node_modules/moment/**
@@ -581,7 +581,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/updateSurvey.js
+        - js/survey-api/survey/updateSurvey.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
         - node_modules/moment/**
@@ -596,7 +596,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/getResponseById.js
+        - js/survey-api/responses/getResponseById.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -609,7 +609,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/getResponsesBySearch.js
+        - js/survey-api/responses/getResponsesBySearch.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -622,7 +622,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/deleteResponse.js
+        - js/survey-api/responses/deleteResponse.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
 
@@ -635,7 +635,7 @@ functions:
           cors: true      
     package:
       include:
-        - js/survey-api/createResponse.js
+        - js/survey-api/responses/createResponse.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
         - node_modules/moment/**
@@ -649,7 +649,7 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/updateResponse.js
+        - js/survey-api/responses/updateResponse.js
         - js/survey-api/handler.js
         - js/survey-api/responses.js
         - node_modules/moment/**
