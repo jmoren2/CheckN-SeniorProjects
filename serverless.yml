@@ -630,7 +630,7 @@ functions:
     handler: js/survey-api/handler.createResponse
     events:
       - http:
-          path: surveys/{surveyId}/responses/{responseId}
+          path: surveys/{surveyId}/responses
           method: post  
           cors: true      
     package:
