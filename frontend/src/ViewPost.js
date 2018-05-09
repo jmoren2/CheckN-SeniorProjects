@@ -163,7 +163,6 @@ class ViewPost extends Component{//Initial State
             console.log(post);
         }
 
-
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
             method: 'PUT',
             body: JSON.stringify(post)
@@ -177,18 +176,19 @@ class ViewPost extends Component{//Initial State
         });
     }
 
-    retrievePost(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+    storeUser(data) {//A function for fetching the user object associated with the post
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
-                'content-type': 'application/json'
+                'content-type' : 'application/json'
             },
             method: 'GET',
         })
-        .then(results => {
-            return results.json();
-        })//Saves the response as JSON
-        .then(data => {
-
+        .then(response => {
+            return response.json();
+        })
+        .then(userObject => {
+            this.posterID = userObject.user.userId;//Saved for checking to edit the post
+            this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
             var pVoters = data.post.positiveVoters;
             var nVoters = data.post.neutralVoters;
@@ -218,7 +218,7 @@ class ViewPost extends Component{//Initial State
             {
                  negCount = 0;
             }
-            return(//displays the post title and contents
+            return(//displays the post contents
             <div className="container">
 
                 <div className="row">
@@ -242,6 +242,7 @@ class ViewPost extends Component{//Initial State
                             <div key={data} className="">
                                 <div className="card-block">
                                     <h3>{data.post.title}</h3>
+                                    <p>{this.posterName}</p>
                                     <p>{data.post.content}</p>
                                 </div>
                             </div>
@@ -265,8 +266,24 @@ class ViewPost extends Component{//Initial State
             </div>
             );
         })
+        .then(posting => {
+            this.setState({postContent: posting});//update the state with the above post title, poster, and content
+        });
+    }
+
+    retrievePost(){
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'GET',
+        })
+        .then(results => {
+            return results.json();
+        })//Saves the response as JSON
         .then(data => {
-            this.setState({postContent: data});//update the state with the above post title and content
+            //Getting the user name to add to the post
+            this.storeUser(data);//Continues the work in the function above
         });
     }
 
