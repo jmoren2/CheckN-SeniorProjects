@@ -1,5 +1,5 @@
 'use strict';
-const deleteResponseSuccess = require('../responses').deleteResopnseSuccess;
+const deleteResponseSuccess = require('../responses').deleteResponseSuccess;
 const deleteResponseFail = require('../responses').ResponseFail;
 
 module.exports.deleteResponse = (ddb, event, context, callback) => {
