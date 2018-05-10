@@ -9,6 +9,9 @@ import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
+import ReactModal from 'react-modal'
+
+import TimeAgo from 'react-timeago'
 
 
 class ViewPost extends Component{//Initial State
@@ -28,8 +31,14 @@ class ViewPost extends Component{//Initial State
             content: "",
             returnedId: null,
             votePhrase: "Please vote and add a comment if you'd like.",
-            voteChoice: 'none'
+            voteChoice: 'none',
+            showModal: false,
+            userThatCommented: ""
         };
+        this.posterID=null;
+        this.posterName=null;
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -216,7 +225,7 @@ class ViewPost extends Component{//Initial State
                 return result.json()
             })
             .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
+                console.log('response: ' + JSON.stringify(response));
         
             });
     }
@@ -279,6 +288,8 @@ class ViewPost extends Component{//Initial State
                         <button className="btn btn-danger btn-sm" type="submit">
                             <ThumbsDown /> {negCount}
                         </button>
+
+                        
                     </span>
 
                     <div className="col-sm-11">
@@ -293,9 +304,10 @@ class ViewPost extends Component{//Initial State
 
                             <div className="row">
                                 <div className="col-sm-4">
-                                    <Moment format="YYYY/MM/DD HH:mm">
-                                        {data.post.timestamp}
-                                    </Moment>
+                                Posted: &nbsp;
+                                <TimeAgo date={data.post.timestamp}>
+                                 
+                                </TimeAgo>
                                 </div>
                                 <div className="col-sm-8">
                                     {data.post.visibilityLevel}
@@ -315,19 +327,61 @@ class ViewPost extends Component{//Initial State
         });
     }
 
-    generateCommentFeed(comments){ //comments are edited here
-        var commentFeed = comments.map((comment) => {
-            return(
-                <div key={comment.commentId} className="card bg-light">
-                
-                <div className="card-block"></div>
-                <p>{comment.content}</p>
-                    
-                </div>
-            )
+    retreiveUser(userId)
+    {
+       // console.log('userId: ' + userId)
+        return fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'GET',
         })
+        .then(result => {
+        //    console.log('result: ' + JSON.stringify(result));
+        //    console.log('result type: ' + typeof response);
+            return result.json()
+        })
+        .then(response => {
+            
+             console.log('response: ' + JSON.stringify(response.user));
+             console.log('response type: ' + typeof response.user);
+             console.log('response obj val: ' + Object.values(response.user));
+            var x = document.getElementById(response.user.userId);
+            x.innerHTML = response.user.email;
+        })
+        
+
+    }
+
+
+    generateCommentFeed(comments){ //comments are edited here
+
+        
+        var commentFeed = comments.map((comment) => {
+            console.log(comment)
+            
+            var test = this.retreiveUser(comment.userId);
+
+            //console.log('test: ' + test)
+         return(
+                    <div key={comment.commentId} className="card bg-light">
+                    
+                    <div className="card-block">
+                    <p id={comment.userId}>
+                        {comment.userId} commented: 
+                    </p>
+                    
+                    <p>{comment.content}</p>
+                    </div>
+                        
+                    </div>
+                );
+        })
+
+        //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
         return commentFeed;
     }
+
 
     retrieveComments(){
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
@@ -359,7 +413,7 @@ class ViewPost extends Component{//Initial State
             return result.json()
         })
         .then(response => {
-            console.log(response)
+            console.log('new Comment' + JSON.stringify(response))
             this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
@@ -435,7 +489,28 @@ class ViewPost extends Component{//Initial State
         document.getElementById("submitVoteButton").disabled = false;
     }
 
+
+    handleOpenModal () {
+        this.setState({ showModal: true });
+      }
+      
+      handleCloseModal () {
+        this.setState({ showModal: false });
+      }
+
+
+      getVoters(){
+
+
+        return (
+            <div>
+                
+            </div>
+        )
+      }
+
     render(){
+            
         return(
             <div>
                 <Navbar />
@@ -455,18 +530,29 @@ class ViewPost extends Component{//Initial State
                                     </div>
 
                                    <h3 style={{color: 'black'}}>Comments</h3>
+                                   
+                                    <div>
+                                   <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
+                                        <ReactModal class="modal fade" isOpen={this.state.showModal}>
+                                        {this.state.postComments}
+                                        <button class="btn btn-info" onClick={this.handleCloseModal}>Close Modal</button>
+                                        </ReactModal>
+                                    </div>
 
                                     <div>
                                         {this.state.newComment}
                                     </div>
+
+                                    
                                     <div>
                                         {this.state.postComments}
                                     </div>
                                     
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         );
     }
