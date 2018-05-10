@@ -18,7 +18,6 @@ class EditPost extends Component{
             state:'OPEN',
             visibilityLevel: [],
             pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
-            returnedId: null, 
             handleSubmitDone: false
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
@@ -82,7 +81,7 @@ class EditPost extends Component{
         })
         .then(result => {
             console.log('RESULT: ' + JSON.stringify(result));
-            this.setState({returnedId: this.state.postID, handleSubmitDone: true});//Give the new post ID to the app for redirection
+            this.setState({handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }
 
@@ -117,7 +116,7 @@ class EditPost extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
+            return(<Redirect to={`/post/${this.state.postID}`}/>);//go to the new post's page
         }
         return(
             <div>
