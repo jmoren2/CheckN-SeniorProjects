@@ -26,18 +26,11 @@ class EditPost extends Component{
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.retrievePost = this.retrievePost.bind(this);
-        //this.insertTitle = this.insertTitle.bind(this);
         console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount() {//Queries the API for the post being edited
         this.retrievePost();
-        this.render();
-    }
-
-    componentDidUpdate() {
-        this.retrievePost();
-        this.render();
     }
 
     retrievePost(){
@@ -76,17 +69,19 @@ class EditPost extends Component{
             pinnedId: this.state.pinnedId,
             state: this.state.state,
             tags: this.state.tagArray,
-            userId: this.props.userObj.userId
+            userId: this.props.userObj.userId,
+            visibilityLevel: this.state.visibilityLevel
         };
 
-        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/{postId}', {
-            method: 'POST',
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+            method: 'PUT',
             body: JSON.stringify(data)//Stringify the data being sent
         })
         .then(response => {
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
+            console.log('RESULT: ' + JSON.stringify(result));
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }
@@ -98,10 +93,6 @@ class EditPost extends Component{
     handleChangeContent(event) {
         this.setState({content: event.target.value});//Updates the content field as typing occurs
     }
-
-    /*insertTitle() {
-        
-    }*/
 
     handleChangeTags(event) {
         //lowercases the tags and splits them
@@ -135,7 +126,7 @@ class EditPost extends Component{
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
-                                <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
+                                <h2 className='text-center' style={{color:'black'}}>Edit Your Post</h2>
                                 <form onSubmit={this.handleSubmit}>
 
                                     <div className='form-group'>
@@ -158,6 +149,10 @@ class EditPost extends Component{
                                     </div>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
+
+                                    <Link to={`/post/${this.state.postID}`}>
+                                    <button className='btn btn-info'>Cancel Edit</button>
+                                    </Link>
 
                                 </form>
                             </div>

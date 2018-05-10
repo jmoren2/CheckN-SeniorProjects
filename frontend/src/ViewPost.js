@@ -40,10 +40,10 @@ class ViewPost extends Component{//Initial State
         this.retrieveComments();
     }
 
-    componentDidUpdate() {
+    /*componentDidUpdate() {
         this.retrievePost();
         //this.retrieveComments();
-    }
+    }*/
 
     voteUp(post) {
         console.log("voted up!")
