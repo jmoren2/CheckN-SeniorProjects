@@ -35,7 +35,7 @@ class CreatePost extends Component{
         this.question = '';
         this.type = 'short';
         this.restrictions = 'none';
-        this.answers = [];
+        this.options = [];
     }
 
     handleSubmit(event){

@@ -20,7 +20,7 @@ class Question extends React.Component{
             question: props.object.question,
             type: props.object.type,
             restrictions: props.object.restrictions,
-            answers: props.object.answers,
+            options: props.object.options,
         }
 
         //These are all predetermined options for type and restrictions
@@ -45,7 +45,7 @@ class Question extends React.Component{
 
     //returns a question object
     //This will probably be deleted, I was testing something with this but now objects are saved directly to parent
-    getQuestionObject(){
+    /*getQuestionObject(){
         var questionObject = {
             question: this.state.question,
             answer: {type: this.state.type}
@@ -61,7 +61,7 @@ class Question extends React.Component{
         }
 
         return questionObject;
-    }
+    }*/
 
     //Based on the type of question changes what shows up for the answer section
     answerHandler = () => {
@@ -100,52 +100,52 @@ class Question extends React.Component{
         //Then display a button that will add another
         //each line will have a textbox
         //the button will add another empty string to this.state.answers then render will show another empty box
-        console.log("renderSelect: " + this.state.answers + 'end');
+        console.log("renderSelect: " + this.state.options + 'end');
         var i = 0;
-        var formatAnswers = this.state.answers.map((answer) => {
+        var formatOptions = this.state.options.map((option) => {
             i++
             return(
             <div>
             <span>
                 <label>{i}: </label>
-                <input id={i-1} onChange={this.updateAnswer} value={/*answer.text*/this.state.answers[i-1]}/>
+                <input id={i-1} onChange={this.updateOption} value={/*answer.text*/this.state.options[i-1]}/>
             </span>
             </div>
             );
         });
-        console.log(formatAnswers);
+        console.log(formatOptions);
         return(
         <div>
             <label>Choices</label>
             <div/>
-            {formatAnswers}
+            {formatOptions}
             <div/>
-            <button type='button' onClick={this.addAnswer}>add answer</button>
+            <button type='button' onClick={this.addOption}>add option</button>
         </div>
         );
     }
 
-    updateAnswer = (event) =>{
-        console.log("answer updated");
-        console.log(this.state.answers);
-        var temp = this.state.answers;
+    updateOption = (event) =>{
+        console.log("option updated");
+        console.log(this.state.options);
+        var temp = this.state.options;
         console.log(temp);
         console.log(event.target.value);
         console.log(event.target.id);
         temp[event.target.id] = event.target.value;
-        this.setState({answers: temp});
+        this.setState({options: temp});
     }
 
     //This is called from the select answer interface to add another answer
-    addAnswer = () =>{
+    addOption = () =>{
         console.log('adding answer');
-        var newArray = this.state.answers;
+        var newArray = this.state.options;
         newArray.push(' ');
         console.log(newArray);
         this.setState({
-            answers: newArray,
+            options: newArray,
         });
-        this.props.object.answers = newArray;
+        this.props.object.options = newArray;
     }
 
     //Renders what user will see when creating a scaled question
