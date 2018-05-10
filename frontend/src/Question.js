@@ -69,14 +69,18 @@ class Question extends React.Component{
         //Then display a button that will add another
         //each line will have a textbox
         //the button will add another empty string to this.state.answers so that render will go again
+        console.log("renderSelect: " + this.state.answers + 'end');
         var formatAnswers = this.state.answers.map((answer) => {
+            return(
             <div>
             <span>
                 <label>1. </label>
                 <input value={answer.text}/>
             </span>
             </div>
+            );
         });
+        console.log(formatAnswers);
         return(
         <div>
             <label>Choices</label>

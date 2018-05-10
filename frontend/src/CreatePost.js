@@ -19,7 +19,8 @@ class CreatePost extends Component{
                     visibilityLevel: [],
                     pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
                     returnedId: null, 
-                    handleSubmitDone: false
+                    handleSubmitDone: false,
+                    questions: []
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
@@ -85,6 +86,42 @@ class CreatePost extends Component{
         });
     }
 
+    generateSurvey = () => {
+        console.log('generateSurvey');
+        document.getElementById('createSurvey').hidden = true;
+        document.getElementById('addQuestion').hidden = false;
+        var temp=this.state.questions
+        temp.push(<Question/>);
+        this.setState({
+            questions: temp,
+        });
+    }
+
+    showSurvey = () => {
+        console.log('showSurvey');
+        var survey = this.state.questions.map(question => {
+            return(
+                <div>
+                 {question}
+                </div>
+            );
+        });
+        return(
+            <div>
+                {survey}
+            </div>
+        );
+    }
+
+    addQuestion = () => {
+        console.log('generateSurvey');
+        var temp=this.state.questions
+        temp.push(<Question/>);
+        this.setState({
+            questions: temp,
+        });
+    }
+
     render(){
         if (this.state.handleSubmitDone === true){
         return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
@@ -118,8 +155,9 @@ class CreatePost extends Component{
                                         </span>
                                     </div>
 
-                                    <button>This will be the add survey button</button>
-                                    <Question/>
+                                    <button id='createSurvey' type='button' onClick={this.generateSurvey}>This will be the add survey button</button>
+                                    {this.showSurvey()}
+                                    <button hidden id='addQuestion' type='button' onClick={this.addQuestion}>Add a Question</button>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
