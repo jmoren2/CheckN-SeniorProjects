@@ -9,6 +9,7 @@ import ViewPost from './ViewPost.js';
 import CreatePost from './CreatePost.js';
 import About from './About.js';
 import RegisterUser from './RegisterUser.js';
+import EditPost from './EditPost.js';
 
 class App extends React.Component {
     constructor(props){
@@ -34,6 +35,7 @@ class App extends React.Component {
                     <Route path="/create" component={props => (<CreatePost userObj={this.userObj} {...props}/>)}/>
                     <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                     <Route path="/about" component={About}/>
+                    <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
                 </div>
             </Router>
         );

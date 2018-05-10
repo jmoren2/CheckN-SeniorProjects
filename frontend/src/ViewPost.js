@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 
 import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
@@ -24,9 +24,12 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none'
         };
+        this.posterID = '';
+        this.posterName = '';
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.storeUser = this.storeUser.bind(this);
+        this.editButton = this.editButton.bind(this);
         this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
         this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
@@ -153,7 +156,6 @@ class ViewPost extends Component{//Initial State
             post['negativeVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
-            
         }
         else {
             post.negativeVoters = [];
@@ -243,7 +245,8 @@ class ViewPost extends Component{//Initial State
                                 <div className="card-block">
                                     <h3>{data.post.title}</h3>
                                     <p>{this.posterName}</p>
-                                    <p>{data.post.content}</p>
+                                    <p id="postEdit">{data.post.content}</p>
+                                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' style={{width: '70%', margin: 'auto'}}/>
                                 </div>
                             </div>
 
@@ -399,6 +402,18 @@ class ViewPost extends Component{//Initial State
         document.getElementById("submitVoteButton").disabled = false;
     }
 
+    editButton() {
+        if(this.props.userObj.userId === this.posterID) {
+            return(
+            <Link to={`/edit/${this.state.postID}`}>
+            <button className='btn btn-info'>Edit Post</button>
+            </Link>);
+        }
+        else {
+            return
+        }
+    }
+
     render(){
         return(
             <div>
@@ -412,6 +427,7 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
+                                        {this.editButton()}
                                     </div>
 
                                     <div>
