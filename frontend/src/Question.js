@@ -3,6 +3,15 @@ import {Link} from 'react-router-dom';
 //import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Dropdown} from 'semantic-ui-react';
 
+/*
+A Question is a single question on the interface for creating surveys
+It allows the user to customize questions
+One important thing that is going on here is when creating a question I use
+<Question object={genericQuestionObject}>
+When genericQuestionObject is created in the parent (createPost in this case) I can write to it 
+from the Question object directly through this.props.object.(aVariable)
+In this way I am always updating CreatePost with the question objects
+*/
 class Question extends React.Component{
     constructor(props){
         super(props);
@@ -35,6 +44,7 @@ class Question extends React.Component{
     }
 
     //returns a question object
+    //This will probably be deleted, I was testing something with this but now objects are saved directly to parent
     getQuestionObject(){
         var questionObject = {
             question: this.state.question,
@@ -53,6 +63,7 @@ class Question extends React.Component{
         return questionObject;
     }
 
+    //Based on the type of question changes what shows up for the answer section
     answerHandler = () => {
         console.log("answerHandler");
         if (this.state.type === 'short')
@@ -73,7 +84,7 @@ class Question extends React.Component{
         }
     }
 
-    //I don't know if it is a good idea to show the user a text box because they might think to put something in it
+    //This is what is displayed when short answer is selected
     renderShort(){
         console.log("renderShort");
         return(
@@ -83,18 +94,21 @@ class Question extends React.Component{
         );
     }
 
+    //This is what is displayed when select answer is selected
     renderSelect = () => {
-        //map all elements in this.state.answer onto the how i'm displaying them
+        //map all elements in this.state.answers onto how i'm displaying them
         //Then display a button that will add another
         //each line will have a textbox
-        //the button will add another empty string to this.state.answers so that render will go again
+        //the button will add another empty string to this.state.answers then render will show another empty box
         console.log("renderSelect: " + this.state.answers + 'end');
+        var i = 0;
         var formatAnswers = this.state.answers.map((answer) => {
+            i++
             return(
             <div>
             <span>
-                <label>1. </label>
-                <input value={answer.text}/>
+                <label>{i}: </label>
+                <input id={i-1} onChange={this.updateAnswer} value={/*answer.text*/this.state.answers[i-1]}/>
             </span>
             </div>
             );
@@ -111,6 +125,18 @@ class Question extends React.Component{
         );
     }
 
+    updateAnswer = (event) =>{
+        console.log("answer updated");
+        console.log(this.state.answers);
+        var temp = this.state.answers;
+        console.log(temp);
+        console.log(event.target.value);
+        console.log(event.target.id);
+        temp[event.target.id] = event.target.value;
+        this.setState({answers: temp});
+    }
+
+    //This is called from the select answer interface to add another answer
     addAnswer = () =>{
         console.log('adding answer');
         var newArray = this.state.answers;
@@ -122,6 +148,7 @@ class Question extends React.Component{
         this.props.object.answers = newArray;
     }
 
+    //Renders what user will see when creating a scaled question
     renderScale(){
         return(<div/>);
     }
@@ -141,6 +168,7 @@ class Question extends React.Component{
         console.log(this.state);
     }
 
+    //just a bunch of if/else to link types to their restrictions
     updateRestrictionsForType = (type) => {
         if (type === 'short')
             this.currentRestrictions = this.shortRestrictions;
@@ -150,6 +178,7 @@ class Question extends React.Component{
             this.currentRestrictions = this.emptyRestrictions;
     }
 
+    //updates this.state.restrictions
     onRestrictionsChange = (event, data) => {
         console.log("changed restrictions");
         this.setState({
@@ -158,6 +187,7 @@ class Question extends React.Component{
         this.props.object.restrictions = data.value;
     }
 
+    //updates this.state.question
     onQuestionChange = (event) => {
         this.setState({question: event.target.value});
         this.props.object.question = event.target.value;
