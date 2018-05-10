@@ -82,7 +82,7 @@ class EditPost extends Component{
         })
         .then(result => {
             console.log('RESULT: ' + JSON.stringify(result));
-            this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
+            this.setState({returnedId: this.state.postID, handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }
 
@@ -117,7 +117,7 @@ class EditPost extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-        return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
+            return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
         }
         return(
             <div>
