@@ -51,7 +51,8 @@ class EditPost extends Component{
                 negativeVoters: data.post.negativeVoters,
                 pinnedId: data.post.pinnedId,
                 state: data.post.state,
-                tagArray: data.post.tags
+                tagArray: data.post.tags,
+                visibilityLevel: data.post.visibilityLevel
             })
         });
     }
