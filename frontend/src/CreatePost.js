@@ -20,18 +20,29 @@ class CreatePost extends Component{
                     pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
                     returnedId: null, 
                     handleSubmitDone: false,
-                    questions: []
+                    questions: [],
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.questionObjects = [];
         console.log("The user object passed in is: " + props.userObj);
+    }
+
+    defaultQuestion(number){
+        this.number = number;
+        this.question = '';
+        this.type = 'short';
+        this.restrictions = 'none';
+        this.answers = [];
     }
 
     handleSubmit(event){
         event.preventDefault();
         //What is being sent to the API
+        console.log('submitting');
+        console.log(this.questionObjects);
         const data = {
             title: this.state.title, 
             content: this.state.content,
@@ -90,8 +101,9 @@ class CreatePost extends Component{
         console.log('generateSurvey');
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
+        this.questionObjects.push(new this.defaultQuestion(this.questionObjects.length));
         var temp=this.state.questions
-        temp.push(<Question/>);
+        temp.push(<Question object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
             questions: temp,
         });
@@ -115,8 +127,9 @@ class CreatePost extends Component{
 
     addQuestion = () => {
         console.log('generateSurvey');
+        this.questionObjects.push(new this.defaultQuestion(this.questionObjects.length));
         var temp=this.state.questions
-        temp.push(<Question/>);
+        temp.push(<Question object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
             questions: temp,
         });

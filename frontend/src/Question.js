@@ -7,12 +7,31 @@ class Question extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            number: props.number,
-            question: '',
-            type: 'short',
-            restrictions: null,
-            answers: [],
+            number: props.object.number,
+            question: props.object.question,
+            type: props.object.type,
+            restrictions: props.object.restrictions,
+            answers: props.object.answers,
         }
+
+        //These are all predetermined options for type and restrictions
+        //the text field is what the user sees, the value is what will be stored in the database.
+        this.types = [
+            {text: 'Short Response', value: 'short'},
+            {text: 'Select Answer', value: 'select'},
+            {text: 'Scale', value: 'scale'},
+        ];
+        this.shortRestrictions = [
+            {text: 'None', value: 'none'},
+            {text: 'Numbers Only', value: 'numbers only'}
+        ];
+        this.selectRestrictions = [
+            {text: 'Pick One', value: 'pick one'},
+            {text: 'Pick Multiple', value: 'pick multiple'}
+        ];
+        this.emptyRestrictions = []
+
+        this.currentRestrictions = this.shortRestrictions;
     }
 
     //returns a question object
@@ -100,6 +119,7 @@ class Question extends React.Component{
         this.setState({
             answers: newArray,
         });
+        this.props.object.answers = newArray;
     }
 
     renderScale(){
@@ -112,9 +132,22 @@ class Question extends React.Component{
         console.log('changed to: ' + data.value);
         if (data.value === this.state.type)
             return;
+        
+        this.updateRestrictionsForType(data.value);
         this.setState({
             type: data.value
         });
+        this.props.object.type = data.value;
+        console.log(this.state);
+    }
+
+    updateRestrictionsForType = (type) => {
+        if (type === 'short')
+            this.currentRestrictions = this.shortRestrictions;
+        else if (type === 'select')
+            this.currentRestrictions = this.selectRestrictions;
+        else
+            this.currentRestrictions = this.emptyRestrictions;
     }
 
     onRestrictionsChange = (event, data) => {
@@ -122,25 +155,31 @@ class Question extends React.Component{
         this.setState({
             restrictions: data.value
         });
+        this.props.object.restrictions = data.value;
+    }
+
+    onQuestionChange = (event) => {
+        this.setState({question: event.target.value});
+        this.props.object.question = event.target.value;
     }
 
     render() {
         return(
             <div>
-                <label>Question</label>
+                <label>Question </label>
                 <span>
-                    <label>1: </label>
-                    <input placeholder='type question'/>
+                    <label>{(this.state.number + 1)}</label>
+                    <input value={this.state.question} onChange={this.onQuestionChange} placeholder='Enter question'/>
                 </span>
                 <div/>
                 <span>
                     <div>
                         <label>Type: </label>
-                        <Dropdown placeholder='short' onChange={this.onTypeChange} selection options={[{text: 'short', value: 'short'},{text: 'select', value: 'select'}]}/>
+                        <Dropdown placeholder='short' onChange={this.onTypeChange} selection options={this.types}/>
                     </div>
                     <div>
                         <label>Restrictions: </label>
-                        <Dropdown placeholder='restrictions' onChange={this.onRestrictionsChange} selection options= {[{text: 'numbers only', value: 'numbers only'}, {text: 'none', value: 'none'}]}/>
+                        <Dropdown placeholder='restrictions' onChange={this.onRestrictionsChange} selection options={this.currentRestrictions}/>
                     </div>
                 </span>
                 <div/>
