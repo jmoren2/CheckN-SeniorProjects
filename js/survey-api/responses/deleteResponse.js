@@ -10,7 +10,7 @@ module.exports.deleteResponse = (ddb, event, context, callback) => {
             
             var id = event.pathParameters.responseId;
             var params = {
-                TableName: "surveryResponses",
+                TableName: "surveyResponses",
                 Key: {
                     "responseId" : id
                 }
