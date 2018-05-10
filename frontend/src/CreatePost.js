@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js'
 import Question from './Question.js'
+import {Divider} from 'semantic-ui-react';
 //import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
@@ -115,6 +116,7 @@ class CreatePost extends Component{
             return(
                 <div>
                  {question}
+                 <Divider/>
                 </div>
             );
         });

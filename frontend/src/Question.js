@@ -38,7 +38,15 @@ class Question extends React.Component{
             {text: 'Pick One', value: 'pick one'},
             {text: 'Pick Multiple', value: 'pick multiple'}
         ];
-        this.emptyRestrictions = []
+        this.scaleRestrictions = [
+            {text: 'None', value: 'none'}
+        ];
+        this.emptyRestrictions = [];
+        this.scaleRange = [
+            {text: '2', value: 2}, {text: '3', value: 3}, {text: '4', value: 4}, {text: '5', value: 5},
+            {text: '6', value: 6}, {text: '7', value: 7}, {text: '8', value: 8}, {text: '9', value: 9}, 
+            {text: '10', value: 10},
+        ];
 
         this.currentRestrictions = this.shortRestrictions;
     }
@@ -120,7 +128,7 @@ class Question extends React.Component{
             <div/>
             {formatOptions}
             <div/>
-            <button type='button' onClick={this.addOption}>add option</button>
+            <button type='button' onClick={this.addOption}>Add Option</button>
         </div>
         );
     }
@@ -150,7 +158,42 @@ class Question extends React.Component{
 
     //Renders what user will see when creating a scaled question
     renderScale(){
-        return(<div/>);
+        var i = -1;
+        var formatOptions = this.state.options.map(() => {
+            i++;
+            return(
+                <span>
+                    <input id={i} onChange={this.updateOption} value={this.state.options[i]}/>
+                </span>
+            );
+        });
+        return(
+        <div>
+            <label>Total Options</label>
+            <Dropdown placeholder='2' onChange={this.onScaleChange} selection options={this.scaleRange}/>
+            <div/>
+            {formatOptions}
+        </div>
+        );
+    }
+
+    //If the user increases the value it shouldn't delete the old ones
+    onScaleChange = (event, data) => {
+        var temp = this.state.options;
+        if (data.value > temp.length)
+        {
+            for (var i = temp.length; i < data.value; i++) {
+                temp[i] = '';
+            } 
+        }
+        else 
+        {
+            temp = temp.slice(0, data.value);
+        }
+        this.setState({
+            options: temp
+        });
+        this.props.object.options = temp;
     }
 
     //Changing type will just update the state and change which the options array for restrictions
@@ -174,6 +217,8 @@ class Question extends React.Component{
             this.currentRestrictions = this.shortRestrictions;
         else if (type === 'select')
             this.currentRestrictions = this.selectRestrictions;
+        else if (type === 'scale')
+            this.currentRestrictions = this.scaleRestrictions;
         else
             this.currentRestrictions = this.emptyRestrictions;
     }
@@ -205,11 +250,11 @@ class Question extends React.Component{
                 <span>
                     <div>
                         <label>Type: </label>
-                        <Dropdown placeholder='short' onChange={this.onTypeChange} selection options={this.types}/>
+                        <Dropdown defaultValue={this.types[0]} placeholder='Select Type' onChange={this.onTypeChange} selection options={this.types}/>
                     </div>
                     <div>
                         <label>Restrictions: </label>
-                        <Dropdown placeholder='restrictions' onChange={this.onRestrictionsChange} selection options={this.currentRestrictions}/>
+                        <Dropdown defaultValue={this.currentRestrictions[0]} placeholder='Select Restriction' onChange={this.onRestrictionsChange} selection options={this.currentRestrictions}/>
                     </div>
                 </span>
                 <div/>
