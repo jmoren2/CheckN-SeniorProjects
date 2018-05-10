@@ -26,17 +26,19 @@ class Question extends React.Component{
         //These are all predetermined options for type and restrictions
         //the text field is what the user sees, the value is what will be stored in the database.
         this.types = [
-            {text: 'Short Response', value: 'short'},
+            {text: 'Free Response', value: 'free'},
             {text: 'Select Answer', value: 'select'},
             {text: 'Scale', value: 'scale'},
         ];
-        this.shortRestrictions = [
+        this.freeRestrictions = [
             {text: 'None', value: 'none'},
-            {text: 'Numbers Only', value: 'numbers only'}
+            {text: 'Short', value: 'short'},
+            {text: 'Long', value: 'long'},
+            {text: 'Numbers Only', value: 'numeric'}
         ];
         this.selectRestrictions = [
-            {text: 'Pick One', value: 'pick one'},
-            {text: 'Pick Multiple', value: 'pick multiple'}
+            {text: 'Pick One', value: 'one'},
+            {text: 'Pick Multiple', value: 'multiple'}
         ];
         this.scaleRestrictions = [
             {text: 'None', value: 'none'}
@@ -48,35 +50,14 @@ class Question extends React.Component{
             {text: '10', value: 10},
         ];
 
-        this.currentRestrictions = this.shortRestrictions;
+        this.currentRestrictions = this.freeRestrictions;
     }
-
-    //returns a question object
-    //This will probably be deleted, I was testing something with this but now objects are saved directly to parent
-    /*getQuestionObject(){
-        var questionObject = {
-            question: this.state.question,
-            answer: {type: this.state.type}
-        };
-
-        if (this.state.resitrctions != null)
-        {
-            questionObject.answer.restrictions = (this.state.restrictions);
-        }
-        if (this.state.answers.length != 0)
-        {
-            questionObject.answer.answers = (this.state.answers);
-        }
-
-        return questionObject;
-    }*/
 
     //Based on the type of question changes what shows up for the answer section
     answerHandler = () => {
-        console.log("answerHandler");
-        if (this.state.type === 'short')
+        if (this.state.type === 'free')
         {
-            return(this.renderShort());
+            return(this.renderFree());
         }
         else if (this.state.type === 'select')
         {
@@ -92,36 +73,31 @@ class Question extends React.Component{
         }
     }
 
-    //This is what is displayed when short answer is selected
-    renderShort(){
-        console.log("renderShort");
+    //This is what is displayed when free answer is selected
+    renderFree(){
         return(
         <div>
-            <label>Response to this question will be short answer</label>
+            <label>Responses to this question will be type by the user</label>
         </div>
         );
     }
 
     //This is what is displayed when select answer is selected
     renderSelect = () => {
-        //map all elements in this.state.answers onto how i'm displaying them
-        //Then display a button that will add another
-        //each line will have a textbox
-        //the button will add another empty string to this.state.answers then render will show another empty box
         console.log("renderSelect: " + this.state.options + 'end');
         var i = 0;
+        //for each option generates a textbox
         var formatOptions = this.state.options.map((option) => {
             i++
             return(
             <div>
             <span>
                 <label>{i}: </label>
-                <input id={i-1} onChange={this.updateOption} value={/*answer.text*/this.state.options[i-1]}/>
+                <input id={i-1} onChange={this.updateOption} value={this.state.options[i-1]}/>
             </span>
             </div>
             );
         });
-        console.log(formatOptions);
         return(
         <div>
             <label>Choices</label>
@@ -134,22 +110,15 @@ class Question extends React.Component{
     }
 
     updateOption = (event) =>{
-        console.log("option updated");
-        console.log(this.state.options);
         var temp = this.state.options;
-        console.log(temp);
-        console.log(event.target.value);
-        console.log(event.target.id);
         temp[event.target.id] = event.target.value;
         this.setState({options: temp});
     }
 
     //This is called from the select answer interface to add another answer
     addOption = () =>{
-        console.log('adding answer');
         var newArray = this.state.options;
-        newArray.push(' ');
-        console.log(newArray);
+        newArray.push('');
         this.setState({
             options: newArray,
         });
@@ -198,8 +167,6 @@ class Question extends React.Component{
 
     //Changing type will just update the state and change which the options array for restrictions
     onTypeChange = (event, data) => {
-        console.log('changed type');
-        console.log('changed to: ' + data.value);
         if (data.value === this.state.type)
             return;
         
@@ -208,13 +175,12 @@ class Question extends React.Component{
             type: data.value
         });
         this.props.object.type = data.value;
-        console.log(this.state);
     }
 
     //just a bunch of if/else to link types to their restrictions
     updateRestrictionsForType = (type) => {
-        if (type === 'short')
-            this.currentRestrictions = this.shortRestrictions;
+        if (type === 'free')
+            this.currentRestrictions = this.freeRestrictions;
         else if (type === 'select')
             this.currentRestrictions = this.selectRestrictions;
         else if (type === 'scale')
@@ -225,7 +191,6 @@ class Question extends React.Component{
 
     //updates this.state.restrictions
     onRestrictionsChange = (event, data) => {
-        console.log("changed restrictions");
         this.setState({
             restrictions: data.value
         });
