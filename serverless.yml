@@ -155,16 +155,16 @@ functions:
         - js/users-api/responses.js
 
 ################### Tags Api ###################
-  getTagById:
-    handler: js/tags-api/handler.getTagById
+  getTagByName:
+    handler: js/tags-api/handler.getTagByName
     events:
       - http:
-          path: tags/{tagId}
+          path: tags/{tag}
           method: get
           cors: true
     package:
       include:
-        - js/tags-api/getTagById.js
+        - js/tags-api/getTagByName.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
 
@@ -185,7 +185,7 @@ functions:
     handler: js/tags-api/handler.deleteTag
     events:
       - http:
-          path: tags/{tagId}
+          path: tags/{tag}
           method: delete
           cors: true
     package:
@@ -207,18 +207,6 @@ functions:
         - js/tags-api/handler.js
         - js/tags-api/responses.js
 
-  updateTag:
-    handler: js/tags-api/handler.updateTag
-    events:
-      - http:
-          path: tags/{tagId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/tags-api/updateTag.js
-        - js/tags-api/handler.js
-        - js/tags-api/responses.js
 
 ################### Comments Api ###################
   getCommentsByPostId:
