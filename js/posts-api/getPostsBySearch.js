@@ -96,14 +96,30 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     var filter = {
         query: {
             bool: {
-                must: [{
-                    match: {
-                        userId: user
-                    }
-                }]
-            }
+                
+            },
         }
     }
+    if(search !== undefined) {
+        console.log('search: ' + search);
+        filter.query.bool.should = [{
+            match: {
+                title: search
+            },
+            match : {
+                content: search
+            }
+        }]
+        filter.query.bool.minimum_should_match = 1;
+    }
+    if(user !== undefined) {
+        filter.query.bool.must = [{
+            match: {
+                userId: user
+            }
+        }];
+    }
+    console.log(filter);
 
     esClient.search({
         index: 'posts',

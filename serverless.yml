@@ -9,6 +9,10 @@ provider:
     Action:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
+  - Effect: "Allow"
+    Action:
+      - "es:ESHttpPost"
+    Resource: "*"
 
 plugins:
   # - serverless-nested-stack
