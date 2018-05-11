@@ -12,16 +12,11 @@ class CreatePost extends Component{
                     title: '', 
                     content: '',
                     tagArray: [],
-                    positiveVoters:[],
-                    neutralVoters: [],
-                    negativeVoters: [],
                     tagButtons: '',
-                    state:'OPEN',
-                    visibilityLevel: [],
-                    pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
                     returnedId: null, 
                     handleSubmitDone: false,
                     questions: [],
+                    hasSurvey: false,
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
@@ -31,32 +26,66 @@ class CreatePost extends Component{
         console.log("The user object passed in is: " + props.userObj);
     }
 
-    defaultQuestion(number){
-        this.number = number;
+    defaultQuestion(){
         this.question = '';
         this.type = 'short';
         this.restrictions = 'none';
         this.options = [];
     }
 
+    //For surveys it will submit the survey, then call another submit once that is done for the whole post 
+    //with the survey ID
     handleSubmit(event){
         event.preventDefault();
-        //What is being sent to the API
-        console.log('submitting');
-        console.log(this.questionObjects);
-        const data = {
-            title: this.state.title, 
-            content: this.state.content,
-            positiveVoters: this.state.positiveVoters,
-            neutralVoters: this.state.neutralVoters,
-            negativeVoters: this.state.negativeVoters,
-            pinnedId: this.state.pinnedId,
-            state: this.state.state,
-            tags: this.state.tagArray,
-            userId: this.props.userObj.userId
-        };
-
+        //I think this is the right solution for posting surveys and posts but commenting it out for now
+        //so that I don't actually submit anything
         /*
+        if (this.state.hasSurvey)
+        {
+            //First create the survey object and submit it
+            const survey = {
+                userId: this.props.userObj.userId,
+                questions: this.state.questions,
+            };
+
+            fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/surveys/', {
+                method: 'POST',
+                body: Json.stringify(survey)
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(result => {
+                this.submitPost(result.survey.surveyId);
+            });
+        }
+        else
+        {
+            this.submitPost(null);
+        }*/
+    }
+
+    submitPost(surveyId){
+        if (surveyId === null)
+        {
+            const data = {
+                title: this.state.title, 
+                content: this.state.content,
+                tags: this.state.tagArray,
+                userId: this.props.userObj.userId
+            };
+        }
+        else
+        {
+            const data = {
+                title: this.state.title, 
+                content: this.state.content,
+                tags: this.state.tagArray,
+                userId: this.props.userObj.userId,
+                surveyId: surveyId
+            };
+        }
+
         fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
@@ -66,7 +95,7 @@ class CreatePost extends Component{
         })
         .then(result => {
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
-        });*/
+        });
     }
 
     handleChangeTitle(event) {
@@ -102,10 +131,11 @@ class CreatePost extends Component{
         console.log('generateSurvey');
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
-        this.questionObjects.push(new this.defaultQuestion(this.questionObjects.length));
+        this.questionObjects.push(new this.defaultQuestion());
         var temp=this.state.questions
-        temp.push(<Question object={this.questionObjects[this.questionObjects.length -1]}/>);
+        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
+            hasSurvey: true,
             questions: temp,
         });
     }
@@ -129,9 +159,9 @@ class CreatePost extends Component{
 
     addQuestion = () => {
         console.log('generateSurvey');
-        this.questionObjects.push(new this.defaultQuestion(this.questionObjects.length));
+        this.questionObjects.push(new this.defaultQuestion());
         var temp=this.state.questions
-        temp.push(<Question object={this.questionObjects[this.questionObjects.length -1]}/>);
+        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
             questions: temp,
         });

@@ -16,7 +16,7 @@ class Question extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            number: props.object.number,
+            number: props.number,
             question: props.object.question,
             type: props.object.type,
             restrictions: props.object.restrictions,
@@ -44,6 +44,8 @@ class Question extends React.Component{
             {text: 'None', value: 'none'}
         ];
         this.emptyRestrictions = [];
+        //This seemed like the easiest way to limit how big the users scale can be while also matching
+        //their selection with a number
         this.scaleRange = [
             {text: '2', value: 2}, {text: '3', value: 3}, {text: '4', value: 4}, {text: '5', value: 5},
             {text: '6', value: 6}, {text: '7', value: 7}, {text: '8', value: 8}, {text: '9', value: 9}, 
@@ -208,7 +210,7 @@ class Question extends React.Component{
             <div>
                 <label>Question </label>
                 <span>
-                    <label>{(this.state.number + 1)}</label>
+                    <label> {this.state.number}</label>
                     <input value={this.state.question} onChange={this.onQuestionChange} placeholder='Enter question'/>
                 </span>
                 <div/>
