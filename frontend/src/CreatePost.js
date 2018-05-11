@@ -66,9 +66,10 @@ class CreatePost extends Component{
     }
 
     submitPost(surveyId){
+        var data;
         if (surveyId === null)
         {
-            const data = {
+            data = {
                 title: this.state.title, 
                 content: this.state.content,
                 tags: this.state.tagArray,
@@ -77,7 +78,7 @@ class CreatePost extends Component{
         }
         else
         {
-            const data = {
+            data = {
                 title: this.state.title, 
                 content: this.state.content,
                 tags: this.state.tagArray,

@@ -86,7 +86,6 @@ class Question extends React.Component{
 
     //This is what is displayed when select answer is selected
     renderSelect = () => {
-        console.log("renderSelect: " + this.state.options + 'end');
         var i = 0;
         //for each option generates a textbox
         var formatOptions = this.state.options.map((option) => {
