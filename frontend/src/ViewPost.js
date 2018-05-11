@@ -346,8 +346,12 @@ class ViewPost extends Component{//Initial State
              console.log('response: ' + JSON.stringify(response.user));
              console.log('response type: ' + typeof response.user);
              console.log('response obj val: ' + Object.values(response.user));
-            var x = document.getElementById(response.user.userId);
-            x.innerHTML = response.user.email;
+             if(document.getElementById(response.user.userId))
+             {
+                var x = document.getElementById(response.user.userId);
+
+                x.innerHTML = response.user.email + " commented: ";
+            }
         })
         
 
@@ -359,6 +363,21 @@ class ViewPost extends Component{//Initial State
         
         var commentFeed = comments.map((comment) => {
             console.log(comment)
+
+            var vote = null;
+
+            if(comment.vote === "POSITIVE")
+            {
+                vote = <ThumbsUp />
+            }
+            else if(comment.vote === "NEGATIVE")
+            {
+                vote = <ThumbsDown />
+            }
+            else
+            {
+                vote = <Neutral />
+            }
             
             var test = this.retreiveUser(comment.userId);
 
@@ -370,6 +389,10 @@ class ViewPost extends Component{//Initial State
                     <p id={comment.userId}>
                         {comment.userId} commented: 
                     </p>
+
+                    <div>
+                        {vote}
+                    </div>
                     
                     <p>{comment.content}</p>
                     </div>
