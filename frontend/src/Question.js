@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 //import {DropdownButton, MenuItem} from 'react-bootstrap';
-import {Dropdown} from 'semantic-ui-react';
+import {Dropdown, Button} from 'semantic-ui-react';
 
 /*
 A Question is a single question on the interface for creating surveys

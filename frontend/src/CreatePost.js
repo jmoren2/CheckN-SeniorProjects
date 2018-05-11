@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
-import Navbar from './Navbar.js'
-import Question from './Question.js'
-import {Divider} from 'semantic-ui-react';
+import Navbar from './Navbar.js';
+import Question from './Question.js';
+import {Divider, Button} from 'semantic-ui-react';
+
+import Plus from 'react-icons/lib/fa/plus';
 //import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
@@ -132,6 +134,7 @@ class CreatePost extends Component{
         console.log('generateSurvey');
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
+        document.getElementById('submitDivider').hidden = false;
         this.questionObjects.push(new this.defaultQuestion());
         var temp=this.state.questions
         temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
@@ -153,6 +156,7 @@ class CreatePost extends Component{
         });
         return(
             <div>
+                <Divider/>
                 {survey}
             </div>
         );
@@ -201,10 +205,12 @@ class CreatePost extends Component{
                                         </span>
                                     </div>
 
-                                    <button id='createSurvey' type='button' onClick={this.generateSurvey}>This will be the add survey button</button>
+                                    <Button id='createSurvey' type='button' onClick={this.generateSurvey} positive><Plus/> Add Survey</Button>
                                     {this.showSurvey()}
-                                    <button hidden id='addQuestion' type='button' onClick={this.addQuestion}>Add a Question</button>
+                                    <Button hidden id='addQuestion' type='button' onClick={this.addQuestion} positive><Plus/> Add Question</Button>
 
+                                    <div/>
+                                    <Divider id="submitDivider" hidden/>
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
                                 </form>
