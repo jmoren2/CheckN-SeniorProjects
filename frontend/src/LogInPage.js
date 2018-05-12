@@ -68,12 +68,11 @@ class LogInPage extends React.Component{
                                 <div className="mx-auto">
 
                                     <div className="">
-                                <h2 className=''  style={{color:'black'}}>CheckN</h2>
-                                <img height="15%" width="15%" src={logo} style={{objectFit:'contain'}} />
-                                </div>
-
+                                        <h2 className=''  style={{color:'black'}}>CheckN</h2>
+                                        <img height="15%" width="15%" src={logo} style={{objectFit:'contain'}} />
                                     </div>
-
+                                    
+                                </div>
 
                             </div>
 
