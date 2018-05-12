@@ -524,3 +524,15 @@ functions:
         - js/categories-api/handler.js
         - js/categories-api/responses.js
         - node_modules/moment/**
+
+  mapIndex:
+    handler: js/posts-api/handler.mapIndex
+    events:
+      - http:
+          path: index
+          method: post
+          cors: true
+    package:
+      include:
+        - js/posts-api/posts-index-mapping.js
+        - js/posts-api/handler.js

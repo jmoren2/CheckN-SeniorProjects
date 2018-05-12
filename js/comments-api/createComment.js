@@ -16,31 +16,18 @@ module.exports.createComment = (ddb, event, context, callback) => {
         var comment = {
             Item: body,
             TableName: 'comments'
-    
         }
         
         ddb.put(comment, function(error, data) {
-            if(error)
-            {
+            if(error) {
                 var failMessage = {message: 'Failed to add comment. Error: ' + error};
-
                 fail(500, failMessage, callback ); 
-
-            }
-            else
-            {
-
+            } else {
                 success(200, comment, callback);
             }
-
           });
-    
-    
-        }
-        else
-        {
+        } else {
             var creationFail = {message: 'Comment creation failed. Error: ' + error};
-
             fail(500, creationFail, callback ); 
       }
 }

@@ -110,7 +110,6 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
                 content: search
             }
         }]
-        filter.query.bool.minimum_should_match = 1;
     }
     if(user !== undefined) {
         filter.query.bool.must = [{

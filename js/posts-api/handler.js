@@ -35,3 +35,8 @@ module.exports.updatePost = (event, context, callback) => {
   const updatePost = require('./updatePost').updatePost;
   updatePost(ddb, event, context, callback);
 }
+
+module.exports.mapIndex = (event, context, callback) => {
+  const mapIndex = require('./posts-index-mapping').mapIndex;
+  mapIndex(esClient, event, context, callback);
+}
