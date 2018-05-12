@@ -201,14 +201,9 @@ class ViewPost extends Component{//Initial State
                 x.innerHTML = response.user.email + " commented: ";
             }
         })
-        
-
     }
 
-
-    generateCommentFeed(comments){ //comments are edited here
-
-        
+    generateCommentFeed(comments){ //comments are edited here  
         var commentFeed = comments.map((comment) => {
             console.log(comment)
 
@@ -230,7 +225,7 @@ class ViewPost extends Component{//Initial State
             var test = this.retreiveUser(comment.userId);
 
             //console.log('test: ' + test)
-         return(
+            return(
                     <div key={comment.commentId} className="card bg-light">
                     
                     <div className="card-block">
