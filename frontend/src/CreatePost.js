@@ -41,30 +41,40 @@ class CreatePost extends Component{
         event.preventDefault();
         //I think this is the right solution for posting surveys and posts but commenting it out for now
         //so that I don't actually submit anything
-        /*
+        console.log("I'm submitting");
+        
         if (this.state.hasSurvey)
         {
             //First create the survey object and submit it
             const survey = {
                 userId: this.props.userObj.userId,
-                questions: this.state.questions,
+                questions: this.questionObjects,
             };
 
-            fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/surveys/', {
+            console.log(survey);
+            console.log(survey.questions);
+            console.log(survey.questions[0]);
+            console.log(JSON.stringify(survey));
+
+            fetch('wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/', {
                 method: 'POST',
-                body: Json.stringify(survey)
+                body: JSON.stringify(survey)
             })
             .then(response => {
-                return response.json()
+                console.log('1');
+                console.log(response);
+                return response.json();
             })
             .then(result => {
+                console.log('2');
+                console.log(result);
                 this.submitPost(result.survey.surveyId);
             });
         }
         else
         {
             this.submitPost(null);
-        }*/
+        }
     }
 
     submitPost(surveyId){

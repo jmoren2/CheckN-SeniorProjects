@@ -283,6 +283,9 @@ class ViewPost extends Component{//Initial State
         })//Saves the response as JSON
         .then(data => {
             //Getting the user name to add to the post
+            console.log("IN RETRIEVE POST");
+            console.log(data);
+            console.log(data.post);
             this.storeUser(data);//Continues the work in the function above
         });
     }
