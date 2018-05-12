@@ -36,6 +36,7 @@ class App extends React.Component {
                     <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                     <Route path="/about" component={About}/>
                     <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
+                    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>
         );

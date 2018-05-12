@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
-import Navbar from './Navbar.js'
-import 'bootstrap/dist/css/bootstrap.css';
+import Navbar from './Navbar.js';
+import Question from './Question.js';
+import {Divider, Button} from 'semantic-ui-react';
+
+import Plus from 'react-icons/lib/fa/plus';
+//import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
     constructor(props){
@@ -16,37 +20,79 @@ class CreatePost extends Component{
                     title: '', 
                     content: '',
                     tagArray: [],
-                    positiveVoters:[],
-                    neutralVoters: [],
-                    negativeVoters: [],
                     tagButtons: '',
-                    state:'OPEN',
-                    visibilityLevel: [],
-                    pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
                     returnedId: null, 
-                    handleSubmitDone: false
+                    handleSubmitDone: false,
+                    questions: [],
+                    hasSurvey: false,
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.questionObjects = [];
         console.log("The user object passed in is: " + props.userObj);
     }
 
+    defaultQuestion(){
+        this.question = '';
+        this.type = 'short';
+        this.restrictions = 'none';
+        this.options = [];
+    }
+
+    //For surveys it will submit the survey, then call another submit once that is done for the whole post 
+    //with the survey ID
     handleSubmit(event){
         event.preventDefault();
-        //What is being sent to the API
-        const data = {
-            title: this.state.title, 
-            content: this.state.content,
-            positiveVoters: this.state.positiveVoters,
-            neutralVoters: this.state.neutralVoters,
-            negativeVoters: this.state.negativeVoters,
-            pinnedId: this.state.pinnedId,
-            state: this.state.state,
-            tags: this.state.tagArray,
-            userId: this.props.userObj.userId
-        };
+        
+        if (this.state.hasSurvey)
+        {
+            //First create the survey object and submit it
+            const survey = {
+                userId: this.props.userObj.userId,
+                questions: this.questionObjects,
+            };
+
+            fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/', {
+                method: 'POST',
+                body: JSON.stringify(survey)
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(result => {
+                this.submitPost(result.survey.surveyId);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        else
+        {
+            this.submitPost(null);
+        }
+    }
+
+    submitPost(surveyId){
+        var data;
+        if (surveyId === null)
+        {
+            data = {
+                title: this.state.title, 
+                content: this.state.content,
+                tags: this.state.tagArray,
+                userId: this.props.userObj.userId
+            };
+        }
+        else
+        {
+            data = {
+                title: this.state.title, 
+                content: this.state.content,
+                tags: this.state.tagArray,
+                userId: this.props.userObj.userId,
+                surveyId: surveyId
+            };
+        }
 
         fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
@@ -89,6 +135,48 @@ class CreatePost extends Component{
         });
     }
 
+    generateSurvey = () => {
+        console.log('generateSurvey');
+        document.getElementById('createSurvey').hidden = true;
+        document.getElementById('addQuestion').hidden = false;
+        document.getElementById('submitDivider').hidden = false;
+        this.questionObjects.push(new this.defaultQuestion());
+        var temp=this.state.questions
+        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+        this.setState({
+            hasSurvey: true,
+            questions: temp,
+        });
+    }
+
+    showSurvey = () => {
+        console.log('showSurvey');
+        var survey = this.state.questions.map(question => {
+            return(
+                <div>
+                 {question}
+                 <Divider/>
+                </div>
+            );
+        });
+        return(
+            <div>
+                <Divider/>
+                {survey}
+            </div>
+        );
+    }
+
+    addQuestion = () => {
+        console.log('generateSurvey');
+        this.questionObjects.push(new this.defaultQuestion());
+        var temp=this.state.questions
+        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+        this.setState({
+            questions: temp,
+        });
+    }
+
     render(){
         if (this.state.handleSubmitDone === true){
         return(<Redirect to={`/post/${this.state.returnedId}`}/>);//go to the new post's page
@@ -122,6 +210,12 @@ class CreatePost extends Component{
                                         </span>
                                     </div>
 
+                                    <Button id='createSurvey' type='button' onClick={this.generateSurvey} positive><Plus/> Add Survey</Button>
+                                    {this.showSurvey()}
+                                    <Button hidden id='addQuestion' type='button' onClick={this.addQuestion} positive><Plus/> Add Question</Button>
+
+                                    <div/>
+                                    <Divider id="submitDivider" hidden/>
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
                                 </form>
