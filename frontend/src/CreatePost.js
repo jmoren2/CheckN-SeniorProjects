@@ -6,6 +6,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 class CreatePost extends Component{
     constructor(props){
         super(props);
+
+        if(this.props.userObj === null)
+        {
+            window.location.href = '/login';
+            console.log('hello')
+        }
         this.state = {
                     title: '', 
                     content: '',

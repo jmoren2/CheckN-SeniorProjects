@@ -79,13 +79,14 @@ class LogInPage extends React.Component{
 
                             <form onSubmit={this.handleSubmit}>
                                 <div className='form-group'>
-                                    <input value={this.state.email} onChange={this.handleChangeEmail} placeholder='Email' className='form-control' /> <br />
-                                    <input value={this.state.password} onChange={this.handleChangePassword}  placeholder='Password' className='form-control' />
+                                    <input value={this.state.email} onChange={this.handleChangeEmail} placeholder='Email' className='form-control' required /> <br />
+                                    <input value={this.state.password} onChange={this.handleChangePassword}  placeholder='Password' className='form-control' type='password' required />
                                 </div>
-                                <button className='btn btn-info' type='submit'>Login</button>
+                                <button className='btn btn-info' type='submit'>Login</button> <br/>
                             </form>
 
                             <div className=''>
+                            <br/>
                                 <Link to="/register">
                                 <button className='btn btn-info'>Register</button>
                                 </Link>
