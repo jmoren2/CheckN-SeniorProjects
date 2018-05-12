@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 
 import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
@@ -15,7 +15,7 @@ import TimeAgo from 'react-timeago'
 
 
 class ViewPost extends Component{//Initial State
-    constructor(props){
+    constructor(props) {
         super(props);
 
         if(this.props.userObj === null)
@@ -38,65 +38,54 @@ class ViewPost extends Component{//Initial State
         this.posterID=null;
         this.posterName=null;
         this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
+        this.editButton = this.editButton.bind(this);
         this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
         this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
     }
 
-    componentDidMount(){//Queries the API for a post and its comments with specified ID
+    componentDidMount() {//Queries the API for a post and its comments with specified ID
         this.retrievePost();
         this.retrieveComments();
     }
 
-    componentDidUpdate(){
+    /*componentDidUpdate() {
         this.retrievePost();
         //this.retrieveComments();
-    }
+    }*/
 
     voteUp(post) {
         console.log("voted up!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
 
         var postToBeVotedOn = post.postId;
         var idToVote = null;
 
-        if(post.userId)
-        {
-
+        if(post.userId) {
             idToVote = post.userId;
-
         }
-        else{
+        else {
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
 
-        
-
-        if(post.positiveVoters)
-        {
-
-            
+        if(post.positiveVoters) {
             post['positiveVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
-            
         }
-        else
-            {
-                post.positiveVoters = [];
-                post['positiveVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.positiveVoters = [];
+            post['positiveVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
 
         // TODO
@@ -106,37 +95,25 @@ class ViewPost extends Component{//Initial State
        // console.log(post)
        
        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-        method: 'PUT',
-        body: JSON.stringify(post)
-    })
-    .then(result => {
-        console.log('result: ' + JSON.stringify(result));
-        return result.json()
-    })
-    .then(response => {
-        console.log('response: ' + JSON.stringify(response));``
-
-    });
-
-
-    
-
-
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));``
+        });
     }
-
 
     neutralVote(post) {
         console.log("voted neutral!")
-
-        
-
         console.log(JSON.parse(JSON.stringify(post)));
+
         var postToBeVotedOn = post.postId;
         var idToVote = null;
-
-
-        if(post.userId)
-        {
+        if(post.userId) {
 
             idToVote = post.userId;
 
@@ -144,12 +121,9 @@ class ViewPost extends Component{//Initial State
         else{
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
-        }
+        }       
 
-        
-
-        if(post.neutralVoters)
-        {
+        if(post.neutralVoters) {
 
             
             post['neutralVoters'].push(idToVote);
@@ -157,28 +131,25 @@ class ViewPost extends Component{//Initial State
             console.log(post)
             
         }
-        else
-            {
-                post.neutralVoters = [];
-                post['neutralVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.neutralVoters = [];
+            post['neutralVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
-
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-                method: 'PUT',
-                body: JSON.stringify(post)
-            })
-            .then(result => {
-                console.log('result: ' + JSON.stringify(result));
-                return result.json()
-            })
-            .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
-        
-            });
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));``
+        });
     }
 
     voteDown(post) {
@@ -187,62 +158,53 @@ class ViewPost extends Component{//Initial State
         var postToBeVotedOn = post.postId;
         var idToVote = null;
 
-        if(post.userId)
-        {
-
+        if(post.userId) {
             idToVote = post.userId;
 
         }
-        else{
+        else {
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
             idToVote = post.userId;
         }
-
-
-        if(post.negativeVoters)
-        {            
+        if(post.negativeVoters) {            
             post['negativeVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
-            
         }
-        else
-            {
-                post.negativeVoters = [];
-                post['negativeVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
-            }
+        else {
+            post.negativeVoters = [];
+            post['negativeVoters'].push(idToVote);
+            console.log('array created');
+            console.log('added voter');
+            console.log(post);
+        }
 
-
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
-                method: 'PUT',
-                body: JSON.stringify(post)
-            })
-            .then(result => {
-                console.log('result: ' + JSON.stringify(result));
-                return result.json()
-            })
-            .then(response => {
-                console.log('response: ' + JSON.stringify(response));
-        
-            });
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            method: 'PUT',
+            body: JSON.stringify(post)
+        })
+        .then(result => {
+            console.log('result: ' + JSON.stringify(result));
+            return result.json()
+        })
+        .then(response => {
+            console.log('response: ' + JSON.stringify(response));
+        });
     }
 
-    retrievePost(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+    storeUser(data) {//A function for fetching the user object associated with the post
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
-                'content-type': 'application/json'
+                'content-type' : 'application/json'
             },
             method: 'GET',
         })
-        .then(results => {
-            return results.json();
-        })//Saves the response as JSON
-        .then(data => {
-            //console.log('r: ' + JSON.stringify(data));
-
+        .then(response => {
+            return response.json();
+        })
+        .then(userObject => {
+            this.posterID = userObject.user.userId;//Saved for checking to edit the post
+            this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
             var pVoters = data.post.positiveVoters;
             var nVoters = data.post.neutralVoters;
@@ -272,7 +234,7 @@ class ViewPost extends Component{//Initial State
             {
                  negCount = 0;
             }
-            return(//displays the post title and contents
+            return(//displays the post contents
             <div className="container">
 
                 <div className="row">
@@ -298,7 +260,9 @@ class ViewPost extends Component{//Initial State
                             <div key={data} className="">
                                 <div className="card-block">
                                     <h3>{data.post.title}</h3>
-                                    <p>{data.post.content}</p>
+                                    <p>{this.posterName}</p>
+                                    <p id="postEdit">{data.post.content}</p>
+                                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' style={{width: '70%', margin: 'auto'}}/>
                                 </div>
                             </div>
 
@@ -322,8 +286,24 @@ class ViewPost extends Component{//Initial State
             </div>
             );
         })
+        .then(posting => {
+            this.setState({postContent: posting});//update the state with the above post title, poster, and content
+        });
+    }
+
+    retrievePost(){
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'GET',
+        })
+        .then(results => {
+            return results.json();
+        })//Saves the response as JSON
         .then(data => {
-            this.setState({postContent: data});//update the state with the above post title and content
+            //Getting the user name to add to the post
+            this.storeUser(data);//Continues the work in the function above
         });
     }
 
@@ -445,23 +425,16 @@ class ViewPost extends Component{//Initial State
     {
         var newComment = 
         <div>
-                <div className="card bg-light" style={{objectFit:'contain'}}>
-                
-                    <div className="card-block">
-                    
-        
+            <div className="card bg-light" style={{objectFit:'contain'}}>
+                <div className="card-block">
                     <p style={{paddingTop:'8px'}}> {this.state.content} </p>
-                    
-                    
-                    </div>
-                        
                 </div>
-        
-                <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
-                Commented&nbsp;<Check />
-                </div>
+            </div>
     
-    </div>
+            <div style={{fontSize: '12px', paddingTop:'8px', paddingBottom:'8px'}}  className="text-success col-sm-2 justify-content-center mx-auto">
+            Commented&nbsp;<Check />
+            </div>
+        </div>
         
         return newComment
     }
@@ -513,6 +486,7 @@ class ViewPost extends Component{//Initial State
     }
 
 
+
     handleOpenModal () {
         this.setState({ showModal: true });
       }
@@ -532,6 +506,18 @@ class ViewPost extends Component{//Initial State
         )
       }
 
+    editButton() {
+        if(this.props.userObj.userId === this.posterID) {
+            return(
+            <Link to={`/edit/${this.state.postID}`}>
+            <button className='btn btn-info'>Edit Post</button>
+            </Link>);
+        }
+        else {
+            return
+        }
+    }
+
     render(){
             
         return(
@@ -546,6 +532,7 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
+                                        {this.editButton()}
                                     </div>
 
                                     <div>

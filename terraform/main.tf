@@ -1,16 +1,15 @@
 provider "aws" {
-  access_key = "AKIAJXKANNCQZUYLEVZQ"
-  secret_key = "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"
-  region     = "us-west-2"
+  profile = "default"
+  region  = "us-west-2"
 }
 
-# terraform {
-#   backend "s3" {
-#     bucket = ""
-#     key    = "path/to/my/key"
-#     region = "us-east-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "checkn-terraform-remote"
+    key    = "terraform-state"
+    region = "us-west-2"
+  }
+}
 
 resource "aws_dynamodb_table" "usersTable" {
   name           = "users"
@@ -26,54 +25,110 @@ resource "aws_dynamodb_table" "usersTable" {
 
 resource "aws_dynamodb_table" "tagsTable" {
   name           = "tags"
-  hash_key       = "tagId"
+  hash_key       = "tag"
   write_capacity = 5
   read_capacity  = 5
 
   attribute {
-    name = "tagId"
+    name = "tag"
     type = "S"
   }
 }
 
-# resource "aws_dynamodb_table" "postsTable" {
-#   name           = "posts"
-#   hash_key       = "postId"
-#   write_capacity = 5
-#   read_capacity  = 5
+resource "aws_dynamodb_table" "postsTable" {
+  name           = "posts"
+  hash_key       = "postId"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "postId"
+    type = "S"
+  }
+}
 
-#   attribute {
-#     name = "postId"
-#     type = "S"
-#   }
-# }
+resource "aws_dynamodb_table" "commentsTable" {
+  name           = "comments"
+  hash_key       = "commentId"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "commentId"
+    type = "S"
+  }
+}
 
-# resource "aws_dynamodb_table" "commentsTable" {
-#   name           = "comments"
-#   hash_key       = "commentId"
-#   write_capacity = 5
-#   read_capacity  = 5
+resource "aws_dynamodb_table" "rolesTable" {
+  name           = "roles"
+  hash_key       = "role"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "role"
+    type = "S"
+  }
+}
 
-#   attribute {
-#     name = "commentId"
-#     type = "S"
-#   }
-# }
+resource "aws_dynamodb_table" "departmentsTable" {
+  name           = "departments"
+  hash_key       = "department"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "department"
+    type = "S"
+  }
+}
 
-# resource "aws_dynamodb_table" "usersTable" {
-#   name           = "users"
-#   hash_key       = "userId"
-#   write_capacity = 5
-#   read_capacity  = 5
+resource "aws_dynamodb_table" "categoriesTable" {
+  name           = "categories"
+  hash_key       = "category"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "category"
+    type = "S"
+  }
+}
 
-#   attribute {
-#     name = "userId"
-#     type = "S"
-#   }
-# }
+resource "aws_dynamodb_table" "surveysTable" {
+  name           = "surveys"
+  hash_key       = "surveyId"
+  write_capacity = 5
+  read_capacity  = 5
 
+  attribute {
+    name = "surveyId"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "surveyResponsesTable" {
+  name           = "surveyResponses"
+  hash_key       = "responseId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "responseId"
+    type = "S"
+  }
+}
+
+resource "aws_elasticsearch_domain" "checkNDomain" {
+  domain_name = "checkn-dev"
+
+  ebs_options {
+    ebs_enabled = true
+    volume_size = 10
+  }
+
+  cluster_config {
+    instance_type  = "t2.small.elasticsearch"
+    instance_count = 2
+  }
+}

@@ -7,15 +7,15 @@ module.exports.updatePost = (ddb, event, context, callback) => {
         var tableName = "posts";
         var item = JSON.parse(event.body);
         var updatedTimeStamp = moment().toISOString();
-        console.log(item);
+        console.log('item: ' + JSON.stringify(item));
         var postId = event.pathParameters.postId
-        console.log(postId)
+        console.log('postId: ' + postId)
         var params = {
             TableName: tableName,
             Key:{
                 "postId": postId
             },
-        UpdateExpression: "set content = :content, #time =:timestamp,  title = :title, userId = :userId, pinnedId = :pinnedId, visibilityLevel = :visibilityLevel, #state = :state, positiveVoters = :positiveVoters, neturalVoters = :neutralVoters , negativeVoters = :negativeVoters",
+        UpdateExpression: "set content = :content, #time =:timestamp,  title = :title, userId = :userId, pinnedId = :pinnedId, visibilityLevel = :visibilityLevel, #state = :state, positiveVoters = :positiveVoters, neutralVoters = :neutralVoters , negativeVoters = :negativeVoters",
         ExpressionAttributeValues:{
             ":content":item.content,
             ":timestamp":updatedTimeStamp,
