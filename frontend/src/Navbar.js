@@ -16,6 +16,7 @@ import Admin from 'react-icons/lib/fa/lock';
 class Navbar extends React.Component {
   constructor(props){
     super(props);
+
   }
   generateSearch = (e) => {
     e.preventDefault();     //Stops the page from reloading
@@ -84,7 +85,7 @@ class Navbar extends React.Component {
                 <ul className="navbar-nav mr-auto">
                   
                   <li className="nav-item active">
-                    <a className="nav-link" href="/Feed"> CheckN</a>
+                    <a className="nav-link" href="/feed"> CheckN</a>
                   </li>
 
                   <li className="nav-item active">
