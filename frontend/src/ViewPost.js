@@ -33,7 +33,10 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none',
             showModal: false,
-            userThatCommented: ""
+            userThatCommented: "",
+            positiveVotersCount: 0,
+            neutralVotersCount: 0,
+            negativeVotersCount: 0,
         };
         this.posterID=null;
         this.posterName=null;
@@ -52,12 +55,20 @@ class ViewPost extends Component{//Initial State
     componentDidMount() {//Queries the API for a post and its comments with specified ID
         this.retrievePost();
         this.retrieveComments();
+        this.voteAmount();
     }
 
     /*componentDidUpdate() {
         this.retrievePost();
         //this.retrieveComments();
     }*/
+
+
+    voteAmount()
+    {
+
+        console.log(this.state.positiveVotersCount)
+    }
 
     storeUser(data) {//A function for fetching the user object associated with the post
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
@@ -70,52 +81,27 @@ class ViewPost extends Component{//Initial State
             return response.json();
         })
         .then(userObject => {
+            console.log("josh: " + JSON.stringify(data))
             this.posterID = userObject.user.userId;//Saved for checking to edit the post
             this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
-            var pVoters = data.post.positiveVoters;
-            var nVoters = data.post.neutralVoters;
-            var negVoters = data.post.negativeVoters;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
+
             return(//displays the post contents
             <div className="container">
 
                 <div className="row">
                     <span className="col-sm">
-                        <button className="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp /> {positiveCount}
+                        <button className="btn btn-primary btn-sm" type="submit" id="upVote">
+                            <ThumbsUp /> 
                         </button>
                         <br />
-                        <button className="btn btn-default btn-sm" type="submit">
-                        <   Neutral /> {neutralCount}
+                        <button className="btn btn-default btn-sm" type="submit" id="netVote">
+                        <   Neutral /> 
                         </button>
                         <br />
-                        <button className="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> {negCount}
+                        <button className="btn btn-danger btn-sm" type="submit" id="downVote">
+                            <ThumbsDown /> 
                         </button>       
                     </span>
 
@@ -193,7 +179,7 @@ class ViewPost extends Component{//Initial State
             
              console.log('response: ' + JSON.stringify(response.user));
              console.log('response type: ' + typeof response.user);
-             console.log('response obj val: ' + Object.values(response.user));
+             //console.log('response obj val: ' + Object.values(response.user));
              if(document.getElementById(response.user.userId))
              {
                 var x = document.getElementById(response.user.userId);
@@ -204,26 +190,46 @@ class ViewPost extends Component{//Initial State
     }
 
     generateCommentFeed(comments){ //comments are edited here  
-        var commentFeed = comments.map((comment) => {
-            console.log(comment)
+       if(comments)
+        { var commentFeed = comments.map((comment) => {
+            if(comment.content)
+            {
+                console.log(comment)
 
             var vote = null;
+            var x = null;
 
-            if(comment.vote === "POSITIVE")
-            {
-                vote = <ThumbsUp />
-            }
-            else if(comment.vote === "NEGATIVE")
-            {
-                vote = <ThumbsDown />
-            }
-            else
-            {
-                vote = <Neutral />
-            }
+            
             
             var test = this.retreiveUser(comment.userId);
 
+            if(comment.vote === "POSITIVE")
+            {
+                this.state.positiveVotersCount += 1;
+                vote = <ThumbsUp />
+                
+                //if(document.getElementById("upVote")){x = document.getElementById("upVote");
+
+               // x.value = this.state.positiveVotersCount;}
+            }
+            else if(comment.vote === "NEGATIVE")
+            {
+                this.state.negativeVotersCount += 1;
+                vote = <ThumbsDown />
+
+                 //x = document.getElementById("downVote");
+
+               // x.value = this.state.negativeVotersCount;
+            }
+            else
+            {
+                this.state.neutralVotersCount += 1;
+                vote = <Neutral />
+
+                //x = document.getElementById("netVote");
+
+                //x.value = this.state.neutralVotersCount;
+            }
             //console.log('test: ' + test)
             return(
                     <div key={comment.commentId} className="card bg-light">
@@ -241,8 +247,10 @@ class ViewPost extends Component{//Initial State
                     </div>
                         
                     </div>
-                );
+                );}
         })
+    
+    }
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
         return commentFeed;
@@ -269,7 +277,18 @@ class ViewPost extends Component{//Initial State
 
     handleSubmit(event){
         event.preventDefault();
-        const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
+
+        var data = null;
+
+        if(this.state.content)
+        {
+            
+             data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
+        }
+        else
+        {
+            data = {postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};
+        }
 
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
@@ -358,13 +377,6 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
-      getVoters(){
-        return (
-            <div>
-                
-            </div>
-        )
-      }
 
     editButton() {
         if(this.props.userObj.userId === this.posterID) {
