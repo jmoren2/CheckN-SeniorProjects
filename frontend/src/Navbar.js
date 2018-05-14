@@ -65,7 +65,7 @@ class Navbar extends React.Component {
       <Admin />	&nbsp;
       Admin Controls</Link>
       <Link to="/">Other</Link>
-      <Link to="/">Logout</Link>
+      <Link to="/logout">Logout</Link>
 </div>
 
 

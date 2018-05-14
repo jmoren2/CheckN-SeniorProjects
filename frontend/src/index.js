@@ -27,26 +27,30 @@ class App extends React.Component {
 
     //Creates the cookie.  This will be created when setUserObject ^ is called from the login page (so when logging in for the first time)
     constructCookie(user){
-        document.cookie = ('user=' + JSON.stringify(user));
+        if (user === null)
+        {
+            document.cookie = ('user= ');
+        } 
+        else
+        {
+            document.cookie = ('user=' + JSON.stringify(user));
+        }
         document.cookie = 'path=/';
-        document.cookie = 'test=kachow'; 
     }
 
     retrieveUserObjFromCookie(){
         try {
-        //I could make this one massive thing but I'll do it 1 step at a time
-        //First get the cookie and split it, I know that user will be the first thing since I made the cookie
-        var user = document.cookie.split(';')[0];
-        //I stringified the JSON object so what I have will look like 'user=stringifiedObject', so split in 2 at the = and take the second
-        user = user.split('=', 2)[1];
-        //Now use JSON.parse on my stringified JSON object to return it to normal
+        //First get the cookie and split it on user=, this way I can have a string that at least starts as the object
+        var user = document.cookie.split('user=')[1];
+        //Now split on the } to get rid of any extra just in case and put the } back on
+        user = ((user.split('}')[0]) + '}');
+        //Now what I have left is the stringified JSON object that can be parsed
         user = JSON.parse(user);
-        //Now I have the user object
-        console.log(user);
 
         return (user);
         }
         catch(err){
+            //If anything at all went wrong then send a null user and they should be sent to login screen
             console.log(err);
             return null;
         }
@@ -56,8 +60,9 @@ class App extends React.Component {
         return(
             <Router>
                 <div>
-                    <Route exact path="/" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} {...props}/>)}/>{/*Passes a potentially null user object to the login page to check if login is necessary*/}
-                    <Route path="/login" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} {...props}/>)}/>{/*Set the user object with this.props.indexUserMethod()*/}
+                    <Route exact path="/" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} loggedOut={false} {...props}/>)}/>{/*Passes a potentially null user object to the login page to check if login is necessary*/}
+                    <Route path="/login" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} loggedOut={false}{...props}/>)}/>{/*Set the user object with this.props.indexUserMethod()*/}
+                    <Route path="/logout" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={null} loggedOut={true}{...props}/>)}/>
                     <Route path="/feed" component={props => (<FeedPage userObj={this.userObj} {...props}/>)}/>{/*Access with this.props.userObj*/}
                     <Route path="/post/:postID" component={props => (<ViewPost userObj={this.userObj} {...props}/>)}/>
                     <Route path="/create" component={props => (<CreatePost userObj={this.userObj} {...props}/>)}/>
