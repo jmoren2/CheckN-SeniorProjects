@@ -17,6 +17,12 @@ class LogInPage extends React.Component{
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+        //Update index to not have the user object anymore
+        if (props.loggedOut === true)
+        {
+            props.indexUserMethod(null);
+        }
         console.log("The user object passed in is: " + props.userObj);
     }
 
