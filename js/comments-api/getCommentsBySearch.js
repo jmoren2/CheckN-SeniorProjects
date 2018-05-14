@@ -12,9 +12,6 @@ module.exports.getCommentsBySearch = (ddb, event, context, callback) => {
         console.log("User string: " + user);
     }
 
-    // todo: users not implemented yet
-    user = null;
-
     if(search || user) {
         // todo: look up user first if 'user' field is defined, early exit if not resolved
 

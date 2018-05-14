@@ -9,25 +9,27 @@ module.exports.deleteComment = (ddb, event, context, callback) => {
             event.pathParameters.commentId !== "") {
             console.log("Received proxy: " + event.pathParameters.commentId);
             var id = event.pathParameters.commentId;
+
             var params = {
-                TableName: "comments",
-                Key: {
-                    "commentId" : id
-                }
-            };
+                index: 'comments',
+                type: 'comment',
+                id: id
+            }
 
             console.log("Attempting a conditional delete...");
-    
-            ddb.delete(params, function(err, data) {
-                if(err)
-                    return deleteCommentFail(500, 'Delete Comment failed. Error: ' + err, callback);
-                else
-                    return deleteCommentSuccess(callback);
+
+            esClient.delete(params, function (error, data) {
+                if(error) {
+                    console.log(error);
+                    return deleteCommentFail(400, error, callback);
+                }
+                console.log('data: ' + JSON.stringify(data));
+                deleteCommentSuccess(callback);
             });
         }
         else
-            return deleteCommentFail(400, 'Delete Comment failed.', callback);
+            return deleteCommentFail(400, 'Delete Comment failed. Bad path parameters.', callback);
     }
     else
-        return deleteCommentFail(400, 'Delete Comment failed', callback);
+        return deleteCommentFail(400, 'Delete Comment failed. No Path parameters given.', callback);
 }
