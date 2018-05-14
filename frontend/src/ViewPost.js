@@ -127,7 +127,6 @@ class ViewPost extends Component{//Initial State
                                     <h3>{data.post.title}</h3>
                                     <p>{this.posterName}</p>
                                     <p id="postEdit">{data.post.content}</p>
-                                    <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' style={{width: '70%', margin: 'auto'}}/>
                                 </div>
                             </div>
 
