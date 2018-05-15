@@ -260,6 +260,9 @@ functions:
         - js/comments-api/createComment.js
         - js/comments-api/handler.js
         - js/comments-api/responses.js
+        - js/posts-api/responses.js
+        - js/posts-api/getPostById.js
+        - js/posts-api/updatePost.js
         - node_modules/moment/**
 
   updateComment:
