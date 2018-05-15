@@ -9,7 +9,7 @@ module.exports.getRole = (ddb, event, context, callback) => {
             event.pathParameters.role !== "") {
             console.log("Received proxy: " + event.pathParameters.role);
 
-            var role = event.pathParameters.role;
+            var role = decodeURIComponent(event.pathParameters.role);
             var params = {
                 TableName: "roles",
                 Key: {
