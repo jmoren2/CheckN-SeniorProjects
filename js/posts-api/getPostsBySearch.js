@@ -18,10 +18,11 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     var filter = {
         query: { bool: { should: [] } }
     }
+    var userFilter, tagFilter, searchFilter;
 
     if(search !== undefined) {
         console.log('search: ' + search);
-        filter.query.bool.should.push({
+        searchFilter = {
             bool: { should: [
                 {
                     match: {
@@ -33,23 +34,20 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
                     }
                 }
             ] }
-        });
+        };
     }
     if(user !== undefined) {
-        filter.query.bool.should.push({
-            bool: { 
-                must: [ { match: { userId: user } } ]
-            }
-        });
+        userFilter = { match: { userId: user } };
     }
 
     if(tag !== undefined) {
-        filter.query.bool.should.push({
-            bool: { 
-                must: [ { match: { tags: tag } } ]
-            }
-        });
+        tagFilter = { match: { tags: tag } };
     }
+    filter.query.bool.should.push(searchFilter);
+    var mustFilter = {bool: {must:[]}}
+    mustFilter.bool.must.push(userFilter);
+    mustFilter.bool.must.push(tagFilter);
+    filter.query.bool.should.push(mustFilter);
     console.log(filter);
 
     esClient.search({
