@@ -13,6 +13,8 @@ provider:
     Action:
       - "es:ESHttpPost"
     Resource: "*"
+  custom:
+    
 
 plugins:
   # - serverless-nested-stack

@@ -3,13 +3,16 @@ const success = require('./responses').multiPostSuccess;
 const fail = require('./responses').postsFail;
 
 module.exports.getPostsBySearch = (esClient, event, context, callback) => {
+    var search, user, tags;
 
     // pull search key(s) and user from the query string
     if(event.queryStringParameters) {
-        var search = event.queryStringParameters.search;
-        var user = event.queryStringParameters.user;
+        search = event.queryStringParameters.search;
+        user = event.queryStringParameters.user;
+        tags = event.queryStringParameters.tags;
         console.log("Search string: " + search);
         console.log("User string: " + user);
+        console.log("Tags: " + tags);
     }
 
     // // todo: users not implemented yet
@@ -102,14 +105,18 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     }
     if(search !== undefined) {
         console.log('search: ' + search);
-        filter.query.bool.should = [{
-            match: {
-                title: search
-            },
-            match : {
-                content: search
+        filter.query.bool.should = [
+            {
+                match: {
+                    title: search
+                }
+            }, 
+            {
+                match : {
+                    content: search
+                }
             }
-        }]
+        ]
     }
     if(user !== undefined) {
         filter.query.bool.must = [{
@@ -117,6 +124,16 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
                 userId: user
             }
         }];
+    }
+    if(tags !== undefined) {
+        if(filter.query.bool.should === undefined) {
+            filter.query.bool.should = [];
+        }
+        filter.query.bool.should.add({
+            match: {
+                tag: tags
+            }
+        });
     }
     console.log(filter);
 
