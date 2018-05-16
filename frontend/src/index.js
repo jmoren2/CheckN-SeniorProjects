@@ -10,6 +10,8 @@ import CreatePost from './CreatePost.js';
 import About from './About.js';
 import RegisterUser from './RegisterUser.js';
 import EditPost from './EditPost.js';
+import Admin from './Admin.js'
+import Report from './Report.js'
 
 class App extends React.Component {
     constructor(props){
@@ -69,6 +71,8 @@ class App extends React.Component {
                     <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                     <Route path="/about" component={About}/>
                     <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/admin" component={props => (<Admin userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/admin/:report" component={props => (<Report userObj={this.userObj} {...props}/>)}/>
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>
