@@ -4,6 +4,9 @@ import logo from './images/checknlogo.png';
 import clientLogo from './images/nikeCheck.jpg'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import {loginUser, getUser, deleteUser} from './assets/okta-api-handler'
+
+
 
 class LogInPage extends React.Component{
     constructor(props){
@@ -17,12 +20,6 @@ class LogInPage extends React.Component{
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
-        //Update index to not have the user object anymore
-        if (props.loggedOut === true)
-        {
-            props.indexUserMethod(null);
-        }
         console.log("The user object passed in is: " + props.userObj);
     }
 
@@ -36,6 +33,21 @@ class LogInPage extends React.Component{
 
     handleSubmit(event){
         event.preventDefault();
+
+        //** Test ONLY dont merge to master **//
+        
+        loginUser(this.state.email, this.state.password)
+        .then(result => {
+            return result.json()
+        })
+        .then(data => {
+            console.log("done: ", data)
+        })
+
+        deleteUser("test@test1.com")
+
+        // ********************************* //
+
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.email}`, {
                 headers: {
                     'content-type': 'application/json'
