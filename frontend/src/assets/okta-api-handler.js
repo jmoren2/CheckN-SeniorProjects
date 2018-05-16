@@ -10,7 +10,7 @@ const headers = {
     'Content-Type': 'application/json',
     Authorization: 'SSWS 00DsDHHA_aVUA4QAV17KvALZlEHCQng_Fe6eufsZNZ',
     client_id: '0oa153tnmegP5431a2p7',
-    client_secret: 'vPFNbQBPkzcrYzOeJ_JzOFzxtwK2teQwLIWr5mbX',
+    client_secret: 'vPFNbQBPkzcrYzOeJ_JzOFzxtwK2teQwLIWr5mbX'
 }
 // ************************************************************* //
 
@@ -35,7 +35,7 @@ export function getUser(email){
 }
 
 
-// Parameter profileshould be JSON object
+// profile should be JSON object
 export function createUser(profile){
     return fetch(baseUrl + 'api/v1/users?activate=true',{
         method: 'POST',
@@ -49,7 +49,6 @@ export function createUser(profile){
 
 /* FUNCTIONS are Having issue with CORS - NOT FUNCTIONAL YET */
 
-// Parameter profile should be JSON object
 export function deleteUser(email){
     return getUser(email)
     .then(response => {
@@ -66,14 +65,14 @@ export function deleteUser(email){
     })
 }
 
-// Parameter profile should be JSON object
+// profile should be JSON object
 export function updateUser(email, profile){
     return getUser(email)
     .then(response => {
         return response.json()
     })
     .then(data => {
-        return fetch(data._links.deactivate.href,{
+        return fetch(baseUrl  + 'api/v1/users/ ' + data.id ,{
             method: 'POST',
             headers: headers,
             profile: profile
