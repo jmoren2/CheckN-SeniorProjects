@@ -9,9 +9,12 @@ provider:
     Action:
       - "dynamoDB:*"
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
+  - Effect: "Allow"
+    Action:
+      - "es:*"
+    Resource: "arn:aws:es:us-west-2:995441987960:domain/checkn-dev"
 
 plugins:
-  # - serverless-nested-stack
   - serverless-plugin-split-stacks
 
 package:
