@@ -9,6 +9,20 @@ module.exports.createPost = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
 
     var body = JSON.parse(event.body);
+
+    if(!body.hasOwnProperty('title') || body.title === undefined){
+      return fail(404, 'Title is missing', callback);
+    }
+    if(!body.hasOwnProperty('userId') || body.userId === undefined){
+      return fail(404, 'userId is missing', callback);
+    }
+    if(!body.hasOwnProperty('state') || body.state === undefined){
+      return fail(404, 'State is missing', callback);
+    }
+    if(!body.hasOwnProperty('content') || body.content === undefined){
+      return fail(404, 'Content is missing', callback);
+    }
+    
     body.postId = uuid.v4();
     var now = moment().toISOString();
     body.timestamp = now;
