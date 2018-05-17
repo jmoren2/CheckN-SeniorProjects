@@ -2,6 +2,7 @@
 const moment = require('moment');
 const response = require('./responses.js').singlePostSuccess
 const fail = require('./responses').postsFail
+
 module.exports.updatePost = (esClient, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var params = {

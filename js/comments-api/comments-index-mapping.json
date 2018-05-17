@@ -1,10 +1,12 @@
 {
     "properties": {
-        "content": { "type": "text" },
-        "userId": { "type": "keyword" },
         "commentId": { "type": "keyword" },
         "postId": { "type": "keyword" },
-        "anonymous": { "type": "boolean" },
+        "parentId": { "type": "keyword" },
+        "content": { "type": "text" },
+        "userId": { "type": "keyword" },
+        "vote": { "type": "keyword" },
+        "timestamp": { "type": "keyword" },
         "voteCounts": {
             "type": "nested",
             "properties": {
@@ -13,12 +15,14 @@
                 "neutral": { "type": "integer" }
             }
         },
+        "nestedComments": { "type": "keyword" },
         "history": { 
             "type": "nested",
             "properties": {
                 "content": { "type": "text" },
                 "timestamp": { "type": "text" }
             }
-        }
+        },
+        "anonymous": { "type": "boolean" }
     }
 }

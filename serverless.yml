@@ -95,6 +95,9 @@ functions:
         - js/posts-api/handler.js
         - js/posts-api/responses.js
         - node_modules/moment/**
+        - js/posts-api/posts-index-mapping.js
+        - js/posts-api/posts-index-mapping.json
+        - node_modules/**
 
 ################### Users Api ###################
   getUserById:
@@ -404,69 +407,69 @@ functions:
         - js/departments-api/responses.js
         - node_modules/moment/**
 
-################### Categories Api ###################
-  getCategory:
-    handler: js/categories-api/handler.getCategory
-    events:
-      - http:
-          path: categories/{category}
-          method: get
-          cors: true
-    package:
-      include:
-        - js/categories-api/getCategory.js
-        - js/categories-api/handler.js
-        - js/categories-api/responses.js
+# ################### Categories Api ###################
+#   getCategory:
+#     handler: js/categories-api/handler.getCategory
+#     events:
+#       - http:
+#           path: categories/{category}
+#           method: get
+#           cors: true
+#     package:
+#       include:
+#         - js/categories-api/getCategory.js
+#         - js/categories-api/handler.js
+#         - js/categories-api/responses.js
 
-  getAllCategories:
-    handler: js/categories-api/handler.getAllCategories
-    events:
-      - http:
-          path: categories
-          method: get
-          cors: true
-    package:
-      include:
-        - js/categories-api/getAllCategories.js
-        - js/categories-api/handler.js
-        - js/categories-api/responses.js
+#   getAllCategories:
+#     handler: js/categories-api/handler.getAllCategories
+#     events:
+#       - http:
+#           path: categories
+#           method: get
+#           cors: true
+#     package:
+#       include:
+#         - js/categories-api/getAllCategories.js
+#         - js/categories-api/handler.js
+#         - js/categories-api/responses.js
 
-  deleteCategory:
-    handler: js/categories-api/handler.deleteCategory
-    events:
-      - http:
-          path: categories/{category}
-          method: delete
-          cors: true
-    package:
-      include:
-        - js/categories-api/deleteCategory.js
-        - js/categories-api/handler.js
-        - js/categories-api/responses.js
+#   deleteCategory:
+#     handler: js/categories-api/handler.deleteCategory
+#     events:
+#       - http:
+#           path: categories/{category}
+#           method: delete
+#           cors: true
+#     package:
+#       include:
+#         - js/categories-api/deleteCategory.js
+#         - js/categories-api/handler.js
+#         - js/categories-api/responses.js
 
-  createCategory:
-    handler: js/categories-api/handler.createCategory
-    events:
-      - http:
-          path: categories
-          method: post
-          cors: true
-    package:
-      include:
-        - js/categories-api/createCategory.js
-        - js/categories-api/handler.js
-        - js/categories-api/responses.js
-        - node_modules/moment/**
+#   createCategory:
+#     handler: js/categories-api/handler.createCategory
+#     events:
+#       - http:
+#           path: categories
+#           method: post
+#           cors: true
+#     package:
+#       include:
+#         - js/categories-api/createCategory.js
+#         - js/categories-api/handler.js
+#         - js/categories-api/responses.js
+#         - node_modules/moment/**
 
-  mapIndex:
-    handler: js/posts-api/handler.mapIndex
-    events:
-      - http:
-          path: index
-          method: post
-          cors: true
-    package:
-      include:
-        - js/posts-api/posts-index-mapping.js
-        - js/comments-api/comments-index-mapping.js
-        - js/posts-api/handler.js
+#   mapIndex:
+#     handler: js/posts-api/handler.mapIndex
+#     events:
+#       - http:
+#           path: index
+#           method: post
+#           cors: true
+#     package:
+#       include:
+#         - js/posts-api/posts-index-mapping.js
+#         - js/comments-api/comments-index-mapping.js
+#         - js/posts-api/handler.js

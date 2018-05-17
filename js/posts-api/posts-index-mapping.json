@@ -5,14 +5,22 @@
         "userId": { "type": "keyword" },
         "postId": { "type": "keyword" },
         "pinnedId": { "type": "keyword" },
-        "status": { "type": "keyword" },
+        "state": { "type": "keyword" },
         "anonymous": { "type": "boolean" },
+        "timestamp": { "type": "keyword" },
         "voteCounts": {
             "type": "nested",
             "properties": {
                 "positive": { "type": "integer" },
                 "negative": { "type": "integer" },
                 "neutral": { "type": "integer" }
+            }
+        },
+        "visibilityLevel": {
+            "type": "nested",
+            "properties": {
+                "department": { "type": "keyword" },
+                "role": { "type": "keyword" }
             }
         },
         "history": { 

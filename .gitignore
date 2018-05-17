@@ -24,3 +24,11 @@ jspm_packages
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/frontend/build
+terraform/dev/.terraform/*
+terraform/backend/.terraform
+terraform/backend/terraform.tfstate
+terraform/backend/terraform.tfstate.backup
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform

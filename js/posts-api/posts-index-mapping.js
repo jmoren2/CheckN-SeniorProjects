@@ -1,34 +1,9 @@
 'use strict';
 
-var mapping = {
-    "properties": {
-        "title": { "type": "text" },
-        "content": { "type": "text" },
-        "userId": { "type": "keyword" },
-        "postId": { "type": "keyword" },
-        "pinnedId": { "type": "keyword" },
-        "status": { "type": "keyword" },
-        "anonymous": { "type": "boolean" },
-        "comments": { "type": "keyword" },
-        "voteCounts": {
-            "type": "nested",
-            "properties": {
-                "positive": { "type": "integer" },
-                "negative": { "type": "integer" },
-                "neutral": { "type": "integer" }
-            }
-        },
-        "history": { 
-            "type": "nested",
-            "properties": {
-                "content": { "type": "text" },
-                "timestamp": { "type": "text" }
-            }
-        }
-    }
-}
+var mapping = require('./posts-index-mapping.json');
 
 module.exports.mapIndex = async (esClient, event, context, callback) => {
+    console.log('mapping: ' + JSON.stringify(mapping));
     var options = {
         index: 'posts',
         type: 'post',
@@ -38,6 +13,7 @@ module.exports.mapIndex = async (esClient, event, context, callback) => {
 
     try {
         await esClient.indices.delete({index: 'posts'});
+        await esClient.indices.create({index: 'posts'});
         data = await esClient.indices.putMapping(options);
     } catch (error) {
         console.log(error);
@@ -61,7 +37,7 @@ function success(post, callback) {
     return callback(null, {
         statusCode: 200,
         body: {
-            data: msg
+            data: post
         }
     });
 }
