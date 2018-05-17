@@ -37,6 +37,7 @@ module.exports.updatePost = (event, context, callback) => {
 }
 
 module.exports.mapIndex = (event, context, callback) => {
-  const mapIndex = require('./posts-index-mapping').mapIndex;
+  // const mapIndex = require('./posts-index-mapping').mapIndex;
+  const mapIndex = require('./comments-index-mapping').mapIndex;
   mapIndex(esClient, event, context, callback);
 }
