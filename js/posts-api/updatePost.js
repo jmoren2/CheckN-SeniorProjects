@@ -15,7 +15,7 @@ module.exports.updatePost = (ddb, event, context, callback) => {
             Key:{
                 "postId": postId
             },
-        UpdateExpression: "set content = :content, #time =:timestamp,  title = :title, userId = :userId, pinnedId = :pinnedId, visibilityLevel = :visibilityLevel, #state = :state, positiveVoters = :positiveVoters, neutralVoters = :neutralVoters , negativeVoters = :negativeVoters",
+        UpdateExpression: "set content = :content, #time =:timestamp,  title = :title, userId = :userId, pinnedId = :pinnedId, visibilityLevel = :visibilityLevel, #state = :state, voteCounts = :voteCounts",
         ExpressionAttributeValues:{
             ":content":item.content,
             ":timestamp":updatedTimeStamp,
@@ -24,9 +24,7 @@ module.exports.updatePost = (ddb, event, context, callback) => {
             ":pinnedId" : item.pinnedId,
             ":visibilityLevel" :item.visibilityLevel,
             ":state" : item.state,
-            ":positiveVoters" : item.positiveVoters,
-            ":neutralVoters" : item.neutralVoters,
-            ":negativeVoters" : item.negativeVoters
+            ":voteCounts" : item.voteCounts
         },
         ExpressionAttributeNames: {
             "#time": "timestamp",
