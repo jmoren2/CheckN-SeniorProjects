@@ -33,7 +33,8 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none',
             showModal: false,
-            userThatCommented: ""
+            userThatCommented: "",
+            surveyId: ''
         };
         this.posterID=null;
         this.posterName=null;
@@ -60,6 +61,7 @@ class ViewPost extends Component{//Initial State
     }*/
 
     storeUser(data) {//A function for fetching the user object associated with the post
+        this.setState({surveyId: data.post.surveyId});
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
@@ -377,6 +379,15 @@ class ViewPost extends Component{//Initial State
         }
     }
 
+    surveyButton() {
+        console.log(this.state.surveyId);
+        return(
+        <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
+        <button/>
+        </Link>
+        );
+    }
+
     render(){
             
         return(
@@ -392,6 +403,7 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                         {this.editButton()}
+                                        {this.surveyButton()}
                                     </div>
 
                                     <div>
