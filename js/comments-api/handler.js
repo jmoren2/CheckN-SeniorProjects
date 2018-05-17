@@ -1,6 +1,6 @@
 'use strict';
 const AWS = require('aws-sdk');
-const ddb = new AWS.DynamoDB.DocumentClient();
+//const ddb = new AWS.DynamoDB.DocumentClient();
 const es = require('elasticsearch');
 AWS.Config.region = 'us-west-2';
 const esClient = es.Client({
@@ -11,16 +11,16 @@ const esClient = es.Client({
   }
 });
 
-module.exports.getCommentsByPostId = (event, context, callback) => {
+/*module.exports.getCommentsByPostId = (event, context, callback) => {
   const getCommentsByPostId = require('./getCommentsByPostId').getCommentsByPostId;
   getCommentsByPostId(esClient, event, context, callback);
-};
-/*
+};*/
+
 module.exports.getCommentById = (event, context, callback) => {
   const getCommentById = require('./getCommentById').getCommentById;
   getCommentById(esClient, event, context, callback);
 };
-*/
+
 module.exports.getCommentsBySearch = (event, context, callback) => {
   const getCommentsBySearch = require('./getCommentsBySearch').getCommentsBySearch;
   getCommentsBySearch(esClient, event, context, callback);
@@ -33,7 +33,7 @@ module.exports.createComment = (event, context, callback) => {
 
 module.exports.updateComment = (event, context, callback) => {
   const updateComment = require('./updateComment').updateComment;
-  updateComment(ddb, event, context, callback);
+  updateComment(esClient, event, context, callback);
 };
 
 module.exports.deleteComment = (event, context, callback) => {
