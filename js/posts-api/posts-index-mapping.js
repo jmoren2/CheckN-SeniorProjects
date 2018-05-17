@@ -9,6 +9,7 @@ var mapping = {
         "pinnedId": { "type": "keyword" },
         "status": { "type": "keyword" },
         "anonymous": { "type": "boolean" },
+        "comments": { "type": "keyword" },
         "voteCounts": {
             "type": "nested",
             "properties": {

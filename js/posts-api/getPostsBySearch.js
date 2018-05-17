@@ -16,39 +16,44 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     }
 
     var filter = {
-        query: { bool: { should: [] } }
+        query: { bool: { must: [] } }
     }
     var userFilter, tagFilter, searchFilter;
 
     if(search !== undefined) {
         console.log('search: ' + search);
         searchFilter = {
-            bool: { should: [
-                {
-                    match: {
-                        title: search
+            bool: { 
+                should: [
+                    {
+                        match: {
+                            title: search
+                        }
+                    },{
+                        match : {
+                            content: search
+                        }
                     }
-                },{
-                    match : {
-                        content: search
-                    }
-                }
-            ] }
+                ],
+                minimum_should_match: 1
+            }
         };
+        filter.query.bool.must.push(searchFilter);
     }
+    var mustFilter = {bool: {must:[]}}
     if(user !== undefined) {
         userFilter = { match: { userId: user } };
+        mustFilter.bool.must.push(userFilter);
     }
 
     if(tag !== undefined) {
         tagFilter = { match: { tags: tag } };
+        mustFilter.bool.must.push(tagFilter);
     }
-    filter.query.bool.should.push(searchFilter);
-    var mustFilter = {bool: {must:[]}}
-    mustFilter.bool.must.push(userFilter);
-    mustFilter.bool.must.push(tagFilter);
-    filter.query.bool.should.push(mustFilter);
-    console.log(filter);
+    if(mustFilter.bool.must.length > 0) {
+        filter.query.bool.must.push(mustFilter);
+    }
+    console.log(JSON.stringify(filter));
 
     esClient.search({
         index: 'posts',
