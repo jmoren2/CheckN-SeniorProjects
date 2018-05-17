@@ -48,7 +48,6 @@ export function createUser(profile){
 
 
 /* FUNCTIONS are Having issue with CORS - NOT FUNCTIONAL YET */
-
 export function deleteUser(email){
     return getUser(email)
     .then(response => {
@@ -56,12 +55,12 @@ export function deleteUser(email){
     })
     .then(data => {
         var id = data.id;
-        console.log("here:" , data)
+        console.log("Delete User here:" , data)
 
         return fetch(data._links.deactivate.href,{
             method: 'POST',
             headers: headers
-         })
+        })
     })
 }
 
