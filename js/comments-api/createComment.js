@@ -16,6 +16,10 @@ module.exports.createComment = (ddb, event, context, callback) => {
             fail(404, failMessage, callback );
         }
        
+        if(!body.hasOwnProperty('content') || body.content === undefined){
+            return fail(404, 'Content is missing', callback);
+        }
+        
         body.commentId = uuid.v4();
         var now = moment().toISOString();
         body.timestamp = now;

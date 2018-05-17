@@ -9,7 +9,9 @@ module.exports.createSurvey = (ddb, event, context, callback) => {
 
     var body = JSON.parse(event.body);
     body.surveyId = uuid.v4();
-
+    if(!body.hasOwnProperty('questions') || body.questions === undefined){
+          return fail(404, 'Questions is missing', callback);
+    }
     var survey = {
         Item: body,
         TableName: 'surveys'
