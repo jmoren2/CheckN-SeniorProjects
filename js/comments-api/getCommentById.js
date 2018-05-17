@@ -14,20 +14,20 @@ module.exports.getCommentById = (esClient, event, context, callback) => {
                 index: 'comments',
                 type: 'comment',
                 id: commentId
-            }
+            };
     
-            esClient.get(params, function (error, data) {
+            esClient.get(params, function (err, data) {
                 if(err) {
-                    return getCommentsFail(500,'get Comments by postId failed. Error: ' + err, callback);
+                    return getCommentsFail(500,'get Comment by commentId failed. Error: ' + err, callback);
                 } else {
                     return singleCommentSuccess(200, data._source, callback);
                 }
             });
 
         } else {
-            return getCommentsFail(400, 'get Comments by postId failed. Bad path parameters.', callback);
+            return getCommentsFail(400, 'get Comment by commentId failed. Bad path parameters.', callback);
         }
     } else {
-        return getCommentsFail(400,'get Comments by postId failed. No path parameters.', callback);
+        return getCommentsFail(400,'get Comment by commentId failed. No path parameters.', callback);
     }
-}
+};

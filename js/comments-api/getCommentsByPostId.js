@@ -1,6 +1,6 @@
 'use strict';
-const multiCommentSuccess = require('./responses').multiCommentSuccess;
-const getCommentsFail = require('./responses').CommentsFail;
+const success = require('./responses').multiCommentSuccess;
+const fail = require('./responses').CommentsFail;
 
 module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
@@ -9,19 +9,26 @@ module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
             event.pathParameters.postId !== "") {
             console.log("Received proxy: " + event.pathParameters.postId);
             var postId = event.pathParameters.postId;
-    
-            ddb.scan(params, function(err, data) {
-                if(err)
-                    return getCommentsFail(500,'get Comments by postId failed. Error: ' + err, callback);
-                else
-                    return multiCommentSuccess(200, data.Items, callback);
-            });
 
-            
+            var filter = {};
+            filter.query.bool.must.match.postId = postId;
+
+            esClient.search({
+                index: 'comments',
+                body: filter
+            }, function(error, data) {
+                if(error) {
+                    console.log('error: ' + JSON.stringify(error));
+                    fail(400, error, callback);
+                } else {
+                    console.log('data: ' + JSON.stringify(data));
+                    success(200, data, callback);
+                }
+            });
         }
         else
-            return getCommentsFail(400, 'get Comments by postId failed.', callback);
+            return fail(400, 'get Comments by postId failed.', callback);
     }
     else
-        return getCommentsFail(400,'get Comments by postId failed', callback);
-}
+        return fail(400,'get Comments by postId failed', callback);
+};

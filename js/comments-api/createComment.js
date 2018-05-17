@@ -17,7 +17,7 @@ module.exports.createComment = (esClient, event, context, callback) => {
             type: 'comment',
             id: comment.commentId,
             body: comment
-        }
+        };
 
         esClient.create(params, function(error, data) {
             if(error) {
@@ -29,4 +29,4 @@ module.exports.createComment = (esClient, event, context, callback) => {
             }
         });
     }
-}
+};

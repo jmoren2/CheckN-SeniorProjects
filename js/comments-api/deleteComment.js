@@ -1,8 +1,8 @@
 'use strict';
-const deleteCommentSuccess = require('./responses').deleteCommentSuccess;
-const deleteCommentFail = require('./responses').CommentsFail;
+const success = require('./responses').deleteCommentSuccess;
+const fail = require('./responses').CommentsFail;
 
-module.exports.deleteComment = (ddb, event, context, callback) => {
+module.exports.deleteComment = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.commentId !== undefined && 
             event.pathParameters.commentId !== null && 
@@ -14,22 +14,22 @@ module.exports.deleteComment = (ddb, event, context, callback) => {
                 index: 'comments',
                 type: 'comment',
                 id: id
-            }
+            };
 
             console.log("Attempting a conditional delete...");
 
             esClient.delete(params, function (error, data) {
                 if(error) {
                     console.log(error);
-                    return deleteCommentFail(400, error, callback);
+                    return fail(400, error, callback);
                 }
                 console.log('data: ' + JSON.stringify(data));
-                deleteCommentSuccess(callback);
+                success(callback);
             });
         }
         else
-            return deleteCommentFail(400, 'Delete Comment failed. Bad path parameters.', callback);
+            return fail(400, 'Delete Comment failed. Bad path parameters.', callback);
     }
     else
-        return deleteCommentFail(400, 'Delete Comment failed. No Path parameters given.', callback);
-}
+        return fail(400, 'Delete Comment failed. No Path parameters given.', callback);
+};

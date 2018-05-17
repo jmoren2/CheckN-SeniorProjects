@@ -1,0 +1,24 @@
+{
+    "properties": {
+        "content": { "type": "text" },
+        "userId": { "type": "keyword" },
+        "commentId": { "type": "keyword" },
+        "postId": { "type": "keyword" },
+        "anonymous": { "type": "boolean" },
+        "voteCounts": {
+            "type": "nested",
+            "properties": {
+                "positive": { "type": "integer" },
+                "negative": { "type": "integer" },
+                "neutral": { "type": "integer" }
+            }
+        },
+        "history": { 
+            "type": "nested",
+            "properties": {
+                "content": { "type": "text" },
+                "timestamp": { "type": "text" }
+            }
+        }
+    }
+}
