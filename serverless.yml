@@ -11,13 +11,12 @@ provider:
     Resource: "arn:aws:dynamodb:us-west-2:995441987960:table/*"
   - Effect: "Allow"
     Action:
-      - "es:ESHttpPost"
-    Resource: "*"
+      - "es:*"
+    Resource: "arn:aws:es:us-west-2:995441987960:domain/checkn-dev"
   custom:
     
 
 plugins:
-  # - serverless-nested-stack
   - serverless-plugin-split-stacks
 
 package:
@@ -296,74 +295,6 @@ functions:
         - js/comments-api/handler.js
         - js/comments-api/responses.js
         - node_modules/moment/**
-        
-  # ################### Location Api ###################
-  # getLocationsByPostId:
-  #   handler: js/locations-api/handler.getLocationByPostId
-  #   events:
-  #     - http:
-  #         path: posts/{postId}/locations
-  #         method: get
-  #         cors: true
-  #   package:
-  #     include:
-  #       - js/locations-api/getLocationsByPostId.js
-  #       - js/locations-api/handler.js
-  #       - js/locations-api/responses.js
-
-  # getLocationsBySearch:
-  #   handler: js/locations-api/handler.getLocationsBySearch
-  #   events:
-  #     - http:
-  #         path: locations
-  #         method: get
-  #         cors: true
-  #   package:
-  #     include:
-  #       - js/locations-api/getLocationsBySearch.js
-  #       - js/locations-api/handler.js
-  #       - js/locations-api/responses.js
-
-  # deleteLocation:
-  #   handler: js/locations-api/handler.deleteLocation
-  #   events:
-  #     - http:
-  #         path: posts/{postId}/locations/{locationId}
-  #         method: delete
-  #         cors: true
-  #   package:
-  #     include:
-  #       - js/locations-api/deleteLocation.js
-  #       - js/locations-api/handler.js
-  #       - js/locations-api/responses.js
-
-  # createLocation:
-  #   handler: js/locations-api/handler.createLocation
-  #   events:
-  #     - http:
-  #         path: posts/{postId}/locations
-  #         method: post
-  #         cors: true
-  #   package:
-  #     include:
-  #       - js/locations-api/createLocation.js
-  #       - js/locations-api/handler.js
-  #       - js/locations-api/responses.js
-  #       - node_modules/moment/**
-
-  # updateLocation:
-  #   handler: js/locations-api/handler.updateLocation
-  #   events:
-  #     - http:
-  #         path: posts/{postId}/locations/{locationId}
-  #         method: put
-  #         cors: true
-  #   package:
-  #     include:
-  #       - js/locations-api/updateLocation.js
-  #       - js/locations-api/handler.js
-  #       - js/locations-api/responses.js
-  #       - node_modules/moment/**
 
 ################### Roles Api ###################
   getRole:
@@ -537,4 +468,5 @@ functions:
     package:
       include:
         - js/posts-api/posts-index-mapping.js
+        - js/comments-api/comments-index-mapping.js
         - js/posts-api/handler.js
