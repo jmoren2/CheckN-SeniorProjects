@@ -13,10 +13,12 @@ class RegisterUser extends Component{
             lastName: '',
             email: '',
             selectedDepartment: '',
+            allDepartments: [],
             returnedUser: null, 
             handleSubmitDone: false
         };
         this.allFields = [0, 0, 0, 0];
+        
         this.getAllDepartments = this.getAllDepartments.bind(this);
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
@@ -96,6 +98,7 @@ class RegisterUser extends Component{
                 departments.push(list.departments[i]);
             }
             dropdown.innerHTML = departments.sort();
+            this.setState({allDepartments: departments});
         });
     }
 
