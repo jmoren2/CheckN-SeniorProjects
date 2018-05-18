@@ -106,7 +106,9 @@ class RegisterUser extends Component{
             }
             console.log("Departments Array: " + JSON.stringify(departments));
             this.setState({allDepartments: departments});
+
             dropdown.hidden = false;
+            console.log(this.state.allDepartments);
         });
     }
 
@@ -141,7 +143,7 @@ class RegisterUser extends Component{
                                         <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' required/> <br />
                                     </div>
 
-                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} hidden/> <br />
+                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} hidden selection options={this.state.allDepartments} /> <br />
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
