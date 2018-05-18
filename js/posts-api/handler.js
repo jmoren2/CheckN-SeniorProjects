@@ -29,17 +29,18 @@ module.exports.createPost = (event, context, callback) => {
 module.exports.deletePost = (event, context, callback) => {
   const deletePost = require('./deletePost').deletePost;
   deletePost(ddb, event, context, callback);
-}
+};
 
 module.exports.updatePost = (event, context, callback) => {
   const updatePost = require('./updatePost').updatePost;
-  const mapIndex = require('./posts-index-mapping').mapIndex;
+  // const mapIndex = require('./posts-index-mapping').mapIndex;
+  const mapIndex = require('../comments-api/comments-index-mapping').mapIndex;
   mapIndex(esClient, event, context, callback);
   // updatePost(esClient, event, context, callback);
-}
+};
 
 module.exports.mapIndex = (event, context, callback) => {
   // const mapIndex = require('./posts-index-mapping').mapIndex;
   const mapIndex = require('./comments-index-mapping').mapIndex;
   mapIndex(esClient, event, context, callback);
-}
+};

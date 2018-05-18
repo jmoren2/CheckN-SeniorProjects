@@ -7,7 +7,6 @@ const success = require('../comments-api/responses').singleCommentSuccess;
 
 module.exports.createComment = (esClient, event, context, callback) => {
     if (event.body !== null && event.body !== undefined) {
-
         var comment = JSON.parse(event.body);
         comment.commentId = uuid.v4();
         comment.timestamp = moment().toISOString();

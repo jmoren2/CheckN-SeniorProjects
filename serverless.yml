@@ -95,8 +95,8 @@ functions:
         - js/posts-api/handler.js
         - js/posts-api/responses.js
         - node_modules/moment/**
-        - js/posts-api/posts-index-mapping.js
-        - js/posts-api/posts-index-mapping.json
+        - js/comments-api/comments-index-mapping.js
+        - js/comments-api/comments-index-mapping.json
         - node_modules/**
 
 ################### Users Api ###################
@@ -244,6 +244,7 @@ functions:
         - js/comments-api/getCommentsByPostId.js
         - js/comments-api/handler.js
         - js/comments-api/responses.js
+        - node_modules/**
 
   getCommentsBySearch:
     handler: js/comments-api/handler.getCommentsBySearch
@@ -257,6 +258,7 @@ functions:
         - js/comments-api/getCommentsBySearch.js
         - js/comments-api/handler.js
         - js/comments-api/responses.js
+        - node_modules/**
 
   deleteComment:
     handler: js/comments-api/handler.deleteComment
@@ -270,6 +272,7 @@ functions:
         - js/comments-api/deleteComment.js
         - js/comments-api/handler.js
         - js/comments-api/responses.js
+        - node_modules/**
 
   createComment:
     handler: js/comments-api/handler.createComment
@@ -284,6 +287,7 @@ functions:
         - js/comments-api/handler.js
         - js/comments-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
   updateComment:
     handler: js/comments-api/handler.updateComment
@@ -298,6 +302,7 @@ functions:
         - js/comments-api/handler.js
         - js/comments-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
 ################### Roles Api ###################
   getRole:
