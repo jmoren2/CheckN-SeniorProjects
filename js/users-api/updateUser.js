@@ -16,7 +16,7 @@ module.exports.updateUser = (esClient, event, context, callback) => {
           if(error)
             fail(500, 'Update User failed. Error: ' + error, callback);
           else
-            success(201, data, callback)
+            success(201, user, callback)
         });
     }
     else{

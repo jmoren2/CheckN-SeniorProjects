@@ -20,7 +20,7 @@ module.exports.getUserById = (esClient, event, context, callback) => {
                 if(err)
                     return getUserFail(500,'get user by userId failed. Error: ' + err, callback);
                 else
-                    return getSingleUserSuccess(200, data.Item, callback);
+                    return getSingleUserSuccess(200, data._source, callback);
             });
         }
         else

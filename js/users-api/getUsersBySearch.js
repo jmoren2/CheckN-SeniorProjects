@@ -14,7 +14,8 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
         role = event.queryStringParameters.role;
     }
 
-    var filter = {
+    // initialize search query
+    var search = {
         query: {
             bool: {
                 must: [],
@@ -23,8 +24,9 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
         }
     };
 
+    // match name field against first OR last name
     if(name !== undefined) {
-        filter.query.bool.must.push({
+        search.query.bool.must.push({
             bool: {
                 should: [{
                     match: {
@@ -38,14 +40,17 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
             }
         })
     }
+
+    // match e-mail field
     if(email !== undefined) {
-        filter.query.bool.must.push({
+        search.query.bool.must.push({
             match: {
                 email: email
             }
         })
     }
 
+    // initialize permissions filter
     var permFilter = {
         nested: {
             path: "permissions",
@@ -57,6 +62,7 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
         }
     };
 
+    // apply department/location/role to permissions filter
     if(dept !== undefined) {
         permFilter.nested.query.bool.must.push({
             term:{
@@ -78,20 +84,28 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
             }
         })
     }
-    filter.query.bool.filter = permFilter;
-    console.log(JSON.stringify(filter));
+    search.query.bool.filter = permFilter;
+    console.log(JSON.stringify(search));
 
     esClient.search({
         index: 'users',
         type: 'user',
-        body: filter
+        body: search
     }, function(error, data) {
         if(error) {
             console.log('error: ' + JSON.stringify(error));
             fail(400, error, callback);
         } else {
             console.log('data: ' + JSON.stringify(data));
-            success(200, data, callback);
+            var hits = data.hits.hits;
+            var users = [];
+
+            // parse hits for user objects
+            for(var i = 0; i < hits.length; ++i){
+                users.push(hits[i]._source)
+            }
+
+            success(200, users, callback);
         }
     });
 };

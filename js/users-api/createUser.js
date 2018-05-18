@@ -24,7 +24,7 @@ module.exports.createUser = (esClient, event, context, callback) => {
           return fail(400, error, callback);
       } else {
           console.log('data: ' + JSON.stringify(data));
-          return success(200, data, callback);
+          return success(200, user, callback);
       }
     });
   } else {

@@ -3,19 +3,20 @@ const success = require('./responses').multiCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
-    var search, user, post;
+    var text, user, post;
 
-    // pull search key(s) and user from the query string
+    // pull search key(s), user and post from the query string
     if(event.queryStringParameters) {
-        search = event.queryStringParameters.search;
+        text = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
         post = event.queryStringParameters.post;
-        console.log("Search string: " + search);
+        console.log("Search string: " + text);
         console.log("User string: " + user);
         console.log("Post string: " + post);
     }
 
-    var filter = {
+    // initialize search query
+    var search = {
         query: {
             bool:{
                 must: [],
@@ -24,22 +25,25 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         }
     };
 
+    // match comment content against search text
     if(search !== undefined) {
-        filter.query.bool.must.push({
+        search.query.bool.must.push({
             match: {
-                content: search
+                content: text
             }
         })
     }
+    // match user field
     if(user !== undefined) {
-        filter.query.bool.filter.push({
+        search.query.bool.filter.push({
             term: {
                 userId: user
             }
         })
     }
+    // match postId
     if(post !== undefined) {
-        filter.query.bool.filter.push({
+        search.query.bool.filter.push({
             term: {
                 postId: post
             }
@@ -57,7 +61,14 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
             fail(400, error, callback);
         } else {
             console.log('data: ' + JSON.stringify(data));
-            success(200, data, callback);
+            var hits = data.hits.hits;
+            var comments = [];
+
+            // parse hits for comment objects
+            for(var i = 0; i < hits.length; ++i){
+                comments.push(hits[i]._source)
+            }
+            success(200, comments, callback);
         }
     });
 };
