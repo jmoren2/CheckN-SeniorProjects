@@ -5,7 +5,6 @@
 
 import React from 'react';
 import {Link} from 'react-router-dom';
-//import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea, Label} from 'semantic-ui-react';
 
 /*
@@ -36,13 +35,7 @@ class Survey extends React.Component{
         this.retrieveSurvey();
     }
 
-    componentWillUpdate(){
-        console.log('should update');
-        console.log(this.state.responses);
-    }
-
     retrieveSurvey(){
-        console.log(this.props.match.params.surveyId);
         //fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/surveys/${this.props.match.params.surveyID}` ,{
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.props.match.params.surveyId}`, {
             headers: {
@@ -51,11 +44,9 @@ class Survey extends React.Component{
             method: 'GET',
         })
         .then(results => {
-            console.log(results);
             return results.json();
         })//Saves the response as JSON
         .then(survey => {
-            console.log(survey);
             this.initializeState(survey.survey);
         });
     }
@@ -64,9 +55,9 @@ class Survey extends React.Component{
         this.response = [];
     }
 
+    //State holds on to the questions and responses
+    //This is important because I want the rendering of each component to be completely state dependent 
     initializeState(survey){
-        console.log('initializeState');
-        console.log(survey);
         var questionArray = survey.questions;
         var responseArray = survey.questions.map((question) => {
             var temp = new this.defaultResponse();
@@ -84,9 +75,8 @@ class Survey extends React.Component{
         );
     }
 
+    //Show survey is a method that gets called by render.  Before I have essentially a "feed" but that causes issues
     showSurvey(){
-        console.log('showSurvey');
-        console.log(this.state.questions);
         var index = -1;
         var theSurvey = this.state.questions.map((question) => {
             index++;
@@ -104,6 +94,7 @@ class Survey extends React.Component{
         )
     }
 
+    //Look at the type of question and pass it on to that types renderer
     questionHandler(question, index){
         if (question.type === "free")
         {
@@ -161,12 +152,13 @@ class Survey extends React.Component{
     }
 
     updateTextResponse = (event) => {
-        console.log('updateTextResponse');
         var temp = this.state.responses;
         temp[event.target.id].response[0] = event.target.value;
         this.setState({responses: temp});
     }
 
+    //checks if the new value is not a number, and if it isn't then it doesn't update
+    //deals with empty string seperately because I ran into problems with it
     updateNumericResponse = (event) => {
         if (event.target.value != '')
         {
@@ -188,7 +180,6 @@ class Survey extends React.Component{
     }
 
     renderSelect(question, index){
-        console.log('renderSelect');
         var onChangeFunction = this.handleSingleSelectChange;
         var selectOptions = null;
         var optionIndex = -1;
@@ -288,7 +279,6 @@ class Survey extends React.Component{
             return(
                 <Grid.Column>
                     <Checkbox
-                        id={this.state.questions[index].options[optionIndex]}
                         text={this.state.questions[index].options[optionIndex]}
                         value={index}
                         checked={this.state.questions[index].options[optionIndex] === this.state.responses[index].response[0]}
@@ -322,8 +312,6 @@ class Survey extends React.Component{
     }
 
     handleScaleChange = (event, {value, text}) => {
-        console.log('handleScaleChange');
-        console.log(text);
         var temp = this.state.responses;
         if (temp[value].response[0] === text)
             temp[value].response[0] = '';
@@ -340,13 +328,7 @@ class Survey extends React.Component{
             responses: this.state.responses
         }
         console.log(surveyResponse);
-        /*
-        var temp = this.state.questions;
-        for (var i = 0; i < this.state.questions.length; i++)
-        {
-            temp[i].question = ("problem " + i);
-        }
-        this.setState({questions: temp});*/
+        //fetch here
     }
 
     render(){
