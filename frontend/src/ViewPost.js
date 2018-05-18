@@ -10,6 +10,7 @@ import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
 import ReactModal from 'react-modal'
+import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
@@ -33,7 +34,8 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none',
             showModal: false,
-            userThatCommented: ""
+            userThatCommented: "",
+            surveyId: ''
         };
         this.posterID=null;
         this.posterName=null;
@@ -60,6 +62,7 @@ class ViewPost extends Component{//Initial State
     }
 
     storeUser(data) {//A function for fetching the user object associated with the post
+        this.setState({surveyId: data.post.surveyId});
         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
@@ -388,6 +391,15 @@ class ViewPost extends Component{//Initial State
         }
     }
 
+    surveyButton() {
+        console.log(this.state.surveyId);
+        return(
+          <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
+          <Button positive>Take Survey</Button>
+          </Link>
+        );
+    }
+
     changePost()
     {
         if(document.getElementById("upVotes"))
@@ -434,6 +446,8 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                         {this.editButton()}
+                                        <div/>
+                                        {this.surveyButton()}
                                     </div>
 
                                     <div>
