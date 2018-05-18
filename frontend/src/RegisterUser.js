@@ -94,6 +94,7 @@ class RegisterUser extends Component{
             return response.json();
         })
         .then(list => {
+            console.log("LIST: " + JSON.stringify(list));
             var dropdown = document.getElementById("allDepartments");
             var departments = [];
             for(var i = 0; i < list.departments.length; ++i){
