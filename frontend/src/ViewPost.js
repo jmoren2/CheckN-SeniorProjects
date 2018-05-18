@@ -56,10 +56,10 @@ class ViewPost extends Component{//Initial State
         this.retrieveComments();
     }
 
-    /*componentDidUpdate() {
-        this.retrievePost();
+    componentDidUpdate() {
+        //this.retrievePost();
         //this.retrieveComments();
-    }*/
+    }
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
@@ -73,6 +73,7 @@ class ViewPost extends Component{//Initial State
             return response.json();
         })
         .then(userObject => {
+            console.log('DATA' + JSON.stringify(data))
             this.posterID = userObject.user.userId;//Saved for checking to edit the post
             this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
@@ -80,45 +81,45 @@ class ViewPost extends Component{//Initial State
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
+            // if(pVoters)
+            // {
+            //     var positiveCount = pVoters.length;
+            // }
+            // else
+            // {
+            //     positiveCount = 0;
+            // }
+            // if(nVoters)
+            // {
+            //     var neutralCount = nVoters.length;
+            // }
+            // else
+            // {
+            //      neutralCount = 0;
+            // }
+            // if(negVoters)
+            // {
+            //     var negCount = negVoters.length;
+            // }
+            // else
+            // {
+            //      negCount = 0;
+            // }
             return(//displays the post contents
             <div className="container">
 
                 <div className="row">
                     <span className="col-sm">
-                        <button className="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp /> {positiveCount}
+                        <button id="upVotes" className="btn btn-primary btn-sm" type="submit">
+                            <ThumbsUp />
                         </button>
                         <br />
-                        <button className="btn btn-default btn-sm" type="submit">
-                        <   Neutral /> {neutralCount}
+                        <button id="netVotes" className="btn btn-default btn-sm" type="submit">
+                        <   Neutral /> 
                         </button>
                         <br />
-                        <button className="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> {negCount}
+                        <button id="downVotes" className="btn btn-danger btn-sm" type="submit">
+                            <ThumbsDown /> 
                         </button>       
                     </span>
 
@@ -192,58 +193,72 @@ class ViewPost extends Component{//Initial State
             return result.json()
         })
         .then(response => {
+            console.log(response)
             
-             console.log('response: ' + JSON.stringify(response.user));
-             console.log('response type: ' + typeof response.user);
-             console.log('response obj val: ' + Object.values(response.user));
              if(document.getElementById(response.user.userId))
              {
                 var x = document.getElementById(response.user.userId);
 
-                x.innerHTML = response.user.email + " commented: ";
+                x.innerHTML = response.user.firstName + " " + response.user.lastName + " commented: ";
+                x.title = response.user.email;
             }
         })
     }
 
     generateCommentFeed(comments){ //comments are edited here  
         var commentFeed = comments.map((comment) => {
-            console.log(comment)
 
-            var vote = null;
+                var content = null;
 
-            if(comment.vote === "POSITIVE")
-            {
-                vote = <ThumbsUp />
-            }
-            else if(comment.vote === "NEGATIVE")
-            {
-                vote = <ThumbsDown />
-            }
-            else
-            {
-                vote = <Neutral />
-            }
+                if(comment.content === undefined)
+                {
+                    content = "noContent"
+                }
+                else
+                {
+                    content = "hasContent"
+                }
+
+                var vote = null;
+
+                if(comment.vote === "POSITIVE")
+                {
+                    vote = <ThumbsUp  style={{color: "blue"}} />
+                }
+                else if(comment.vote === "NEGATIVE")
+                {
+                    vote = <ThumbsDown  style={{color: "red"}} />
+                }
+                else
+                {
+                    vote = <Neutral />
+                }
+                
+                var test = this.retreiveUser(comment.userId);
+
+                //console.log('test: ' + test)
+
             
-            var test = this.retreiveUser(comment.userId);
-
-            //console.log('test: ' + test)
-            return(
-                    <div key={comment.commentId} className="card bg-light">
-                    
-                    <div className="card-block">
-                    <p id={comment.userId}>
-                        {comment.userId} commented: 
-                    </p>
-
-                    <div>
-                        {vote}
-                    </div>
-                    
-                    <p>{comment.content}</p>
-                    </div>
+                return(
+                        <div name={content} key={comment.commentId} className="card bg-light">
                         
-                    </div>
-                );
+                        <div className="card-block">
+                        <p id={comment.userId}>
+                            {comment.userId} commented: 
+                        </p>
+
+                        <div>
+                            {vote}
+                        </div>
+                        
+                        <p>{comment.content}</p>
+                        </div>
+                            
+                        </div>
+                    );
+                
+                
+            
         })
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
@@ -353,6 +368,8 @@ class ViewPost extends Component{//Initial State
 
 
     handleOpenModal () {
+        //this.retrieveComments();
+        console.log('state comments' + JSON.stringify(this.state.postComments[0]))
         this.setState({ showModal: true });
       }
       
@@ -360,13 +377,7 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
-      getVoters(){
-        return (
-            <div>
-                
-            </div>
-        )
-      }
+     
 
     editButton() {
         if(this.props.userObj.userId === this.posterID) {
@@ -383,10 +394,41 @@ class ViewPost extends Component{//Initial State
     surveyButton() {
         console.log(this.state.surveyId);
         return(
-        <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
-        <Button positive>Take Survey</Button>
-        </Link>
+          <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
+          <Button positive>Take Survey</Button>
+          </Link>
         );
+    }
+
+    changePost()
+    {
+        if(document.getElementById("upVotes"))
+        {
+        var up = document.getElementById("upVotes");
+        }
+        else
+        {
+            console.log("no upVotes")
+        }
+        
+    }
+
+    filterCommentsWithoutContent(comments)
+    {
+        if(document.getElementsByName("noContent"))
+        {
+            
+            var noc = document.getElementsByName("noContent");
+            
+
+            for (let i = 0; i < noc.length; i++) {
+                noc[i].hidden = true;
+              }
+            
+        }
+        return (
+            comments
+        )
     }
 
     render(){
@@ -417,7 +459,9 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
-                                        {this.state.postComments}
+                                        {
+                                            this.state.postComments
+                                        }
                                         <button class="btn btn-info" onClick={this.handleCloseModal}>Close Modal</button>
                                         </ReactModal>
                                     </div>
@@ -427,7 +471,7 @@ class ViewPost extends Component{//Initial State
                                     </div>
        
                                     <div>
-                                        {this.state.postComments}
+                                        {this.filterCommentsWithoutContent(this.state.postComments)}
                                     </div>
                                         
                         </div>
