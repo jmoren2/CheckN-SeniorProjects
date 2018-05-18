@@ -61,7 +61,7 @@ class Survey extends React.Component{
     }
 
     defaultResponse(){
-        this.response = [''];
+        this.response = [];
     }
 
     initializeState(survey){
@@ -170,7 +170,7 @@ class Survey extends React.Component{
     updateNumericResponse = (event) => {
         if (event.target.value != '')
         {
-            if (isNaN(event.taret.value))
+            if (isNaN(event.target.value))
                 return;
             else
             {
@@ -178,6 +178,12 @@ class Survey extends React.Component{
                 temp[event.target.id].response[0] = event.target.value;
                 this.setState({responses: temp});
             }
+        }
+        else
+        {
+            var temp = this.state.responses;
+            temp[event.target.id].response[0] = event.target.value;
+            this.setState({responses: temp});
         }
     }
 

@@ -10,6 +10,7 @@ import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
 import ReactModal from 'react-modal'
+import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
@@ -383,7 +384,7 @@ class ViewPost extends Component{//Initial State
         console.log(this.state.surveyId);
         return(
         <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
-        <button/>
+        <Button positive>Take Survey</Button>
         </Link>
         );
     }
@@ -403,6 +404,7 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                         {this.editButton()}
+                                        <div/>
                                         {this.surveyButton()}
                                     </div>
 
