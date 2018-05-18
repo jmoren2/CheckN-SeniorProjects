@@ -4,7 +4,7 @@
 //Need the page to check against a userID to make sure users that aren't signed in or have already taken can't do it again
 
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea, Label} from 'semantic-ui-react';
 
 /*
@@ -27,7 +27,9 @@ class Survey extends React.Component{
         this.state = {
             questions: [],
             responses: [],
-            surveyId: ''
+            surveyId: '',
+            responseSubmitted: false, 
+            postId: this.props.match.params.fromPostId
         }
     }
 
@@ -329,17 +331,38 @@ class Survey extends React.Component{
         }
         console.log(surveyResponse);
         //fetch here
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.props.match.params.surveyId}/responses`, {
+                method: 'POST',
+                body: JSON.stringify(surveyResponse)
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);
+                this.setState({responseSubmitted: true});
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     render(){
-        return(
-            <div className='container'>
-                <div className='card card-1 text-md-center'>
-                    {this.showSurvey()}
-                    <Button onClick={this.handleSubmit} positive>Submit Response</Button>
+        if (this.state.responseSubmitted)
+        {
+            return(
+                <Redirect to={`/post/${this.state.postId}`}/>
+            );
+        }
+        else
+        {
+            return(
+                <div className='container'>
+                    <div className='card card-1 text-md-center'>
+                        {this.showSurvey()}
+                        <Button onClick={this.handleSubmit} positive>Submit Response</Button>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 
