@@ -16,9 +16,9 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
 
     var filter = {
         query: {
-            bool:{
+            bool: {
                 must: [],
-                filter: []
+                filter: {}
             }
         }
     };
@@ -45,34 +45,41 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
             }
         })
     }
-    if(dept !== undefined) {
-        filter.query.bool.filter.push({
-            term: {
-                permissions: {
-                    department: dept
+
+    var permFilter = {
+        nested: {
+            path: "permissions",
+            query: {
+                bool: {
+                    must: []
                 }
+            }
+        }
+    };
+
+    if(dept !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "permissions.department" : dept
             }
         })
     }
     if(locat !== undefined) {
-        filter.query.bool.filter.push({
-            term: {
-                permissions: {
-                    location: locat
-                }
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "permissions.location" : locat
             }
         })
     }
     if(role !== undefined) {
-        filter.query.bool.filter.push({
-            term: {
-                permissions: {
-                    role: role
-                }
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "permissions.role" : role
             }
         })
     }
-    console.log(filter);
+    filter.query.bool.filter = permFilter;
+    console.log(JSON.stringify(filter));
 
     esClient.search({
         index: 'users',
