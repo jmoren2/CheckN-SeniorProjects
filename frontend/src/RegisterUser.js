@@ -3,30 +3,45 @@ import {Redirect} from 'react-router-dom';
 import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './index.js';
+import {Dropdown} from 'semantic-ui-react';
 
 class RegisterUser extends Component{
     constructor(props){
         super(props);
         this.state = {
-                    firstName: '', 
-                    lastName: '',
-                    email: '',
-                    returnedUser: null, 
-                    handleSubmitDone: false};
+            firstName: '', 
+            lastName: '',
+            email: '',
+            selectedDepartment: '',
+            returnedUser: null, 
+            handleSubmitDone: false
+        };
+        this.allFields = [0, 0, 0, 0];
+        this.getAllDepartments = this.getAllDepartments.bind(this);
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
+        this.handleDepChange = this.handleDepChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         console.log("The user object passed in is: " + props.userObj);
     }
 
+    componentDidMount(){
+        getAllDepartments();
+    }
+
     handleSubmit(event){
         event.preventDefault();
+        for(var i = 0; i < 4; ++i){
+            if(this.allFields[i] === 0)
+                return("Not all fields have been filled out");
+        }
         //What is being sent to the API
         const data = {
             firstName: this.state.firstName, 
             lastName: this.state.lastName,
-            email: this.state.email
+            email: this.state.email,
+            permissions: [{department: this.state.selectedDepartment, role: 'standard'}]
         };
 
         fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/', {
@@ -44,14 +59,44 @@ class RegisterUser extends Component{
 
     handleChangeFirst(event) {
         this.setState({firstName: event.target.value});//Updates the firstName field as typing occurs
+        this.allFields[0] = 1;
     }
 
     handleChangeLast(event) {
         this.setState({lastName: event.target.value});//Updates the lastName field as typing occurs
+        this.allFields[1] = 1;
     }
 
     handleChangeEmail(event) {
         this.setState({email: event.target.value});//Updates the email field as typing occurs
+        this.allFields[2] = 1;
+    }
+
+    handleDepChange = (event, data) => {
+        this.setState({
+            selectedDepartment: data.value
+        })
+        this.allFields[3] = 1;
+    }
+
+    getAllDepartments = () => {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/departments`, {
+            headers: {
+                'content-type': 'application/json'
+                 },
+            method: 'GET',
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(list => {
+            var dropdown = document.getElementById("allDepartments");
+            var departments = [];
+            for(var i = 0; i < list.departments.length; ++i){
+                departments.push(list.departments[i]);
+            }
+            dropdown.innerHTML = departments.sort();
+        });
     }
 
     render(){
@@ -84,6 +129,8 @@ class RegisterUser extends Component{
                                         <label>Email: </label>
                                         <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' required/> <br />
                                     </div>
+
+                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} required/>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
