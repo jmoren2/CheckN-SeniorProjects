@@ -31,7 +31,7 @@ class RegisterUser extends Component{
     }
 
     componentDidMount(){
-        getAllDepartments();
+        this.getAllDepartments();
     }
 
     handleSubmit(event){
@@ -97,16 +97,21 @@ class RegisterUser extends Component{
             var dropdown = document.getElementById("allDepartments");
             var departments = [];
             for(var i = 0; i < list.departments.length; ++i){
-                departments.push(list.departments[i].department);
+                departments.push({
+                    key: list.departments[i].department,
+                    value: list.departments[i].department,
+                    text: list.departments[i].department
+                });
             }
-            dropdown.innerHTML = departments.sort();
+            console.log("Departments Array: " + JSON.stringify(departments));
             this.setState({allDepartments: departments});
+            dropdown.hidden = false;
         });
     }
 
     render(){
         if (this.state.handleSubmitDone === true || this.props.userObj != null){
-        return(<Redirect to='/login'/>);//go to the login page to actually log in with the newly-created account
+            return(<Redirect to='/login'/>);//go to the login page to actually log in with the newly-created account
         }
         return(
             <div>
@@ -135,7 +140,7 @@ class RegisterUser extends Component{
                                         <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' required/> <br />
                                     </div>
 
-                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} required/> <br />
+                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} hidden/> <br />
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
