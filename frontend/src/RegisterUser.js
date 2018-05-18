@@ -18,12 +18,14 @@ class RegisterUser extends Component{
             handleSubmitDone: false
         };
         this.allFields = [0, 0, 0, 0];
-        
+
         this.getAllDepartments = this.getAllDepartments.bind(this);
+
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleDepChange = this.handleDepChange.bind(this);
+
         this.handleSubmit = this.handleSubmit.bind(this);
         console.log("The user object passed in is: " + props.userObj);
     }
@@ -95,7 +97,7 @@ class RegisterUser extends Component{
             var dropdown = document.getElementById("allDepartments");
             var departments = [];
             for(var i = 0; i < list.departments.length; ++i){
-                departments.push(list.departments[i]);
+                departments.push(list.departments[i].department);
             }
             dropdown.innerHTML = departments.sort();
             this.setState({allDepartments: departments});
@@ -133,7 +135,7 @@ class RegisterUser extends Component{
                                         <input value={this.state.email} onChange={this.handleChangeEmail}  placeholder='Email' className='form-control' required/> <br />
                                     </div>
 
-                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} required/>
+                                    <Dropdown id="allDepartments" placeholder='Select Department' onChange={this.handleDepChange} selection options={this.state.AllDepartments} required/> <br />
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
 
