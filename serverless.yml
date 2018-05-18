@@ -95,8 +95,8 @@ functions:
         - js/posts-api/handler.js
         - js/posts-api/responses.js
         - node_modules/moment/**
-        - js/comments-api/comments-index-mapping.js
-        - js/comments-api/comments-index-mapping.json
+        - js/users-api/users-index-mapping.js
+        - js/users-api/users-index-mapping.json
         - node_modules/**
 
 ################### Users Api ###################
@@ -112,6 +112,7 @@ functions:
         - js/users-api/getUserById.js
         - js/users-api/handler.js
         - js/users-api/responses.js
+        - node_modules/**
 
   getUsersBySearch:
     handler: js/users-api/handler.getUsersBySearch
@@ -125,6 +126,7 @@ functions:
         - js/users-api/getUsersBySearch.js
         - js/users-api/handler.js
         - js/users-api/responses.js
+        - node_modules/**
 
   deleteUser:
     handler: js/users-api/handler.deleteUser
@@ -138,6 +140,7 @@ functions:
         - js/users-api/deleteUser.js
         - js/users-api/handler.js
         - js/users-api/responses.js
+        - node_modules/**
 
   createUser:
     handler: js/users-api/handler.createUser
@@ -151,6 +154,7 @@ functions:
         - js/users-api/createUser.js
         - js/users-api/handler.js
         - js/users-api/responses.js
+        - node_modules/**
 
   updateUser:
     handler: js/users-api/handler.updateUser
@@ -164,6 +168,7 @@ functions:
         - js/users-api/updateUser.js
         - js/users-api/handler.js
         - js/users-api/responses.js
+        - node_modules/**
 
 ################### Tags Api ###################
   getTagById:

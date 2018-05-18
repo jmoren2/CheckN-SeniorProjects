@@ -34,7 +34,8 @@ module.exports.deletePost = (event, context, callback) => {
 module.exports.updatePost = (event, context, callback) => {
   const updatePost = require('./updatePost').updatePost;
   // const mapIndex = require('./posts-index-mapping').mapIndex;
-  const mapIndex = require('../comments-api/comments-index-mapping').mapIndex;
+  // const mapIndex = require('../comments-api/comments-index-mapping').mapIndex;
+  const mapIndex = require('../users-api/users-index-mapping').mapIndex;
   mapIndex(esClient, event, context, callback);
   // updatePost(esClient, event, context, callback);
 };

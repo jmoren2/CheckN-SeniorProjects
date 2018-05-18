@@ -11,12 +11,10 @@ module.exports.getUserById = (esClient, event, context, callback) => {
 
             var userId = event.pathParameters.userId;
             var params = {
-                index: 'comments',
-                type: 'comment',
+                index: 'users',
+                type: 'user',
                 id: userId
             };
-
-            console.log("Attempting a conditional delete...");
     
             esClient.get(params, function(err, data) {
                 if(err)

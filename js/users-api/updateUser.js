@@ -20,6 +20,6 @@ module.exports.updateUser = (esClient, event, context, callback) => {
         });
     }
     else{
-        fail(500,'User updated failed. Error: JSON body is empty or undefined', callback);
+        fail(500,'User update failed. Error: JSON body is empty or undefined', callback);
     }
 };

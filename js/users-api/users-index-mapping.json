@@ -1,0 +1,26 @@
+{
+    "properties": {
+        "userId": { "type": "keyword" },
+        "firstName": { "type": "keyword" },
+        "lastName": { "type": "keyword" },
+        "email": { "type": "keyword" },
+        "vote": { "type": "keyword" },
+        "timestamp": { "type": "keyword" },
+        "votes": {
+            "type": "nested",
+            "properties": {
+                "positive": { "type": "keyword" },
+                "negative": { "type": "keyword" },
+                "neutral": { "type": "keyword" }
+            }
+        },
+        "permissions": {
+            "type": "nested",
+            "properties": {
+                "department": { "type": "text" },
+                "location": { "type": "text" },
+                "role": { "type": "text" }
+            }
+        }
+    }
+}
