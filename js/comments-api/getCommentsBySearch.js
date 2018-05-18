@@ -26,7 +26,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
     };
 
     // match comment content against search text
-    if(search !== undefined) {
+    if(text !== undefined) {
         search.query.bool.must.push({
             match: {
                 content: text
@@ -49,12 +49,58 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
             }
         })
     }
-    console.log(filter);
+    console.log(search);
+
+    // associate user names with comments
+    var showUsers = function(comments, callback){
+        // build search query
+        var userIdArr = [];
+        for(let i = 0; i < comments.length; ++i){
+            if(comments[i].userId) {
+                userIdArr.push({
+                    match: {
+                        userId: comments[i].userId
+                    }
+                })
+            }
+        }
+        search = {query:{bool:{should:userIdArr}}};
+        var userMap = {};
+
+        esClient.search({
+            index: 'users',
+            type: 'user',
+            body: search
+        }, function(error, data) {
+            if(error) {
+                console.log('associating users error: ' + JSON.stringify(error));
+            }
+            else {
+                var userArr = data.hits.hits;
+                // populate map
+                for(let i = 0; i < userArr.length; ++i){
+                    let user = userArr[i]._source;
+                    userMap[user.userId] = user.firstName + ' ' + user.lastName;
+                }
+            }
+
+            // associate user names to comments
+            for(let i = 0; i < comments.length; ++i){
+                let userName = 'unknown user';
+                if(userMap[comments[i].userId]){
+                    userName = userMap[comments[i].userId]
+                }
+                comments[i].userName = userName
+            }
+
+            return success(200, comments, callback);
+        });
+    };
 
     esClient.search({
         index: 'comments',
         type: 'comment',
-        body: filter
+        body: search
     }, function(error, data) {
         if(error) {
             console.log('error: ' + JSON.stringify(error));
@@ -65,10 +111,10 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
             var comments = [];
 
             // parse hits for comment objects
-            for(var i = 0; i < hits.length; ++i){
+            for(let i = 0; i < hits.length; ++i){
                 comments.push(hits[i]._source)
             }
-            success(200, comments, callback);
+            return showUsers(comments, callback);
         }
     });
 };

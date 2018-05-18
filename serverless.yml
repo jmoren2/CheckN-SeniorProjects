@@ -246,7 +246,7 @@ functions:
           cors: true
     package:
       include:
-        - js/comments-api/getCommentsByPostId.js
+        - js/comments-api/getCommentById.js
         - js/comments-api/handler.js
         - js/comments-api/responses.js
         - node_modules/**

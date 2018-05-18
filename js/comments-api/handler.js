@@ -11,10 +11,13 @@ const esClient = es.Client({
   }
 });
 
-/*module.exports.getCommentsByPostId = (event, context, callback) => {
-  const getCommentsByPostId = require('./getCommentsByPostId').getCommentsByPostId;
-  getCommentsByPostId(esClient, event, context, callback);
-};*/
+// hijacking for getCommentById until we do full deploy
+module.exports.getCommentsByPostId = (event, context, callback) => {
+  //const getCommentsByPostId = require('./getCommentsByPostId').getCommentsByPostId;
+  //getCommentsByPostId(esClient, event, context, callback);
+  const getCommentById = require('./getCommentById').getCommentById;
+  getCommentById(esClient, event, context, callback);
+};
 
 module.exports.getCommentById = (event, context, callback) => {
   const getCommentById = require('./getCommentById').getCommentById;

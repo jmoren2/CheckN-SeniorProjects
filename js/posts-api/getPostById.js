@@ -12,18 +12,12 @@ module.exports.getPostById = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.postId);
 
             var id = event.pathParameters.postId;
-            // var params = {
-            //     TableName: "posts",
-            //     Key: {
-            //         "postId": id 
-            //     }
-            // };
 
             var params = {
                index: 'posts',
                type: 'post',
                id: id
-            }
+            };
 
             esClient.get(params, function(err, data) {
                 if(err) {
@@ -36,16 +30,17 @@ module.exports.getPostById = (esClient, event, context, callback) => {
                         index: 'users',
                         type: 'user',
                         id: post.userId
-                     }
+                     };
                     esClient.get(paramsUser, function(err, data2){
                         if(err){
-                            console.log('error: ' + err);
-                            return fail(500, 'get user by id failes. Error: ' + err, callback);
+                            console.log('getPostById get user error: ' + err);
+                            post.userName = 'unknown user';
                         } else {
                             console.log('data: ' + JSON.stringify(data2));
                             var user = data2._source;
-                            return success(200, data._source, callback);
+                            post.userName = user.firstName + ' ' + user.lastName;
                         }
+                        return success(200, post, callback);
                     });
                 }
             });
@@ -56,4 +51,4 @@ module.exports.getPostById = (esClient, event, context, callback) => {
     }
     else
         return fail(400,'get post by postId failed', callback);
-}
+};

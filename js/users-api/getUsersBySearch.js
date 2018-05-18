@@ -105,7 +105,7 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
                 users.push(hits[i]._source)
             }
 
-            success(200, users, callback);
+            return success(200, users, callback);
         }
     });
 };
