@@ -6,15 +6,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 //import {DropdownButton, MenuItem} from 'react-bootstrap';
-import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea} from 'semantic-ui-react';
-
-
-/*
-Need to check how responses are gonna be formatted 
-Also figure out when I'm gonna create the response array
-If I create it in render it will be destroyed,
-but if I create a generic object it might not have good info for each response
-*/
+import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea, Label} from 'semantic-ui-react';
 
 /*
 {
@@ -30,32 +22,23 @@ but if I create a generic object it might not have good info for each response
 }
 */
 
-
-class Survey extends React.Component {
+class Survey extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            surveyFeed: null,
-            surveyResponses: [],
-            checked: true
+            questions: [],
+            responses: [],
+            surveyId: ''
         }
-        this.surveyQuestions = [];
-        //this.surveyResponses = [];
     }
 
-    componentDidMount() {//Queries the API for a post and its comments with specified ID
+    componentDidMount() {
         this.retrieveSurvey();
     }
 
-    componentDidUpdate(){
-        console.log('UPDATED');
-        console.log(this.state.surveyResponses[0].response[0]);
-        console.log(this.state.checked);
-    }
-
-    defaultResponse(id){
-        this.questionId = id;
-        this.response = [];
+    componentWillUpdate(){
+        console.log('should update');
+        console.log(this.state.responses);
     }
 
     retrieveSurvey(){
@@ -73,52 +56,55 @@ class Survey extends React.Component {
         })//Saves the response as JSON
         .then(survey => {
             console.log(survey);
-            this.generateSurvey(survey.survey.questions);//Continues the work in the function above
+            this.initializeState(survey.survey);
         });
     }
 
-    //When generating survey need to create quesiton objects
-    //have mapping increment an index, set questionObject[index] to the question object
-    //Then pass that index along to renderQuestion so that it can reference the objects
-    generateSurvey = (survey) => {
-        var index = -1;
-        var theSurvey = survey.map((question) => {
-            index++;
+    defaultResponse(){
+        this.response = [''];
+    }
 
-            var temp = this.state.surveyResponses;
-            temp.push(new this.defaultResponse(question.Id));
-            this.setState({surveyResponses: temp});
-
+    initializeState(survey){
+        console.log('initializeState');
+        console.log(survey);
+        var questionArray = survey.questions;
+        var responseArray = survey.questions.map((question) => {
+            var temp = new this.defaultResponse();
             return(
-                <div>
-                    {this.renderQuestion(question, index)}
-                </div>
-            );
+                temp
+            )
         });
-        this.setState({surveyFeed: theSurvey});
-    }
 
-    renderQuestion = (question, index) => {
-        return(
-            <div>
-            <Card fluid>
-                <Card.Content>
-                    <Card.Header>
-                        {question.question}
-                    </Card.Header>
-                    <Form>
-                        {this.questionHandler(question, index)}
-                    </Form>
-                </Card.Content>
-            </Card>
-            <Divider/>
-            </div>
+        this.setState(
+            {
+                questions: questionArray,
+                responses: responseArray,
+                surveyId: survey.surveyId
+            }
         );
     }
 
-    //Go through the type for each question and pass it on to another method
-    questionHandler = (question, index) => {
-        console.log('type ' + question.type);
+    showSurvey(){
+        console.log('showSurvey');
+        console.log(this.state.questions);
+        var index = -1;
+        var theSurvey = this.state.questions.map((question) => {
+            index++;
+            return(
+                <div>
+                    {this.questionHandler(question, index)}
+                </div>
+            );
+        });
+        
+        return(
+            <div>
+                {theSurvey}
+            </div>
+        )
+    }
+
+    questionHandler(question, index){
         if (question.type === "free")
         {
             return(
@@ -145,8 +131,7 @@ class Survey extends React.Component {
         }
     }
 
-    //Rows will be updated based on size restrictions but in the future there might be a character limit
-    renderFree = (question, index) => {
+    renderFree(question, index){
         var theRows = 3;
         var onChangeMethod = this.updateTextResponse;
         if (question.restrictions === 'short')
@@ -158,128 +143,28 @@ class Survey extends React.Component {
             theRows = 1;
             onChangeMethod = this.updateNumericResponse;
         }
-        console.log(this.state);
-        return(
-            <TextArea id={index} className='freeResponse' value={this.state.surveyResponses[index].response[0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
-        );
-    }
-
-    renderSelect = (question, index) => {
-
-        //call a different checkbox renderer based on restriction
-        var checkBoxRender = this.renderMultipleCheckbox;
-        if (question.restrictions === 'one')
-            checkBoxRender = this.renderOneCheckbox;
-
-        var optionIndex = -1;
-        var checkBoxes = question.options.map((option) => {
-            optionIndex++;
-            var temp=this.state.surveyResponses;
-
-            return(
-                <div>
-                    {checkBoxRender(option, index, optionIndex)}
-                </div>
-            );
-        });
-
         return(
             <div>
-                {checkBoxes}
+            <Card fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {this.state.questions[index].question}
+                    </Card.Header>
+                    <Form>
+                    <TextArea id={index} className='freeResponse' value={this.state.responses[index].response[0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
+                    </Form>
+                </Card.Content>
+            </Card>
+            <Divider/>
             </div>
-            /*
-            <Form>
-                <Form.Field>
-                    Selected value: <b>{this.state.value}</b>
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox
-                        radio
-                        label='Choose this'
-                        name='checkboxRadioGroup'
-                        value='this'
-                        checked={this.state.value === 'this'}
-                        onChange={this.handleChange}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox
-                        radio
-                        label='Or that'
-                        name='checkboxRadioGroup'
-                        value='that'
-                        checked={this.state.value === 'that'}
-                        onChange={this.handleChange}
-                    />
-                </Form.Field>
-            </Form>*/
         );
     }
 
-    renderOneCheckbox = (option, index, optionIndex) => {
-        console.log('renderOneCheckbox');
-        console.log(option);
-        console.log(typeof option);
-        var k = index;
-        console.log('Other' === option);
-        return(
-            <Checkbox
-                label={option}
-                value={index}
-                name="checkboxRadioGroup"
-                checked={this.state.checked}
-                onChange={this.updateOneSelect}
-            >
-            </Checkbox>
-        );
-    }
-
-    //checked={this.state.surveyResponses[index].response[0] === option}
-
-    updateOneSelect = (event, {value}) => {
-        console.log('updateOneSelect');
-        /*console.log(event.target.value);
-        console.log(this.state);
-        console.log(event.target.label);
-        console.log(event.target.value);
-        console.log('==========================');
-        console.log(event);
-        console.log(event.target);*/
-        var temp = this.state.surveyResponses;
-        console.log(temp[value].response[0]);
-        //console.log(event);
-        //console.log(event.target);
-        //console.log(event.target.value);
-        //console.log(value);
-        //console.log(event.target.innerText);
-        temp[value].response[0] = event.target.innerHTML;
-        //console.log(temp[value]);
-        console.log(temp[value].response[0]);
-        console.log(typeof temp[value].response[0]);
-        this.setState({surveyResponses: temp, checked: !this.state.checked});
-        /*var temp = this.state.surveyResponses;
-        temp[event.target.tabindex].response[0] = event.target.value;
-        console.log(temp[event.target.tabindex].response[0]);
-        this.setState({surveyResponses: temp});*/
-    }
-
-    renderMultipleCheckbox = (option, index, optionIndex) => {
-        return(
-            <Checkbox/>
-        );
-    }
-
-    renderScale = (question, index) => {
-        return(
-            <label>scale</label>
-        );
-    }
-
-    updateTextResponse = (event) =>{
-        var temp = this.state.surveyResponses;
+    updateTextResponse = (event) => {
+        console.log('updateTextResponse');
+        var temp = this.state.responses;
         temp[event.target.id].response[0] = event.target.value;
-        this.setState({surveyResponses: temp});
-        console.log(this.state);
+        this.setState({responses: temp});
     }
 
     updateNumericResponse = (event) => {
@@ -289,18 +174,181 @@ class Survey extends React.Component {
                 return;
             else
             {
-                var temp = this.state.surveyResponses;
+                var temp = this.state.responses;
                 temp[event.target.id].response[0] = event.target.value;
-                this.setState({surveyResponses: temp});
+                this.setState({responses: temp});
             }
         }
+    }
+
+    renderSelect(question, index){
+        console.log('renderSelect');
+        var onChangeFunction = this.handleSingleSelectChange;
+        var selectOptions = null;
+        var optionIndex = -1;
+        if (this.state.questions[index].restrictions === 'multiple')
+        {
+            onChangeFunction = this.handleMultipleSelectChange;
+            selectOptions = this.state.questions[index].options.map((options) => {
+                optionIndex++;
+                return(
+                    <div>
+                        <Checkbox 
+                            label={this.state.questions[index].options[optionIndex]}
+                            value={index}
+                            onChange={onChangeFunction}
+                        />
+                    </div>
+                );
+            });
+        }
+        else
+        {
+            selectOptions = this.state.questions[index].options.map((options) => {
+                optionIndex++;
+                return(
+                    <div>
+                        <Checkbox 
+                            label={this.state.questions[index].options[optionIndex]}
+                            value={index}
+                            checked={this.state.questions[index].options[optionIndex] === this.state.responses[index].response[0]}
+                            onChange={onChangeFunction}
+                        />
+                    </div>
+                );
+            });
+        }
+
+        return(
+            <div>
+            <Card fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {this.state.questions[index].question}
+                    </Card.Header>
+                    <Form>
+                        {selectOptions}
+                    </Form>
+                </Card.Content>
+            </Card>
+            <Divider/>
+            </div>
+        )
+    }
+
+    handleSingleSelectChange = (event, {value, label}) => {
+        var temp = this.state.responses;
+        if (temp[value].response[0] === label)
+            temp[value].response[0] = '';
+        else
+            temp[value].response[0] = label;
+        this.setState({responses: temp});
+    }
+
+    handleMultipleSelectChange = (event, {value, label, checked}) => {
+        var temp = this.state.responses;
+        //If the user has just checked the item, add it
+        if (checked)
+        {
+            temp[value].response.push(label);
+        }
+        else    //otherwise the user must have just unchecked it, so remove it
+        {
+            var index = temp[value].response.indexOf(label);
+            //indexOf should return -1 if item isn't in array, which shouldn't happen
+            if (index >= 0)
+            {
+                //This should remove 1 item starting at index
+                temp[value].response.splice(index, 1);
+            }
+        }
+    }
+
+    //Scale is just a slightly modified single select
+    //probably use a grid that has 2 rows and as many columns as options
+    renderScale(question, index){
+        var optionIndex = -1;
+        var topRow = this.state.questions[index].options.map((option) => {
+            optionIndex++;
+            return(
+                <Grid.Column>
+                    <label>{this.state.questions[index].options[optionIndex]}</label>
+                </Grid.Column>
+            )
+        });
+        optionIndex = -1;
+        var bottomRow = this.state.questions[index].options.map((options) => {
+            optionIndex++;
+            return(
+                <Grid.Column>
+                    <Checkbox
+                        id={this.state.questions[index].options[optionIndex]}
+                        text={this.state.questions[index].options[optionIndex]}
+                        value={index}
+                        checked={this.state.questions[index].options[optionIndex] === this.state.responses[index].response[0]}
+                        onChange={this.handleScaleChange}
+                    />
+                </Grid.Column>
+            )
+        });
+        return(
+            <div>
+            <Card fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {this.state.questions[index].question}
+                    </Card.Header>
+                    <Form>
+                    <Grid columns={this.state.questions[index].options.length} divided centered>
+                    <Grid.Row>
+                        {topRow}
+                    </Grid.Row>
+                    <Grid.Row>
+                        {bottomRow}
+                    </Grid.Row>
+                </Grid>
+                    </Form>
+                </Card.Content>
+            </Card>
+            <Divider/>
+            </div>
+        )
+    }
+
+    handleScaleChange = (event, {value, text}) => {
+        console.log('handleScaleChange');
+        console.log(text);
+        var temp = this.state.responses;
+        if (temp[value].response[0] === text)
+            temp[value].response[0] = '';
+        else
+            temp[value].response[0] = text;
+        this.setState({responses: temp});
+    }
+
+    //Submit will do the request to submit a response and then redirect back to the post the user came from
+    handleSubmit = () => {
+        console.log("SUBMITTING");
+        var surveyResponse = {
+            userId: this.props.userObj.userId,
+            responses: this.state.responses
+        }
+        console.log(surveyResponse);
+        /*
+        var temp = this.state.questions;
+        for (var i = 0; i < this.state.questions.length; i++)
+        {
+            temp[i].question = ("problem " + i);
+        }
+        this.setState({questions: temp});*/
     }
 
     render(){
         return(
             <div className='container'>
                 <div className='card card-1 text-md-center'>
-                    {this.state.surveyFeed}
+                    {this.showSurvey()}
+                    <Button onClick={this.handleSubmit} positive>Submit Response</Button>
                 </div>
             </div>
         );
