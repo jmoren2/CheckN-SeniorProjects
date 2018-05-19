@@ -11,6 +11,7 @@ import About from './About.js';
 import RegisterUser from './RegisterUser.js';
 import EditPost from './EditPost.js';
 import Survey from './Survey.js';
+import SurveyResponse from './SurveyResponses.js';
 
 class App extends React.Component {
     constructor(props){
@@ -71,6 +72,7 @@ class App extends React.Component {
                     <Route path="/about" component={About}/>
                     <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
                     <Route path="/survey/:surveyId/:fromPostId" component={props => (<Survey userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/surveyResponses/:surveyId/:fromPostId" component={props => (<SurveyResponse userObj={this.userObj} {...props}/>)}/>
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>

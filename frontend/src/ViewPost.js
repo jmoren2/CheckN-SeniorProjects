@@ -394,9 +394,14 @@ class ViewPost extends Component{//Initial State
     surveyButton() {
         console.log(this.state.surveyId);
         return(
-          <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
-          <Button positive>Take Survey</Button>
-          </Link>
+            <div>
+                <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
+                    <Button positive>Take Survey</Button>
+                </Link>
+                <Link to={`/surveyResponses/${this.state.surveyId}/${this.state.postID}`}>
+                    <Button positive>View Responses</Button>
+                </Link>
+            </div>
         );
     }
 
