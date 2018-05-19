@@ -26,8 +26,8 @@ module.exports.createPost = (ddb, event, context, callback) => {
       } 
       else {
         console.log('data: ' + data);
-        if(post.body.hasOwnProperty('survey')){
-          event.body = JSON.stringify(post.body.surveys);
+        if(post.Item.hasOwnProperty('survey') && !isEmptyObject(post.Item.survey)){
+          event.body = JSON.stringify(post.Item.survey);
           createSurvey(ddb, event, context, function(err, data2){
             if(err) {
               var failMessage = {message: 'Failed to create Survey. Error: ' + error};
@@ -45,4 +45,8 @@ module.exports.createPost = (ddb, event, context, callback) => {
   } else {
     return fail(500, 'Post creation failed.', callback)
   }
+}
+
+function isEmptyObject(obj) {
+  return !Object.keys(obj).length;
 }
