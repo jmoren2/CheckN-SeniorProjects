@@ -9,7 +9,7 @@ module.exports.getTagByName = (ddb, event, context, callback) => {
             event.pathParameters.tag !== "") {
             console.log("Received proxy: " + event.pathParameters.tag);
 
-            var tag = event.pathParameters.tag;
+            var tag = decodeURIComponent(event.pathParameters.tag);
             var params = {
                 TableName: "tags",
                 Key: {

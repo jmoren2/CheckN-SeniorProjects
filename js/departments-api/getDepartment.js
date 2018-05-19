@@ -9,7 +9,7 @@ module.exports.getDepartment = (ddb, event, context, callback) => {
             event.pathParameters.department !== "") {
             console.log("Received proxy: " + event.pathParameters.department);
 
-            var name = event.pathParameters.department;
+            var name = decodeURIComponent(event.pathParameters.department);
             var params = {
                 TableName: "departments",
                 Key: {
