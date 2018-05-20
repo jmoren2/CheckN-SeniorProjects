@@ -19,14 +19,7 @@ module.exports.createPost = (ddb, event, context, callback) => {
         TableName: 'posts'
 
     }
-    
-    ddb.put(post, function(error, data) {
-      if(error) {
-        return fail(500, 'Post creation failed. Error: ' + error, callback);
-      } 
-      else {
-        console.log('data: ' + data);
-        if(post.Item.hasOwnProperty('survey') && !isEmptyObject(post.Item.survey)){
+    if(post.Item.hasOwnProperty('survey') && !isEmptyObject(post.Item.survey)){
           event.body = JSON.stringify(post.Item.survey);
           createSurvey(ddb, event, context, function(err, data2){
             if(err) {
@@ -34,11 +27,19 @@ module.exports.createPost = (ddb, event, context, callback) => {
               fail(500, failMessage, callback);
             } 
             else {
+              var newSurvey = JSON.parse(data2.body);
+              post.Item.survey = newSurvey;
               success(200, body, callback);
             }
           });
         }
-        else 
+    ddb.put(post, function(error, data) {
+      if(error) {
+        return fail(500, 'Post creation failed. Error: ' + error, callback);
+      } 
+      else {
+        console.log('data: ' + data);
+        
           return success(200, body, callback);
       }
     });
