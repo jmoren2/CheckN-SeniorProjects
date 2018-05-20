@@ -1,6 +1,5 @@
 'use strict';
 
-const uuid = require('uuid');
 const success = require('./responses.js').singleTagSuccess;
 const fail = require('./responses.js').tagsFail;
 
@@ -8,10 +7,9 @@ module.exports.createTag = (ddb, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
 
     var body = JSON.parse(event.body);
-    body.tagId = uuid.v4();
-
+    var tag = body.tag;
     var tag = {
-        Item: body,
+        Item: {"tag" : tag},
         TableName: 'tags'
 
     }

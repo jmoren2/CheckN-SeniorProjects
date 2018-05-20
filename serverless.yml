@@ -14,9 +14,10 @@ provider:
       - "es:*"
     Resource: "arn:aws:es:us-west-2:995441987960:domain/checkn-dev"
   custom:
-    
+
 
 plugins:
+  # - serverless-nested-stack
   - serverless-plugin-split-stacks
 
 package:
@@ -81,6 +82,8 @@ functions:
         - js/posts-api/responses.js
         - node_modules/moment/**
         - node_modules/**
+        - js/survey-api/survey/createSurvey.js
+        - js/survey-api/responses.js
 
   updatePost:
     handler: js/posts-api/handler.updatePost
@@ -95,9 +98,9 @@ functions:
         - js/posts-api/handler.js
         - js/posts-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
         - js/users-api/users-index-mapping.js
         - js/users-api/users-index-mapping.json
-        - node_modules/**
 
 ################### Users Api ###################
   getUserById:
@@ -171,16 +174,16 @@ functions:
         - node_modules/**
 
 ################### Tags Api ###################
-  getTagById:
-    handler: js/tags-api/handler.getTagById
+  getTagByName:
+    handler: js/tags-api/handler.getTagByName
     events:
       - http:
-          path: tags/{tagId}
+          path: tags/{tag}
           method: get
           cors: true
     package:
       include:
-        - js/tags-api/getTagById.js
+        - js/tags-api/getTagByName.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
 
@@ -201,7 +204,7 @@ functions:
     handler: js/tags-api/handler.deleteTag
     events:
       - http:
-          path: tags/{tagId}
+          path: tags/{tag}
           method: delete
           cors: true
     package:
@@ -223,18 +226,6 @@ functions:
         - js/tags-api/handler.js
         - js/tags-api/responses.js
 
-  updateTag:
-    handler: js/tags-api/handler.updateTag
-    events:
-      - http:
-          path: tags/{tagId}
-          method: put
-          cors: true
-    package:
-      include:
-        - js/tags-api/updateTag.js
-        - js/tags-api/handler.js
-        - js/tags-api/responses.js
 
 ################### Comments Api ###################
   getCommentsByPostId:
@@ -308,6 +299,74 @@ functions:
         - js/comments-api/responses.js
         - node_modules/moment/**
         - node_modules/**
+        
+  # ################### Location Api ###################
+  # getLocationsByPostId:
+  #   handler: js/locations-api/handler.getLocationByPostId
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations
+  #         method: get
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/getLocationsByPostId.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+
+  # getLocationsBySearch:
+  #   handler: js/locations-api/handler.getLocationsBySearch
+  #   events:
+  #     - http:
+  #         path: locations
+  #         method: get
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/getLocationsBySearch.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+
+  # deleteLocation:
+  #   handler: js/locations-api/handler.deleteLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations/{locationId}
+  #         method: delete
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/deleteLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+
+  # createLocation:
+  #   handler: js/locations-api/handler.createLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations
+  #         method: post
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/createLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+  #       - node_modules/moment/**
+
+  # updateLocation:
+  #   handler: js/locations-api/handler.updateLocation
+  #   events:
+  #     - http:
+  #         path: posts/{postId}/locations/{locationId}
+  #         method: put
+  #         cors: true
+  #   package:
+  #     include:
+  #       - js/locations-api/updateLocation.js
+  #       - js/locations-api/handler.js
+  #       - js/locations-api/responses.js
+  #       - node_modules/moment/**
 
 ################### Roles Api ###################
   getRole:
@@ -470,6 +529,142 @@ functions:
 #         - js/categories-api/handler.js
 #         - js/categories-api/responses.js
 #         - node_modules/moment/**
+
+################### Surveys Api ###################
+  getSurveyById:
+    handler: js/survey-api/handler.getSurveyById
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/survey/getSurveyById.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  getSurveysBySearch:
+    handler: js/survey-api/handler.getSurveysBySearch
+    events:
+      - http:
+          path: surveys
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/survey/getSurveysBySearch.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  deleteSurvey:
+    handler: js/survey-api/handler.deleteSurvey
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/survey-api/survey/deleteSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  createSurvey:
+    handler: js/survey-api/handler.createSurvey
+    events:
+      - http:
+          path: surveys
+          method: post
+          cors: true
+    package:
+      include:
+        - js/survey-api/survey/createSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+  updateSurvey:
+    handler: js/survey-api/handler.updateSurvey
+    events:
+      - http:
+          path: surveys/{surveyId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/survey-api/survey/updateSurvey.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+################### Survey Responses Api ###################
+  getResponseById:
+    handler: js/survey-api/handler.getResponseById
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/responses/getResponseById.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  getResponsesBySearch:
+    handler: js/survey-api/handler.getResponsesBySearch
+    events:
+      - http:
+          path: surveys/{surveyId}/responses
+          method: get
+          cors: true
+    package:
+      include:
+        - js/survey-api/responses/getResponsesBySearch.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  deleteResponse:
+    handler: js/survey-api/handler.deleteResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: delete
+          cors: true
+    package:
+      include:
+        - js/survey-api/responses/deleteResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+
+  createResponse:
+    handler: js/survey-api/handler.createResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses
+          method: post
+          cors: true
+    package:
+      include:
+        - js/survey-api/responses/createResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
+
+  updateResponse:
+    handler: js/survey-api/handler.updateResponse
+    events:
+      - http:
+          path: surveys/{surveyId}/responses/{responseId}
+          method: put
+          cors: true
+    package:
+      include:
+        - js/survey-api/responses/updateResponse.js
+        - js/survey-api/handler.js
+        - js/survey-api/responses.js
+        - node_modules/moment/**
 
 #   mapIndex:
 #     handler: js/posts-api/handler.mapIndex

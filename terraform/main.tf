@@ -12,7 +12,7 @@ terraform {
 }
 
 resource "aws_dynamodb_table" "usersTable" {
-  name           = "users-${var.stage}"
+  name           = "users"
   hash_key       = "userId"
   write_capacity = 5
   read_capacity  = 5
@@ -24,7 +24,7 @@ resource "aws_dynamodb_table" "usersTable" {
 }
 
 resource "aws_dynamodb_table" "tagsTable" {
-  name           = "tags-${var.stage}"
+  name           = "tags"
   hash_key       = "tag"
   write_capacity = 5
   read_capacity  = 5
@@ -36,7 +36,7 @@ resource "aws_dynamodb_table" "tagsTable" {
 }
 
 resource "aws_dynamodb_table" "postsTable" {
-  name           = "posts-${var.stage}"
+  name           = "posts"
   hash_key       = "postId"
   write_capacity = 5
   read_capacity  = 5
@@ -48,7 +48,7 @@ resource "aws_dynamodb_table" "postsTable" {
 }
 
 resource "aws_dynamodb_table" "commentsTable" {
-  name           = "comments-${var.stage}"
+  name           = "comments"
   hash_key       = "commentId"
   write_capacity = 5
   read_capacity  = 5
@@ -60,7 +60,7 @@ resource "aws_dynamodb_table" "commentsTable" {
 }
 
 resource "aws_dynamodb_table" "rolesTable" {
-  name           = "roles-${var.stage}"
+  name           = "roles"
   hash_key       = "role"
   write_capacity = 5
   read_capacity  = 5
@@ -72,7 +72,7 @@ resource "aws_dynamodb_table" "rolesTable" {
 }
 
 resource "aws_dynamodb_table" "departmentsTable" {
-  name           = "departments-${var.stage}"
+  name           = "departments"
   hash_key       = "department"
   write_capacity = 5
   read_capacity  = 5
@@ -84,13 +84,37 @@ resource "aws_dynamodb_table" "departmentsTable" {
 }
 
 resource "aws_dynamodb_table" "categoriesTable" {
-  name           = "categories-${var.stage}"
+  name           = "categories"
   hash_key       = "category"
   write_capacity = 5
   read_capacity  = 5
 
   attribute {
     name = "category"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "surveysTable" {
+  name           = "surveys"
+  hash_key       = "surveyId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "surveyId"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table" "surveyResponsesTable" {
+  name           = "surveyResponses"
+  hash_key       = "responseId"
+  write_capacity = 5
+  read_capacity  = 5
+
+  attribute {
+    name = "responseId"
     type = "S"
   }
 }

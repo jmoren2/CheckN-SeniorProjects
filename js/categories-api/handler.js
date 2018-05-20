@@ -2,14 +2,14 @@
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.getCategoriesByPostId = (event, context, callback) => {
-  const getCategoriesByPostId = require('./getCategoriesByPostId').getCategoriesByPostId
-  getCategoriesByPostId(ddb, event, context, callback);
+module.exports.getCategory = (event, context, callback) => {
+  const getCategory = require('./getCategory').getCategory
+  getCategory(ddb, event, context, callback);
 };
 
-module.exports.getCategoriesBySearch = (event, context, callback) => {
-  const getCategoriesBySearch = require('./getCategoriesBySearch').getCategoriesBySearch
-  getCategoriesBySearch(ddb, event, context, callback);
+module.exports.getAllCategories = (event, context, callback) => {
+  const getAllCategories = require('./getAllCategories').getAllCategories;
+  getAllCategories(ddb, event, context, callback);
 };
 
 module.exports.createCategory = (event, context, callback) => {

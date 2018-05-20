@@ -15,6 +15,7 @@ module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
 
             esClient.search({
                 index: 'comments',
+                type: 'comment',
                 body: filter
             }, function(error, data) {
                 if(error) {
