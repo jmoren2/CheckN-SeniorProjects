@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Redirect, Route} from 'react-router-dom';
-import { Dropdown, Button, Input, Container, Header } from 'semantic-ui-react';
+import { Dropdown, Button, Input, Container, Header, Form } from 'semantic-ui-react';
 import Navbar from './Navbar.js'
 
 
@@ -38,44 +38,47 @@ class Admin extends React.Component{
      getAllUsers = () =>
      {
 
-         fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.searchQuery}`, {
-                headers: {
-                    'content-type': 'application/json'
-                },
-                method: 'GET',
-        })
-        .then(res => {
-            return res.json();
-        })
-        .then(data => {
-            console.log(data.users[0].email)
-            var x = document.getElementById("allUsers")
-            x.hidden = false;
-            var emails = []
-            var users = []
-            for(var i=0; i < data.users.length; ++i)
-            {
+        //  fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.searchQuery}`, {
+        //         headers: {
+        //             'content-type': 'application/json'
+        //         },
+        //         method: 'GET',
+        // })
+        // .then(res => {
+        //     return res.json();
+        // })
+        // .then(data => {
+        //     console.log(data.users[0].email)
+        //     // var x = document.getElementById("allUsers")
+        //     // x.hidden = false;
+        //     // var emails = []
+        //     // var users = []
+        //     // for(var i=0; i < data.users.length; ++i)
+        //     // {
 
-                users.push({
-                    key: data.users[i].email,
-                    value: data.users[i].email,
-                    text:  data.users[i].firstName + " " + data.users[i].lastName
-                })
-            }
-            this.setState({
-                AllUsers: users
-            })
-        })
+        //     //     users.push({
+        //     //         key: data.users[i].email,
+        //     //         value: data.users[i].email,
+        //     //         text:  data.users[i].firstName + " " + data.users[i].lastName
+        //     //     })
+        //     // }
+        //     // this.setState({
+        //     //     AllUsers: users
+        //     // })
+        // })
 
-        document.getElementById("allUsers").hidden = false;
-         
+        // console.log('here')
+        
+        // var x  = document.getElementById("searchUser");
+        // console.log(x)
+        // //x.disabled = false;
      }
      getAllDepartments = () =>
      {
          
         document.getElementById("editUser").hidden = true;
         document.getElementById("removeUser").hidden = true;
-        document.getElementById("allUsers").hidden = true;
+        //document.getElementById("allUsers").hidden = true;
 
         //  fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.searchQuery}`, {
         //         headers: {
@@ -139,15 +142,101 @@ class Admin extends React.Component{
             })
     }
 
-    handleEditUser = (event, data) =>
+    handleEditUser = (event) =>
     {
+        document.getElementById("editUserForm").hidden = false;
         console.log(this.state.selectedUser)
     }
 
-
-    handleRemoveUser = (event, data) =>
+    removeUser = (data) =>
     {
-        console.log(this.state.selectedUser)
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data}`, {
+        headers: {
+            'content-type': 'application/json'
+        },
+        method: 'DELETE',
+            })
+            .then(res => {
+                return JSON.stringify(res);
+            })
+            .then(data => {
+                console.log(data)
+                alert('User Deleted')
+            })
+    }
+
+
+    handleRemoveUser = (event) =>
+    {
+        
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
+        headers: {
+            'content-type': 'application/json'
+        },
+        method: 'GET',
+            })
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                this.removeUser(data.users[0].userId)
+            })
+
+
+    }
+
+    heandlSearchUser = (event, data) =>
+    {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?namesearch=${data.value}`, {
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'GET',
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(data => {
+            console.log(data)
+
+            if(data.statusCode === 500)
+            {
+                document.getElementById("editUser").hidden = true;
+                document.getElementById("removeUser").hidden = true;
+                this.setState({
+                    AllUsers: []
+                })
+                console.log('No User')
+            }
+            else{
+                var x = document.getElementById("allUsers")
+                x.hidden = false;
+                var length = null;
+                if(data.users.length !== 0)
+                {
+                    length = data.users.length;
+                }
+                else
+                {
+                    length = 0;
+                }
+                var users = []
+                for(var i=0; i < data.users.length; ++i)
+                {
+    
+                    users.push({
+                        key: data.users[i].email,
+                        value: data.users[i].email,
+                        text:  data.users[i].firstName + " " + data.users[i].lastName
+                    })
+                }
+                this.setState({
+                    AllUsers: users
+                })
+            }
+            
+             
+        })
     }
 
 
@@ -175,11 +264,25 @@ class Admin extends React.Component{
 
                             <Button standard onClick={this.handleRunReport}>Reports</Button> <br/><br/><br/>
 
-                            <Dropdown id="allUsers" placeholder='Select User' onChange={this.handleUserChange} hidden selection options={this.state.AllUsers}/> 
+                            <Input id="searchUser" placeholder='Search...' onChange={this.heandlSearchUser} /> <br/>
+
+                            <Dropdown id="allUsers" selection options={this.state.AllUsers} hidden onChange={this.handleUserChange}  />
                             
                             <br/>
                             <Button standard hidden id="editUser" onClick={this.handleEditUser}>Edit User</Button>
                             <Button standard hidden id="removeUser" onClick={this.handleRemoveUser}>Remove User</Button>
+
+                        <Form id="editUserForm" hidden>
+                            <Form.Group widths='equal'>
+                            <Form.Input fluid label='First name' placeholder='First name' />
+                            <Form.Input fluid label='Last name' placeholder='Last name' />
+                            </Form.Group>
+                            
+                            <Form.TextArea label='About' placeholder='Tell us more about you...' />
+                            <Form.Checkbox label='I agree to the Terms and Conditions' />
+                            <Form.Button>Submit</Form.Button>
+                        </Form>
+
                              </div>
                          </div>
                      </div>
