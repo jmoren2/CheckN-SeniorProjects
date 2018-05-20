@@ -16,8 +16,6 @@ module.exports.getUserById = (ddb, event, context, callback) => {
                     "userId": userId 
                 }
             };
-
-            console.log("Attempting a conditional delete...");
     
             ddb.get(params, function(err, data) {
                 if(err)

@@ -16,8 +16,6 @@ module.exports.getDepartment = (ddb, event, context, callback) => {
                     "department": name 
                 }
             };
-
-            console.log("Attempting a conditional delete...");
     
             ddb.get(params, function(err, data) {
                 if(err)

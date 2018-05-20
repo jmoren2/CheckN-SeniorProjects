@@ -18,8 +18,6 @@ module.exports.getPostById = (ddb, event, context, callback) => {
                     "postId": id 
                 }
             };
-
-            console.log("Attempting a conditional delete...");
     
             ddb.get(params, function(err, data) {
                 if(err)

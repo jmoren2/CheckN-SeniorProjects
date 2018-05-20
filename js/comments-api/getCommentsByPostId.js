@@ -16,8 +16,6 @@ module.exports.getCommentsByPostId = (ddb, event, context, callback) => {
                     ":postId": postId
                 }
             };
-
-            console.log("Attempting a conditional delete...");
     
             ddb.scan(params, function(err, data) {
                 if(err)

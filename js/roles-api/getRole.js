@@ -17,8 +17,6 @@ module.exports.getRole = (ddb, event, context, callback) => {
                 }
             };
 
-            console.log("Attempting a conditional delete...");
-    
             ddb.get(params, function(err, data) {
                 if(err)
                     return getRoleFail(500,'get Role by role failed. Error: ' + err, callback);

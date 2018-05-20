@@ -16,8 +16,6 @@ module.exports.getSurveyById = (ddb, event, context, callback) => {
                     "surveyId": id 
                 }
             };
-
-            console.log("Attempting a conditional delete...");
     
             ddb.get(params, function(err, data) {
                 if(err)
