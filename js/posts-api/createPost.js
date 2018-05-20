@@ -13,34 +13,37 @@ module.exports.createPost = (esClient, event, context, callback) => {
     post.postId = uuid.v4();
     post.timestamp = moment().toISOString();
 
+    if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
+        post.survey.postId = post.postId;
+        event.body = JSON.stringify(post.survey);
+        createSurvey(esClient, event, context, function(err, data2){
+          if(err) {
+            var failMessage = {message: 'Failed to create Survey. Error: ' + error};
+            fail(500, failMessage, callback);
+          }
+          else {
+            var newSurvey = JSON.parse(data2.body);
+            post.surveyId = newSurvey.surveyId;
+            delete post.survey;
+            success(200, body, callback);
+          }
+        });
+    }
+
     var params = {
-      index: 'posts',
-      type: 'post',
-      id: post.postId,
-      body: post
+        index: 'posts',
+        type: 'post',
+        id: post.postId,
+        body: post
     };
 
     esClient.create(params, function(error, data) {
       if(error) {
-        console.log('error: ' + JSON.stringify(error));
         return fail(500, 'Post creation failed. Error: ' + error, callback);
-      } else {
-        console.log('data: ' + JSON.stringify(data));
-        if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
-          event.body = JSON.stringify(post.survey);
-          createSurvey(esClient, event, context, function(err, data2){
-            if(err) {
-              var failMessage = {message: 'Failed to create Survey. Error: ' + error};
-              fail(500, failMessage, callback);
-            }
-            else {
-
-              success(200, body, callback);
-            }
-          });
-        }
-        else
-          return success(200, body, callback);
+      }
+      else {
+        console.log('data: ' + data);
+        return success(200, body, callback);
       }
     });
   } else {
