@@ -1,5 +1,5 @@
 {
     "properties": {
-        "departmentName": { "type": "keyword" }
+        "department": { "type": "keyword" }
     }
 }
