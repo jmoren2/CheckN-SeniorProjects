@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Accordion, Dropdown, Grid} from 'semantic-ui-react';
+import {Accordion, Dropdown, Grid, Icon, Card} from 'semantic-ui-react';
+import './index.css'
 
 class SurveyResponse extends React.Component{
     constructor(props){
@@ -13,18 +14,25 @@ class SurveyResponse extends React.Component{
             dropBoxQuestionArray: null,
             dropBoxOptionsArrays: null,
             currentDropBoxOptions: null,
+            filterByQuestions: [-1],
             filterByResponseTo: -1,
             filterByResponse: -1,
 
+            //whether or not the box is open needs to be state dependent
+            activeBoxes: [],
+            //total index will let me do a show all button later
+            totalIndex: 0,
+
             surveyId: this.props.match.params.surveyId, 
             postId: this.props.match.params.fromPostId,
+
         }
     }
 
     componentDidMount() {
         //I'll need the survey and the responses so that I can see questions and all possible answers
         this.retrieveSurvey();
-        //this.retrieveResponses();
+        this.retrieveResponses();
     }
 
     retrieveSurvey(){
@@ -48,6 +56,8 @@ class SurveyResponse extends React.Component{
     //When initializing a survey I create the {text: , value: } objects for the dropboxes
     //Also store the question array itself in state I will want the question text later on
     initializeForSurvey(questions){
+        console.log('initialize survey being');
+        console.log(questions);
         var dropBoxQuestionArray = [{text: 'All', value: -1}];
         var dropBoxOptionsArrays = []
         for (var i = 0; i < questions.length; i++)
@@ -69,11 +79,11 @@ class SurveyResponse extends React.Component{
             dropBoxOptionsArrays: dropBoxOptionsArrays,
             currentDropBoxOptions: dropBoxOptionsArrays[0],
             questions: questions
-        })
+        });
     }
 
     retrieveResponses(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.state.surveyId}/responses`, {
+        /*fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.state.surveyId}/responses`, {
             headers: {
                 'content-type': 'application/json'
             },
@@ -87,12 +97,29 @@ class SurveyResponse extends React.Component{
         })
         .catch(error => {
             console.log(error);
-        });
+        });*/
+        this.setState({
+            responses: [
+                {
+                    userId: 12345,
+                    responses: [['howdy'],['sup'],['hello'],['123'],['a'],['b', 'd'],['3']]
+                },
+                {
+                    userId: 54321,
+                    responses: [['Portland'],['Seattle'],['Los Angeles'],['24'],['d'],['a', 'c'],['8']]
+                },
+                {
+                    userId: 100110101,
+                    responses: [['blah blah blah'],['yadda yadda yadda'],['whatever'],['30000'],['d'],['b', 'c'],['1']]
+                }
+            ],
+            totalIndex: 3
+        })
     }
 
     showSelection(){
         return(
-            <Grid centered celled='internally' columns={3}>
+            <Grid celled='internally' columns={3}>
                 <Grid.Row>
                     <Grid.Column>
                         <label>Show Questions:</label>
@@ -112,6 +139,7 @@ class SurveyResponse extends React.Component{
                         multiple
                         selection
                         options={this.state.dropBoxQuestionArray}
+                        onChange={this.onChangeFilterByQuestions}
                         />
                     </Grid.Column>
                     <Grid.Column>
@@ -137,6 +165,13 @@ class SurveyResponse extends React.Component{
         );
     }
 
+    onChangeFilterByQuestions = (event, data) => {
+        console.log(data);
+        if (data.value.length == 0)
+            this.setState({filterByQuestions: [-1]});
+        else
+            this.setState({filterByQuestions: data.value});
+    }
     onChangeFilterByResponseToDropbox = (event, data) => {
         console.log(event.value);
         console.log(data.value);
@@ -154,9 +189,131 @@ class SurveyResponse extends React.Component{
     }
 
     showResponses(){
+        console.log('show responses');
         return(
-            <label>Temp</label>
+            <Accordion exclusive={false} fluid styled>
+                {this.generateAccordions()}
+            </Accordion>
         );
+    }
+
+    generateAccordions(){
+        var index = -1;
+        var accordions = this.state.responses.map((response) => {
+            index++;
+            if (this.state.filterByResponseTo == -1)
+            {
+                return(
+                    <div>
+                        <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
+                            <Icon name='dropdown'/>
+                            {this.state.responses[index].userId}
+                        </Accordion.Title>
+                        <Accordion.Content active={this.state.activeBoxes.includes(index)}>
+                            {this.generateRespones(index)}
+                        </Accordion.Content>
+                    </div>
+                );
+            }
+            else if (this.state.responses[index].responses[this.state.filterByResponseTo].includes(this.state.questions[this.state.filterByResponseTo].options[this.state.filterByResponse]))
+            {
+                return(
+                    <div>
+                        <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
+                            <Icon name='dropdown'/>
+                            {this.state.responses[index].userId}
+                        </Accordion.Title>
+                        <Accordion.Content active={this.state.activeBoxes.includes(index)}>
+                            {this.generateRespones(index)}
+                        </Accordion.Content>
+                    </div>
+                )
+            }
+            else
+            {
+                return(
+                    <div/>
+                )
+            }
+        })
+        return accordions;
+    }
+
+    handleAccordionClick = (event, data) => {
+        console.log('===================');
+        var temp = this.state.activeBoxes;
+        console.log(temp);
+        if (temp.includes(data.index))
+        {
+            console.log('removing ' + data.index);
+            //get rid of that one
+            temp.splice(temp.indexOf(data.index), 1);
+        }
+        else
+        {
+            console.log('adding ' + data.index);
+            temp.push(data.index);
+        }
+        console.log(temp);
+        this.setState({activeBoxes: temp});
+    }
+
+    generateRespones(index){
+        var questionIndex = -1;
+        var responseOutput = null;
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log(index);
+        console.log(this.state);
+        if (this.state.filterByQuestions.includes(-1))
+        {
+            //render all unconditionally
+            //responseIndex++;
+            responseOutput = this.state.questions.map((question) => {
+                questionIndex++;
+                return(
+                    <Card className="responsecard" fluid>
+                        <Card.Content>
+                            <Card.Header>
+                                {questionIndex + 1}. {this.state.questions[questionIndex].question}
+                            </Card.Header>
+                        <div/>
+                        <label>{this.state.responses[index].responses[questionIndex]}</label>
+                        </Card.Content>
+                    </Card>
+                )
+            })
+        }
+        else
+        {
+            responseOutput = this.state.questions.map((question) => {
+                questionIndex++;
+                if (this.state.filterByQuestions.includes(questionIndex))
+                {
+                    return(
+                        <Card className="responsecard" fluid>
+                            <Card.Content>
+                                <Card.Header>
+                                    {questionIndex + 1}. {this.state.questions[questionIndex].question}
+                                </Card.Header>
+                            <div/>
+                            <label>{this.state.responses[index].responses[questionIndex]}</label>
+                            </Card.Content>
+                        </Card>
+                    )
+                }
+                else
+                {
+                    return(
+                        <div/>
+                    )
+                }
+            })
+        }
+        return responseOutput;
+    }
+
+    generateResponseContent(index){
+
     }
 
     render(){
