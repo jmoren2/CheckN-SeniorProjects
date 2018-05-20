@@ -3,7 +3,7 @@ const moment = require('moment');
 const success = require('./responses').singleCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
-module.exports.updateComment = (ddb, event, context, callback) => {
+module.exports.updateComment = (esClient, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
         var body = JSON.parse(event.body);
         body.timestamp = moment().toISOString();
@@ -18,7 +18,7 @@ module.exports.updateComment = (ddb, event, context, callback) => {
         };
 
         console.log("Updating a Comment...");
-        ddb.update(params, function(error, data) {
+        esClient.update(params, function(error, data) {
           if(error)
             fail(500, 'Update Comment failed. Error: ' + error, callback);
           else

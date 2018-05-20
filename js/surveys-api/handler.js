@@ -1,31 +1,41 @@
 'use strict';
 const AWS = require('aws-sdk');
-const ddb = new AWS.DynamoDB.DocumentClient();
+//const ddb = new AWS.DynamoDB.DocumentClient();
+const es = require('elasticsearch');
+AWS.Config.region = 'us-west-2';
+const esClient = es.Client({
+    hosts: 'https://search-checkn-dev-2kiktd5jmzuvcarxmggu6tb4ju.us-west-2.es.amazonaws.com',
+    connectionClass: require('http-aws-es'),
+    amazonES: {
+        credentials: new AWS.EnvironmentCredentials('AWS')
+    }
+});
+
 
 /* --------------- Survey handlers --------------- */
 module.exports.getSurveyById = (event, context, callback) => {
   const getSurveyById = require('./surveys/getSurveyById').getSurveyById;
-  getSurveyById(ddb, event, context, callback);
+  getSurveyById(esClient, event, context, callback);
 };
 
 module.exports.getSurveysBySearch = (event, context, callback) => {
   const getSurveyBySearch = require('./surveys/getSurveyBySearch').getSurveyBySearch;
-  getSurveyBySearch(ddb, event, context, callback);
+  getSurveyBySearch(esClient, event, context, callback);
 };
 
 module.exports.createSurvey = (event, context, callback) => {
   const createSurvey = require('./surveys/createSurvey').createSurvey;
-  createSurvey(ddb, event, context, callback);
+  createSurvey(esClient, event, context, callback);
 };
 
 module.exports.deleteSurvey = (event, context, callback) => {
   const deleteSurvey = require('./surveys/deleteSurvey').deleteSurvey;
-  deleteSurvey(ddb, event, context, callback);
+  deleteSurvey(esClient, event, context, callback);
 };
 
 module.exports.updateSurvey = (event, context, callback) => {
   const updateSurvey = require('./surveys/updateSurvey').updateSurvey;
-  updateSurvey(ddb, event, context, callback);
+  updateSurvey(esClient, event, context, callback);
 };
 
 module.exports.mapSurveysIndex = (event, context, callback) => {
@@ -36,22 +46,22 @@ module.exports.mapSurveysIndex = (event, context, callback) => {
 /* --------------- Survey Response handlers --------------- */
 module.exports.getResponseById = (event, context, callback) => {
     const getResponseById = require('./responses/getResponseById').getResponseById;
-    getResponseById(ddb, event, context, callback);
+    getResponseById(esClient, event, context, callback);
 };
 
 module.exports.createResponse = (event, context, callback) => {
     const createResponse = require('./responses/createResponse').createResponse;
-    createResponse(ddb, event, context, callback);
+    createResponse(esClient, event, context, callback);
 };
 
 module.exports.deleteResponse = (event, context, callback) => {
     const deleteResponse = require('./responses/deleteResponse').deleteResponse;
-    deleteResponse(ddb, event, context, callback);
+    deleteResponse(esClient, event, context, callback);
 };
 
 module.exports.updateResponse = (event, context, callback) => {
     const updateResponse = require('./responses/updateResponse').updateResponse;
-    updateResponse(ddb, event, context, callback);
+    updateResponse(esClient, event, context, callback);
 };
 
 module.exports.mapResponsesIndex = (event, context, callback) => {
