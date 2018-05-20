@@ -686,7 +686,7 @@ functions:
 
 ################### Map Indexes Api ###################
   mapCommentsIndex:
-    handler: js/comments-api/handler.mapIndex
+    handler: js/comments-api/handler.mapCommentsIndex
     events:
       - http:
           path: index/comments
@@ -700,7 +700,7 @@ functions:
         - node_modules/**
 
   mapDepartmentsIndex:
-    handler: js/departments-api/handler.mapIndex
+    handler: js/departments-api/handler.mapDepartmentsIndex
     events:
       - http:
           path: index/departments
@@ -714,7 +714,7 @@ functions:
         - node_modules/**
 
   mapPostsIndex:
-    handler: js/posts-api/handler.mapIndex
+    handler: js/posts-api/handler.mapPostsIndex
     events:
       - http:
           path: index/posts
@@ -728,7 +728,7 @@ functions:
         - node_modules/**
 
   mapRolesIndex:
-    handler: js/roles-api/handler.mapIndex
+    handler: js/roles-api/handler.mapRolesIndex
     events:
       - http:
           path: index/roles
@@ -742,7 +742,7 @@ functions:
         - node_modules/**
 
   mapSurveysIndex:
-    handler: js/surveys-api/handler.mapSurveyIndex
+    handler: js/surveys-api/handler.mapSurveysIndex
     events:
       - http:
           path: index/surveys
@@ -770,7 +770,7 @@ functions:
         - node_modules/**
 
   mapTagsIndex:
-    handler: js/tags-api/handler.mapIndex
+    handler: js/tags-api/handler.mapTagsIndex
     events:
       - http:
           path: index/tags
@@ -784,7 +784,7 @@ functions:
         - node_modules/**
 
   mapUsersIndex:
-    handler: js/users-api/handler.mapIndex
+    handler: js/users-api/handler.mapUsersIndex
     events:
       - http:
           path: index/users

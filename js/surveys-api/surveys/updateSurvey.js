@@ -1,5 +1,5 @@
 'use strict';
-const response = require('../responses.js').singleSurveySuccess;
+const success = require('../responses').singleSurveySuccess;
 const fail = require('../responses').SurveyFail;
 module.exports.updateSurvey = (esClient, event, context, callback) => {
     if(event.body !== null && event.body !== undefined){
@@ -16,7 +16,7 @@ module.exports.updateSurvey = (esClient, event, context, callback) => {
           if(error)
             fail(500, 'Update Survey failed. Error: ' + error, callback);
           else
-            response(201, data._source, callback)
+            success(201, data._source, callback)
         });
     }
     else{
