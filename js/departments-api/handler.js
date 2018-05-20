@@ -15,14 +15,19 @@ module.exports.getAllDepartments = (event, context, callback) => {
 module.exports.createDepartment = (event, context, callback) => {
   const createDepartment = require('./createDepartment').createDepartment;
   createDepartment(ddb, event, context, callback);
-}
+};
 
 module.exports.updateDepartment = (event, context, callback) => {
   const updateDepartment = require('./updateDepartment').updateDepartment;
   updateDepartment(ddb, event, context, callback);
-}
+};
 
 module.exports.deleteDepartment = (event, context, callback) => {
   const deleteDepartment = require('./deleteDepartment').deleteDepartment;
   deleteDepartment(ddb, event, context, callback);
-}
+};
+
+module.exports.mapDepartmentsIndex = (event, context, callback) => {
+    const mapIndex = require('./departments-index-mapping').mapIndex;
+    mapIndex(esClient, event, context, callback);
+};

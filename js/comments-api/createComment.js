@@ -20,12 +20,17 @@ module.exports.createComment = (esClient, event, context, callback) => {
 
         esClient.create(params, function(error, data) {
             if(error) {
-                console.log('error: ' + JSON.stringify(error));
+                console.log('Comment creation failed. error: ' + JSON.stringify(error));
                 return fail(400, error, callback);
             } else {
                 console.log('data: ' + JSON.stringify(data));
                 return success(200, comment, callback);
             }
         });
+    }
+    else {
+        let error = 'Comment creation failed. error: body empty';
+        console.log(error);
+        return fail(400, error, callback);
     }
 };

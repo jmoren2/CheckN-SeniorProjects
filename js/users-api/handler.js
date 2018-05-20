@@ -35,3 +35,8 @@ module.exports.updateUser = (event, context, callback) => {
   const updateUser = require('./updateUser').updateUser;
   updateUser(esClient, event, context, callback);
 };
+
+module.exports.mapUsersIndex = (event, context, callback) => {
+    const mapIndex = require('./users-index-mapping').mapIndex;
+    mapIndex(esClient, event, context, callback);
+};

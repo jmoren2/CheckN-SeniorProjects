@@ -11,13 +11,10 @@ const esClient = es.Client({
   }
 });
 
-// hijacking for getCommentById until we do full deploy
-module.exports.getCommentsByPostId = (event, context, callback) => {
-  //const getCommentsByPostId = require('./getCommentsByPostId').getCommentsByPostId;
-  //getCommentsByPostId(esClient, event, context, callback);
-  const getCommentById = require('./getCommentById').getCommentById;
-  getCommentById(esClient, event, context, callback);
-};
+/*module.exports.getCommentsByPostId = (event, context, callback) => {
+  const getCommentsByPostId = require('./getCommentsByPostId').getCommentsByPostId;
+  getCommentsByPostId(esClient, event, context, callback);
+};*/
 
 module.exports.getCommentById = (event, context, callback) => {
   const getCommentById = require('./getCommentById').getCommentById;
@@ -44,7 +41,7 @@ module.exports.deleteComment = (event, context, callback) => {
   deleteComment(esClient, event, context, callback);
 };
 
-/*module.exports.mapIndexComments = (event, context, callback) => {
-  const mapIndexComments = require('./comments-index-mapping').mapIndexComments;
-  mapIndexComments(esClient, event, context, callback);
-};*/
+module.exports.mapCommentsIndex = (event, context, callback) => {
+  const mapIndex = require('./comments-index-mapping').mapIndex;
+  mapIndex(esClient, event, context, callback);
+};

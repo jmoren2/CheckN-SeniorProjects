@@ -10,8 +10,17 @@ module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.postId);
             var postId = event.pathParameters.postId;
 
-            var filter = {};
-            filter.query.bool.must.match.postId = postId;
+            var filter = {
+                query: {
+                    bool: {
+                        must: {
+                            match: {
+                                postId: postId
+                            }
+                        }
+                    }
+                }
+            };
 
             esClient.search({
                 index: 'comments',

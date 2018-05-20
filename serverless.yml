@@ -17,7 +17,6 @@ provider:
 
 
 plugins:
-  # - serverless-nested-stack
   - serverless-plugin-split-stacks
 
 package:
@@ -67,6 +66,7 @@ functions:
         - js/posts-api/deletePost.js
         - js/posts-api/handler.js
         - js/posts-api/responses.js
+        - node_modules/**
 
   createPost:
     handler: js/posts-api/handler.createPost
@@ -80,10 +80,10 @@ functions:
         - js/posts-api/createPost.js
         - js/posts-api/handler.js
         - js/posts-api/responses.js
+        - js/surveys-api/surveys/createSurvey.js
+        - js/surveys-api/responses.js
         - node_modules/moment/**
         - node_modules/**
-        - js/survey-api/survey/createSurvey.js
-        - js/survey-api/responses.js
 
   updatePost:
     handler: js/posts-api/handler.updatePost
@@ -99,8 +99,6 @@ functions:
         - js/posts-api/responses.js
         - node_modules/moment/**
         - node_modules/**
-        - js/users-api/users-index-mapping.js
-        - js/users-api/users-index-mapping.json
 
 ################### Users Api ###################
   getUserById:
@@ -186,6 +184,7 @@ functions:
         - js/tags-api/getTagByName.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
+        - node_modules/**
 
   getTagsBySearch:
     handler: js/tags-api/handler.getTagsBySearch
@@ -212,6 +211,7 @@ functions:
         - js/tags-api/deleteTag.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
+        - node_modules/**
 
   createTag:
     handler: js/tags-api/handler.createTag
@@ -225,14 +225,14 @@ functions:
         - js/tags-api/createTag.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
-
+        - node_modules/**
 
 ################### Comments Api ###################
-  getCommentsByPostId:
-    handler: js/comments-api/handler.getCommentsByPostId
+  getCommentById:
+    handler: js/comments-api/handler.getCommentById
     events:
       - http:
-          path: posts/{postId}/comments
+          path: comments/{commentId}
           method: get
           cors: true
     package:
@@ -381,6 +381,7 @@ functions:
         - js/roles-api/getRole.js
         - js/roles-api/handler.js
         - js/roles-api/responses.js
+        - node_modules/**
 
   getAllRoles:
     handler: js/roles-api/handler.getAllRoles
@@ -394,6 +395,7 @@ functions:
         - js/roles-api/getAllRoles.js
         - js/roles-api/handler.js
         - js/roles-api/responses.js
+        - node_modules/**
 
   deleteRole:
     handler: js/roles-api/handler.deleteRole
@@ -407,6 +409,7 @@ functions:
         - js/roles-api/deleteRole.js
         - js/roles-api/handler.js
         - js/roles-api/responses.js
+        - node_modules/**
 
   createRole:
     handler: js/roles-api/handler.createRole
@@ -421,6 +424,7 @@ functions:
         - js/roles-api/handler.js
         - js/roles-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
 ################### Departments Api ###################
   getDepartment:
@@ -435,6 +439,7 @@ functions:
         - js/departments-api/getDepartment.js
         - js/departments-api/handler.js
         - js/departments-api/responses.js
+        - node_modules/**
 
   getAllDepartments:
     handler: js/departments-api/handler.getAllDepartments
@@ -448,6 +453,7 @@ functions:
         - js/departments-api/getAllDepartments.js
         - js/departments-api/handler.js
         - js/departments-api/responses.js
+        - node_modules/**
 
   deleteDepartment:
     handler: js/departments-api/handler.deleteDepartment
@@ -461,6 +467,7 @@ functions:
         - js/departments-api/deleteDepartment.js
         - js/departments-api/handler.js
         - js/departments-api/responses.js
+        - node_modules/**
 
   createDepartment:
     handler: js/departments-api/handler.createDepartment
@@ -475,6 +482,7 @@ functions:
         - js/departments-api/handler.js
         - js/departments-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
 # ################### Categories Api ###################
 #   getCategory:
@@ -532,7 +540,7 @@ functions:
 
 ################### Surveys Api ###################
   getSurveyById:
-    handler: js/survey-api/handler.getSurveyById
+    handler: js/surveys-api/handler.getSurveyById
     events:
       - http:
           path: surveys/{surveyId}
@@ -540,12 +548,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/survey/getSurveyById.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/surveys/getSurveyById.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   getSurveysBySearch:
-    handler: js/survey-api/handler.getSurveysBySearch
+    handler: js/surveys-api/handler.getSurveysBySearch
     events:
       - http:
           path: surveys
@@ -553,12 +562,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/survey/getSurveysBySearch.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/surveys/getSurveysBySearch.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   deleteSurvey:
-    handler: js/survey-api/handler.deleteSurvey
+    handler: js/surveys-api/handler.deleteSurvey
     events:
       - http:
           path: surveys/{surveyId}
@@ -566,12 +576,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/survey/deleteSurvey.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/surveys/deleteSurvey.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   createSurvey:
-    handler: js/survey-api/handler.createSurvey
+    handler: js/surveys-api/handler.createSurvey
     events:
       - http:
           path: surveys
@@ -579,13 +590,14 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/survey/createSurvey.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/surveys/createSurvey.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
   updateSurvey:
-    handler: js/survey-api/handler.updateSurvey
+    handler: js/surveys-api/handler.updateSurvey
     events:
       - http:
           path: surveys/{surveyId}
@@ -593,14 +605,15 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/survey/updateSurvey.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/surveys/updateSurvey.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
 ################### Survey Responses Api ###################
   getResponseById:
-    handler: js/survey-api/handler.getResponseById
+    handler: js/surveys-api/handler.getResponseById
     events:
       - http:
           path: surveys/{surveyId}/responses/{responseId}
@@ -608,12 +621,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/responses/getResponseById.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/responses/getResponseById.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   getResponsesBySearch:
-    handler: js/survey-api/handler.getResponsesBySearch
+    handler: js/surveys-api/handler.getResponsesBySearch
     events:
       - http:
           path: surveys/{surveyId}/responses
@@ -621,12 +635,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/responses/getResponsesBySearch.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/responses/getResponsesBySearch.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   deleteResponse:
-    handler: js/survey-api/handler.deleteResponse
+    handler: js/surveys-api/handler.deleteResponse
     events:
       - http:
           path: surveys/{surveyId}/responses/{responseId}
@@ -634,12 +649,13 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/responses/deleteResponse.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/responses/deleteResponse.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
+        - node_modules/**
 
   createResponse:
-    handler: js/survey-api/handler.createResponse
+    handler: js/surveys-api/handler.createResponse
     events:
       - http:
           path: surveys/{surveyId}/responses
@@ -647,13 +663,14 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/responses/createResponse.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/responses/createResponse.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
   updateResponse:
-    handler: js/survey-api/handler.updateResponse
+    handler: js/surveys-api/handler.updateResponse
     events:
       - http:
           path: surveys/{surveyId}/responses/{responseId}
@@ -661,20 +678,121 @@ functions:
           cors: true
     package:
       include:
-        - js/survey-api/responses/updateResponse.js
-        - js/survey-api/handler.js
-        - js/survey-api/responses.js
+        - js/surveys-api/responses/updateResponse.js
+        - js/surveys-api/handler.js
+        - js/surveys-api/responses.js
         - node_modules/moment/**
+        - node_modules/**
 
-#   mapIndex:
-#     handler: js/posts-api/handler.mapIndex
-#     events:
-#       - http:
-#           path: index
-#           method: post
-#           cors: true
-#     package:
-#       include:
-#         - js/posts-api/posts-index-mapping.js
-#         - js/comments-api/comments-index-mapping.js
-#         - js/posts-api/handler.js
+################### Map Indexes Api ###################
+  mapCommentsIndex:
+    handler: js/comments-api/handler.mapIndex
+    events:
+      - http:
+          path: index/comments
+          method: put
+          cors: true
+    package:
+      include:
+        - js/comments-api/comments-index-mapping.js
+        - js/comments-api/comments-index-mapping.json
+        - js/comments-api/handler.js
+        - node_modules/**
+
+  mapDepartmentsIndex:
+    handler: js/departments-api/handler.mapIndex
+    events:
+      - http:
+          path: index/departments
+          method: put
+          cors: true
+    package:
+      include:
+        - js/departments-api/departments-index-mapping.js
+        - js/departments-api/departments-index-mapping.json
+        - js/departments-api/handler.js
+        - node_modules/**
+
+  mapPostsIndex:
+    handler: js/posts-api/handler.mapIndex
+    events:
+      - http:
+          path: index/posts
+          method: put
+          cors: true
+    package:
+      include:
+        - js/posts-api/posts-index-mapping.js
+        - js/posts-api/posts-index-mapping.json
+        - js/posts-api/handler.js
+        - node_modules/**
+
+  mapRolesIndex:
+    handler: js/roles-api/handler.mapIndex
+    events:
+      - http:
+          path: index/roles
+          method: put
+          cors: true
+    package:
+      include:
+        - js/roles-api/roles-index-mapping.js
+        - js/roles-api/roles-index-mapping.json
+        - js/roles-api/handler.js
+        - node_modules/**
+
+  mapSurveysIndex:
+    handler: js/surveys-api/handler.mapSurveyIndex
+    events:
+      - http:
+          path: index/surveys
+          method: put
+          cors: true
+    package:
+      include:
+        - js/surveys-api/surveys/surveys-index-mapping.js
+        - js/surveys-api/surveys/surveys-index-mapping.json
+        - js/surveys-api/handler.js
+        - node_modules/**
+
+  mapResponsesIndex:
+    handler: js/surveys-api/handler.mapResponsesIndex
+    events:
+      - http:
+          path: index/responses
+          method: put
+          cors: true
+    package:
+      include:
+        - js/surveys-api/responses/responses-index-mapping.js
+        - js/surveys-api/responses/responses-index-mapping.json
+        - js/surveys-api/handler.js
+        - node_modules/**
+
+  mapTagsIndex:
+    handler: js/tags-api/handler.mapIndex
+    events:
+      - http:
+          path: index/tags
+          method: put
+          cors: true
+    package:
+      include:
+        - js/tags-api/tags-index-mapping.js
+        - js/tags-api/tags-index-mapping.json
+        - js/tags-api/handler.js
+        - node_modules/**
+
+  mapUsersIndex:
+    handler: js/users-api/handler.mapIndex
+    events:
+      - http:
+          path: index/users
+          method: put
+          cors: true
+    package:
+      include:
+        - js/users-api/users-index-mapping.js
+        - js/users-api/users-index-mapping.json
+        - js/users-api/handler.js
+        - node_modules/**

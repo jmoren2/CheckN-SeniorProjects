@@ -3,13 +3,12 @@ const success = require('./responses').singleCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.getCommentById = (esClient, event, context, callback) => {
-    // using postId as temporary hack until we do full deploy
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.postId !== undefined &&
-            event.pathParameters.postId !== null &&
-            event.pathParameters.postId !== "") {
-            console.log("Received proxy: " + event.pathParameters.postId);
-            var commentId = event.pathParameters.postId;
+        if (event.pathParameters.commentId !== undefined &&
+            event.pathParameters.commentId !== null &&
+            event.pathParameters.commentId !== "") {
+            console.log("Received proxy: " + event.pathParameters.commentId);
+            var commentId = event.pathParameters.commentId;
 
             var params = {
                 index: 'comments',

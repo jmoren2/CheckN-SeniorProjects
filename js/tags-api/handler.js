@@ -21,3 +21,8 @@ module.exports.deleteTag = (event, context, callback) => {
   const deleteTag = require('./deleteTag').deleteTag;
   deleteTag(ddb, event, context, callback);
 };
+
+module.exports.mapTagsIndex = (event, context, callback) => {
+    const mapIndex = require('./tags-index-mapping').mapIndex;
+    mapIndex(esClient, event, context, callback);
+};
