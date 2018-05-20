@@ -4,18 +4,18 @@
 const success = require('./responses.js').singleDepartmentSuccess;
 const fail = require('./responses.js').DepartmentsFail;
 
-module.exports.createDepartment = (ddb, event, context, callback) => {
+module.exports.createDepartment = (esClient, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
 
     var body = JSON.parse(event.body);
 
-    var departments = {
-        Item: body,
-        TableName: 'departments'
-
-    }
+    var params = {
+      index: 'departments',
+      type: 'department',
+      body: body
+    };
     
-    ddb.put(departments, function(error, data) {
+    esClient.create(params, function(error, data) {
       if(error) {
         return fail(500, 'Department creation failed. Error: ' + error, callback);
       } else {
@@ -26,4 +26,4 @@ module.exports.createDepartment = (ddb, event, context, callback) => {
   } else {
     return fail(500, 'Department creation failed.', callback)
   } 
-}
+};

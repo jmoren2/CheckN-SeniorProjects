@@ -7,9 +7,9 @@
         "permissions": {
             "type": "nested",
             "properties": {
-                "department": { "type": "text" },
-                "location": { "type": "text" },
-                "role": { "type": "text" }
+                "department": { "type": "keyword" },
+                "location": { "type": "keyword" },
+                "role": { "type": "keyword" }
             }
         }
     }
