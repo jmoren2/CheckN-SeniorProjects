@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Redirect, Route} from 'react-router-dom';
-import { Dropdown, Button, Input, Container, Header, Form, TextArea } from 'semantic-ui-react';
+import { Dropdown, Button, Input, Container, Header, Form, TextArea, Modal, Image } from 'semantic-ui-react';
 import Navbar from './Navbar.js'
 
 
@@ -17,6 +17,7 @@ class Admin extends React.Component{
         this.state = {
             report: '',
             runReport: false,
+            createUser: false,
             AllUsers: [],
             selectedUser: '',
             allDepartments: [],
@@ -28,6 +29,11 @@ class Admin extends React.Component{
             email:'',
             department:'',
             role:'',
+            cfirstName:'',
+            clastName: '',
+            cemail:'',
+            cdepartment:'',
+            crole:'',
             selectedDepartment:'',
             departmentToAdd: '',
             selectedRole: '',
@@ -59,19 +65,20 @@ class Admin extends React.Component{
         },
     function()
 {
-    if(this.state.report !== "Users")
-    {
+    
+    // if(this.state.report !== "Users")
+    // {
 
-                document.getElementById("editUser").hidden = true;
-                document.getElementById("removeUser").hidden = true;
-                document.getElementById("allUsers").hidden = true;
-    }
-    if(this.state.report !== "Departments")
-    {
+    //             document.getElementById("editUser").hidden = true;
+    //             document.getElementById("removeUser").hidden = true;
+    //             document.getElementById("allUsers").hidden = true;
+    // }
+    // if(this.state.report !== "Departments")
+    // {
         
-        document.getElementById("addDepButton").hidden = true;
-        document.getElementById("addDep").hidden = true;
-    }
+    //     document.getElementById("addDepButton").hidden = true;
+    //     document.getElementById("addDep").hidden = true;
+    // }
     if(this.state.report === "Departments")
     {
 
@@ -79,15 +86,27 @@ class Admin extends React.Component{
     }
     if(this.state.report === "Roles")
     {
+        document.getElementById("addRole").hidden = true;
         this.handleRoles();
+
     }
+
+
     if(this.state.report === "Users")
     {
         
         document.getElementById("allDepartments").hidden = true;
+        document.getElementById("addDepButton").hidden = true;
+        document.getElementById("addDep").hidden = true;
         document.getElementById("deleteDepartment").hidden = true;
         document.getElementById("searchUser").hidden = false;
         document.getElementById("addDep").hidden = true;
+        document.getElementById("addRole").hidden = true;
+        document.getElementById("addRoleButton").hidden = true;
+        document.getElementById("delRole").hidden = true;
+        document.getElementById("delRoleButton").hidden = true;
+        document.getElementById("modal").hidden = false; 
+        
     }
 })
     }
@@ -97,8 +116,15 @@ class Admin extends React.Component{
     {
         document.getElementById("addDepButton").hidden = true;
         document.getElementById("addDep").hidden = true;
-        document.getElementById("searchUser").hidden = true;
         document.getElementById("allDepartments").hidden = true;
+        document.getElementById("deleteDepartment").hidden = true;
+        document.getElementById("editUserForm").hidden = true;
+        document.getElementById("allUsers").hidden = true;
+        document.getElementById("editUser").hidden = true;
+        document.getElementById("removeUser").hidden = true;
+        document.getElementById("searchUser").hidden = true;
+        document.getElementById("modal").hidden = true;
+
         document.getElementById("addRole").hidden = false;
         document.getElementById("addRoleButton").hidden = false;
         document.getElementById("delRole").hidden = false;
@@ -115,6 +141,7 @@ class Admin extends React.Component{
         })
         .then(data =>
             {
+                
             console.log(data)
 
             if(data.statusCode === 500)
@@ -158,7 +185,20 @@ class Admin extends React.Component{
         document.getElementById("addDep").hidden = false;
         document.getElementById("searchUser").hidden = true;
         document.getElementById("allDepartments").hidden = false;
+        document.getElementById("editUserForm").hidden = false;
 
+
+        document.getElementById("addRole").hidden = true;
+        document.getElementById("addRoleButton").hidden = true;
+        document.getElementById("delRole").hidden = true;
+        document.getElementById("delRoleButton").hidden = true;
+        
+        document.getElementById("editUserForm").hidden = true;
+        document.getElementById("allUsers").hidden = true;
+        document.getElementById("editUser").hidden = true;
+        document.getElementById("removeUser").hidden = true;
+        document.getElementById("modal").hidden = true;
+        
 
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/departments`, {
             headers: {
@@ -219,6 +259,13 @@ class Admin extends React.Component{
             runReport: true
         })
         
+    }
+
+    handleCreateUser = (event) =>
+    {
+        this.setState({
+            createUser: true
+        })
     }
 
     handleUserChange = (event, data) =>
@@ -478,6 +525,39 @@ class Admin extends React.Component{
             
     }
 
+
+    submitCreateUser = (event, data) =>
+    {
+        var data = {};
+
+
+        var data = {
+            firstName: this.state.cfirstName,
+            lastName: this.state.clastName,
+            email: this.state.cemail,
+            userPermissions: [{department: this.state.cdepartment, role: this.state.crole}],
+            posts: [],
+            comments: [],
+            votes: []
+            
+        }
+
+        console.log(data)
+
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(result => {
+            console.log('user created');
+            window.location.reload();
+        })
+            
+    }
+
     deleteDepartment= (event, data) =>
     {
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/departments/${this.state.selectedDepartment}`, {
@@ -568,8 +648,11 @@ class Admin extends React.Component{
 
     render(){ 
         if (this.state.runReport === true){
-            return(<Redirect to={`/admin/${this.state.report}`}/>);//go to the new post's page
+            return(<Redirect to={`/${this.state.report}/report`}/>);//go to the new post's page
             }
+        
+
+        
 
          return(
              <div>
@@ -585,30 +668,58 @@ class Admin extends React.Component{
 
                             <Dropdown placeholder='Select Type' onChange={this.handleReportType} selection options={this.options}/>
 
-                            <Button standard onClick={this.handleRunReport}>Reports</Button> <br/><br/><br/>
 
-                            <Input id="searchUser" placeholder='Search...' onChange={this.heandlSearchUser} /> <br/>
+                            <Button standard onClick={this.handleRunReport}>Reports</Button> 
+
+                            {/* USERS */}
+
+
+                            {/* <Button standard  in="makeUser" onClick={this.handleCreateUser}>Create User</Button> */}
+                            <br/><br/><br/>
+
+                            <div id="modal">
+                            <Modal trigger={<Button>Create User</Button>}>
+                                <Modal.Header>Admin - Create User</Modal.Header>                             
+                                <Modal.Description>
+                                <Form id="ceditUserForm" onSubmit={this.submitCreateUser} >                           
+                            <Form.Input name='cfirstName' id="cformFirstName" fluid label='First name' placeholder="First Name" onChange={this.handleChange}/>
+                            <Form.Input name="clastName" id="cformLastName" fluid label='Last name' placeholder="Last Name" onChange={this.handleChange} />
+                            <Form.Input name="cemail" id="cformEmail" fluid label='Email' placeholder="Email" onChange={this.handleChange} />
+                            <Form.Dropdown name="cdepartment" id="cformDepartment" fluid selection label='department' onFocus={this.getAllDepartments} onChange={this.handleChange} options={this.state.allDepartments} placeholder='Department'/>
+                            <Form.Dropdown name="crole" id="cformRole" fluid selection label='role'  onFocus={this.getAllRoles} onChange={this.handleChange} options={this.state.allRoles} placeholder='Role' />
+                            <Button>Submit</Button>
+                        </Form>
+                                </Modal.Description>
+                            </Modal>
+                            </div> <br/>
+
+
+                            <Input id="searchUser"  placeholder='Search User...' onChange={this.heandlSearchUser} /> <br/>
 
                             <Dropdown id="allUsers" selection options={this.state.AllUsers} hidden onChange={this.handleUserChange}  />
-
-                            <Input id="addDep"   placeholder='Department Name...' name="departmentToAdd" onChange={this.handleChange} />
-                            <Button standard hidden id="addDepButton" onClick={this.submitDepartment}>Add Department</Button> <br />
-
-
-                            <Dropdown id="allDepartments" name="selectedDepartment" label="All Departments" selection options={this.state.allDepartments} onChange={this.handleChange} hidden  />
-                            <Button standard hidden id="deleteDepartment" onClick={this.deleteDepartment}>Delete Department</Button>
-                            
                             <br/>
                             <Button standard hidden id="editUser" onClick={this.handleEditUser}>Edit User</Button>
                             <Button standard hidden id="removeUser" onClick={this.handleRemoveUser}>Remove User</Button>
 
+
+                            {/* DEPARTMENT */}
+
+                            <Input id="addDep"  placeholder='Department Name...' name="departmentToAdd" onChange={this.handleChange} />
+                            <Button standard hidden id="addDepButton" onClick={this.submitDepartment}>Add Department</Button> <br />
+                            <Dropdown id="allDepartments" name="selectedDepartment" label="All Departments" selection options={this.state.allDepartments} onChange={this.handleChange} hidden  />
+                            <Button standard hidden id="deleteDepartment" onClick={this.deleteDepartment}>Delete Department</Button>
                             
-                            <Input id="addRole"   placeholder='Role Name...' name="roleToAdd" onChange={this.handleChange} />
+                            
+
+                            {/* ROLES */}
+                            <Input id="addRole"  placeholder='Role Name...' name="roleToAdd" onChange={this.handleChange} />
                             <Button standard hidden id="addRoleButton" onClick={this.submitRole}>Add Role</Button> <br />
                             <Dropdown id="delRole" selection   placeholder='Roles...' name="selectedRole" onChange={this.handleChange} options={this.state.allRoles} hidden/>
                             <Button standard hidden id="delRoleButton" onClick={this.deleteRole}>Delete Role</Button> <br />
 
                         
+
+                        {/* EDIT USER FORM */}
 
                         <Form id="editUserForm" onSubmit={this.submitUserEdit} hidden>                           
                             <Form.Input name='firstName' id="formFirstName" fluid label='First name' placeholder={this.state.selectedUserInfo.firstName} onChange={this.handleChange}/>
