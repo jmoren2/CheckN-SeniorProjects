@@ -12,9 +12,7 @@ provider:
   - Effect: "Allow"
     Action:
       - "es:*"
-    Resource: "arn:aws:es:us-west-2:995441987960:domain/checkn-dev"
-  custom:
-
+    Resource: "arn:aws:es:us-west-2:995441987960:domain/*"
 
 plugins:
   - serverless-plugin-split-stacks

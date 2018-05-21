@@ -16,9 +16,7 @@ module.exports.getCategory = (ddb, event, context, callback) => {
                     "category": category 
                 }
             };
-
-            console.log("Attempting a conditional delete...");
-    
+            
             ddb.get(params, function(err, data) {
                 if(err)
                     return getCategoryFail(500,'get Category by Category failed. Error: ' + err, callback);
