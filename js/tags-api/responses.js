@@ -1,4 +1,4 @@
-module.exports.tagsFail = (code, msg, callback) => {
+module.exports.TagsFail = (code, msg, callback) => {
     return callback(null, {
         statusCode: code,
         body: JSON.stringify({
@@ -11,7 +11,7 @@ module.exports.tagsFail = (code, msg, callback) => {
             message: msg
         })
     });
-}
+};
 
 module.exports.deleteTagSuccess = (callback) => {
     return callback(null, {
@@ -22,7 +22,7 @@ module.exports.deleteTagSuccess = (callback) => {
             "Content-Type": "application/json",
         }
     });
-}
+};
 
 module.exports.singleTagSuccess = (code, tag, callback) => {
     return callback(null, {
@@ -37,7 +37,7 @@ module.exports.singleTagSuccess = (code, tag, callback) => {
             tag: tag
         })
     })
-}
+};
 
 module.exports.multiTagSuccess = (code, tags, callback) => {
     return callback(null, {
@@ -53,4 +53,4 @@ module.exports.multiTagSuccess = (code, tags, callback) => {
             count: tags.length
         })
     })
-}
+};

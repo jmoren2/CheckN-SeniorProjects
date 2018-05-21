@@ -120,12 +120,7 @@ resource "aws_dynamodb_table" "surveyResponsesTable" {
 }
 
 resource "aws_elasticsearch_domain" "checkNDomain" {
-  domain_name = "checkn-dev"
-
-  ebs_options {
-    ebs_enabled = true
-    volume_size = 10
-  }
+  domain_name = "checkn-${var.stage}"
 
   cluster_config {
     instance_type  = "t2.small.elasticsearch"
