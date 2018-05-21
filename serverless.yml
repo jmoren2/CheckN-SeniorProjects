@@ -198,6 +198,7 @@ functions:
         - js/tags-api/getTagsBySearch.js
         - js/tags-api/handler.js
         - js/tags-api/responses.js
+        - node_modules/**
 
   deleteTag:
     handler: js/tags-api/handler.deleteTag

@@ -14,6 +14,7 @@ module.exports.createDepartment = (esClient, event, context, callback) => {
     var params = {
       index: 'departments',
       type: 'department',
+      id: insert,
       body: {department: insert}
     };
     

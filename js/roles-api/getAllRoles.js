@@ -28,7 +28,7 @@ module.exports.getAllRoles = (esClient, event, context, callback) => {
 
             // parse hits for roles
             for(let i = 0; i < hits.length; ++i){
-                roles.push(hits[i])
+                roles.push(hits[i]._source.role)
             }
 
             return success(200, roles, callback);

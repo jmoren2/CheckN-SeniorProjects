@@ -27,7 +27,7 @@ module.exports.getAllDepartments = (esClient, event, context, callback) => {
 
             // parse hits for departments
             for(let i = 0; i < hits.length; ++i){
-                departments.push(hits[i])
+                departments.push(hits[i]._source.department)
             }
 
             return success(200, departments, callback);

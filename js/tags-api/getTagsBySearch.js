@@ -28,7 +28,7 @@ module.exports.getTagsBySearch = (esClient, event, context, callback) => {
 
             // parse hits for tags
             for(let i = 0; i < hits.length; ++i){
-                tags.push(hits[i])
+                tags.push(hits[i]._source.tag)
             }
 
             return success(200, tags, callback);

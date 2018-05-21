@@ -12,10 +12,11 @@ module.exports.createRole = (esClient, event, context, callback) => {
         var params = {
             index: 'roles',
             type: 'role',
+            id: insert,
             body: {'role' : insert}
         };
 
-        esClient.put(params, function(error, data) {
+        esClient.create(params, function(error, data) {
             if(error)
                 return fail(500, 'createRole failed. Error: ' + error, callback);
             else {

@@ -12,10 +12,11 @@ module.exports.createTag = (esClient, event, context, callback) => {
         var params = {
             index: 'tags',
             type: 'tag',
+            id: insert,
             body: {'tag' : insert}
         };
 
-        esClient.put(params, function(error, data) {
+        esClient.create(params, function(error, data) {
             if(error)
                 return fail(500, 'createTag failed. Error: ' + error, callback);
             else {
