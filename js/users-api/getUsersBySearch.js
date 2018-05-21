@@ -50,10 +50,10 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
         })
     }
 
-    // initialize permissions filter
+    // initialize userPermissions filter
     var permFilter = {
         nested: {
-            path: "permissions",
+            path: "userPermissions",
             query: {
                 bool: {
                     must: []
@@ -62,25 +62,25 @@ module.exports.getUsersBySearch = (esClient, event, context, callback) => {
         }
     };
 
-    // apply department/location/role to permissions filter
+    // apply department/location/role to userPermissions filter
     if(dept !== undefined) {
         permFilter.nested.query.bool.must.push({
             term:{
-                "permissions.department" : dept
+                "userPermissions.department" : dept
             }
         })
     }
     if(locat !== undefined) {
         permFilter.nested.query.bool.must.push({
             term:{
-                "permissions.location" : locat
+                "userPermissions.location" : locat
             }
         })
     }
     if(role !== undefined) {
         permFilter.nested.query.bool.must.push({
             term:{
-                "permissions.role" : role
+                "userPermissions.role" : role
             }
         })
     }

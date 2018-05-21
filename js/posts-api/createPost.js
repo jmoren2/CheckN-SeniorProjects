@@ -25,7 +25,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
             var newSurvey = JSON.parse(data2.body);
             post.surveyId = newSurvey.surveyId;
             delete post.survey;
-            success(200, body, callback);
+            success(200, post, callback);
           }
         });
     }
@@ -43,7 +43,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
       }
       else {
         console.log('data: ' + data);
-        return success(200, body, callback);
+        return success(200, post, callback);
       }
     });
   } else {
