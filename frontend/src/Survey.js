@@ -49,7 +49,11 @@ class Survey extends React.Component{
             return results.json();
         })//Saves the response as JSON
         .then(survey => {
+            console.log(survey);
             this.initializeState(survey.survey);
+        })
+        .catch(error => {
+            console.log(error);
         });
     }
 
@@ -60,6 +64,8 @@ class Survey extends React.Component{
     //State holds on to the questions and responses
     //This is important because I want the rendering of each component to be completely state dependent 
     initializeState(survey){
+        console.log('initializeState');
+        console.log(survey);
         var questionArray = survey.questions;
         var responseArray = survey.questions.map((question) => {
             var temp = new this.defaultResponse();
