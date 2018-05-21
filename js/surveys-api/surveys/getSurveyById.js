@@ -2,7 +2,7 @@
 const getSingleSurveySuccess = require('../responses').singleSurveySuccess;
 const getSurveyFail = require('../responses').SurveyFail;
 
-module.exports.getSurveyById = (ddb, event, context, callback) => {
+module.exports.getSurveyById = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.surveyId !== undefined && 
             event.pathParameters.surveyId !== null && 
@@ -16,7 +16,7 @@ module.exports.getSurveyById = (ddb, event, context, callback) => {
                 id: id
             };
 
-            ddb.get(params, function(err, data) {
+            esClient.get(params, function(err, data) {
                 if(err)
                     return getSurveyFail(500,'get Survey by Id failed. Error: ' + err, callback);
                 else {
