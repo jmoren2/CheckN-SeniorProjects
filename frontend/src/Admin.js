@@ -14,6 +14,12 @@ class Admin extends React.Component{
             window.location.href = '/login';
             console.log('hello')
         }
+        if(this.props.userObj.userPermissions[0].role !== "admin")
+        {
+            window.location.href = '/login';
+            console.log('goodbye') 
+        }
+
         this.state = {
             report: '',
             runReport: false,
@@ -42,7 +48,7 @@ class Admin extends React.Component{
         
         this.searchQuery = "a";
         
-        console.log("The user object passed in is: " + props.userObj);
+        console.log("The user object passed in is: " + JSON.stringify(props.userObj));
     
     }
 
@@ -648,7 +654,16 @@ class Admin extends React.Component{
 
     render(){ 
         if (this.state.runReport === true){
-            return(<Redirect to={`/${this.state.report}/report`}/>);//go to the new post's page
+            if(this.state.report === "")
+            {
+                
+                window.location.reload();
+            }
+            else
+            {
+
+                return(<Redirect to={`/${this.state.report}/report`}/>);//go to the new post's page
+            }
             }
         
 
@@ -677,7 +692,7 @@ class Admin extends React.Component{
                             {/* <Button standard  in="makeUser" onClick={this.handleCreateUser}>Create User</Button> */}
                             <br/><br/><br/>
 
-                            <div id="modal">
+                            <div hidden id="modal">
                             <Modal trigger={<Button>Create User</Button>}>
                                 <Modal.Header>Admin - Create User</Modal.Header>                             
                                 <Modal.Description>

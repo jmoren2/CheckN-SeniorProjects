@@ -16,7 +16,14 @@ class DepartmentReport extends React.Component{
 
         this.state = {
             allDepartments: [],
-            selectedDepartment: ''
+            selectedDepartment: '',
+            usersByDep:[],
+            depPosts:0,
+            depComments:0,
+            depVotes:0,
+            depUpVotes:0,
+            depNetVotes:0,
+            depDownVotes:0,
         }
 
         
@@ -71,13 +78,81 @@ class DepartmentReport extends React.Component{
                 allDepartments: departments
             }, function(){
 
-                document.getElementById("metrics").hidden = false;
+            
             })
             
         }
     })
 }
 
+    getMetrics = () =>
+    {
+        
+                document.getElementById("metrics").hidden = false;
+        
+    fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?dept=${this.state.selectedDepartment}`, {
+        headers: {
+            'content-type': 'application/json'
+             },
+        method: 'GET',
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data =>{
+            this.setState({
+                usersByDep: data.users
+            },
+        function(){
+            this.calculateMetrics()
+        })
+    })
+    }
+
+
+    calculateMetrics = () =>
+    {
+        console.log('hehreeee')
+        var posts = 0;
+        var comments = 0;
+        var votes =0;
+        var uvotes=0;
+        var nvotes =0;
+        var dvotes=0;
+
+        for(var i=0; i <this.state.usersByDep.length; ++i)
+        {
+            console.log(this.state.usersByDep[i])
+            if(this.state.usersByDep[i].posts)
+            {
+                var x = this.state.usersByDep[i].posts.length;
+
+                posts += x;
+                //console.log(this.state.usersByDep[i])
+                //posts += this.state.usersByDep[i].userPermissions[0].posts.length;
+            }
+            if(this.state.usersByDep[i].comments)
+            {
+                var y = this.state.usersByDep[i].comments.length
+                comments += y;
+                //console.log(this.state.usersByDep[i])
+                //comments += this.state.usersByDep[i].userPermissions[0].comments.length;
+            }
+            if(this.state.usersByDep[i].votes)
+            {
+                var v = this.state.usersByDep[i].votes.length;
+                votes +=v;
+                ///votes += this.state.usersByDep[i].userPermissions[0].votes.length;
+            }
+           
+        }
+
+        this.setState({
+            depPosts: posts,
+            depComments: comments,
+            depVotes: votes
+        })
+    }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
     
@@ -97,6 +172,8 @@ class DepartmentReport extends React.Component{
 
                                 <Dropdown id="allDepartments" name="selectedDepartment" label="All Departments" selection onFocus={this.getAllDepartments} options={this.state.allDepartments} onChange={this.handleChange} />
 
+                                <Button standard  id="run" onClick={this.getMetrics}>Run</Button> <br />
+                            
 
                                 <div id="metrics" hidden>
                                         <Card>
@@ -107,6 +184,9 @@ class DepartmentReport extends React.Component{
                                                 </h3>
                                             </Card.Header>
                                             <Card.Description>
+                                                Posts: {this.state.depPosts} <br/>
+                                                Comments: {this.state.depComments} <br/>
+                                                Total Votes: {this.state.depVotes} <br/>
                                                 {/* Posts: {this.state.posts.length} <br/>
                                                 Comments: {this.state.comments.length} <br/>
                                                 Total Votes: {this.state.votes.length} <br/>

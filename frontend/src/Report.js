@@ -31,7 +31,7 @@ class Report extends React.Component{
         }
 
         
-        console.log("The user object passed in is: " + props.userObj);
+        console.log("The user object passed in is: " + JSON.stringify(this.props.userObj));
     
     }
 
