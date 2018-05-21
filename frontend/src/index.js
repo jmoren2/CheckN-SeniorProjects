@@ -13,6 +13,8 @@ import EditPost from './EditPost.js';
 import Admin from './Admin.js'
 import Report from './Report.js'
 import DepartmentReport from './DepartmentReport.js'
+import Survey from './Survey.js';
+import SurveyResponse from './SurveyResponses.js';
 
 class App extends React.Component {
     constructor(props){
@@ -76,6 +78,8 @@ class App extends React.Component {
                     <Route path="/admin" component={props => (<Admin userObj={this.userObj} {...props}/>)}/>
                     <Route path="/Users/report" component={props => (<Report userObj={this.userObj} {...props}/>)}/>
                     <Route path="/Departments/report" component={props => (<DepartmentReport userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/survey/:surveyId/:fromPostId" component={props => (<Survey userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/surveyResponses/:surveyId/:fromPostId" component={props => (<SurveyResponse userObj={this.userObj} {...props}/>)}/>
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>
