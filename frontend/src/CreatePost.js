@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Question from './Question.js';
-import {Divider, Button} from 'semantic-ui-react';
+import {Divider, Button, Icon} from 'semantic-ui-react';
 
 import Plus from 'react-icons/lib/fa/plus';
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -53,7 +53,9 @@ class CreatePost extends Component{
                 userId: this.props.userObj.userId,
                 questions: this.questionObjects,
             };
+            this.submitPost(survey);
 
+            /*
             fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/', {
                 method: 'POST',
                 body: JSON.stringify(survey)
@@ -64,7 +66,7 @@ class CreatePost extends Component{
             .then(result => {
                 this.submitPost(result.survey.surveyId);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error));*/
         }
         else
         {
@@ -72,9 +74,9 @@ class CreatePost extends Component{
         }
     }
 
-    submitPost(surveyId){
+    submitPost(survey){
         var data;
-        if (surveyId === null)
+        if (survey === null)
         {
             data = {
                 title: this.state.title, 
@@ -90,11 +92,15 @@ class CreatePost extends Component{
                 content: this.state.content,
                 tags: this.state.tagArray,
                 userId: this.props.userObj.userId,
-                surveyId: surveyId
+                survey: survey
             };
         }
 
-        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+        console.log('creating post with ');
+        console.log(data);
+        
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
+        //fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
         })
@@ -102,7 +108,11 @@ class CreatePost extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
+            console.log(result);
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
+        })
+        .catch(error => {
+            console.log(error);
         });
     }
 
