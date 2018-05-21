@@ -17,7 +17,7 @@ module.exports.createSurvey = (esClient, event, context, callback) => {
         body: body
     };
     
-    esClient.put(params, function(error, data) {
+    esClient.create(params, function(error, data) {
       if(error) {
         return fail(500, 'Survey creation failed. Error: ' + error, callback);
       } else {
