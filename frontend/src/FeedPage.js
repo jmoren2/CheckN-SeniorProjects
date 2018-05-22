@@ -19,7 +19,7 @@ class FeedPage extends React.Component{
         this.state = {
             feed: <div>Loading...</div>
         }
-        this.searchQuery = "search=a";
+        this.searchQuery = "forUser=" + this.props.userObj.userId;//TODO: test that this actually works with a regular user and an admin
         console.log("The user object passed in is: " + props.userObj);
     }
 
