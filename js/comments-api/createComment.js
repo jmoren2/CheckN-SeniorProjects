@@ -5,42 +5,32 @@ const moment = require('moment');
 const fail = require('../comments-api/responses').CommentsFail;
 const success = require('../comments-api/responses').singleCommentSuccess;
 
-module.exports.createComment = (ddb, event, context, callback) => {
+module.exports.createComment = (esClient, event, context, callback) => {
     if (event.body !== null && event.body !== undefined) {
+        var comment = JSON.parse(event.body);
+        comment.commentId = uuid.v4();
+        comment.timestamp = moment().toISOString();
 
-        var body = JSON.parse(event.body);
-        body.commentId = uuid.v4();
-        var now = moment().toISOString();
-        body.timestamp = now;
-    
-        var comment = {
-            Item: body,
-            TableName: 'comments'
-    
-        }
-        
-        ddb.put(comment, function(error, data) {
-            if(error)
-            {
-                var failMessage = {message: 'Failed to add comment. Error: ' + error};
+        var params = {
+            index: 'comments',
+            type: 'comment',
+            id: comment.commentId,
+            body: comment
+        };
 
-                fail(500, failMessage, callback ); 
-
+        esClient.create(params, function(error, data) {
+            if(error) {
+                console.log('Comment creation failed. error: ' + JSON.stringify(error));
+                return fail(400, error, callback);
+            } else {
+                console.log('data: ' + JSON.stringify(data));
+                return success(200, comment, callback);
             }
-            else
-            {
-
-                success(200, comment, callback);
-            }
-
-          });
-    
-    
-        }
-        else
-        {
-            var creationFail = {message: 'Comment creation failed. Error: ' + error};
-
-            fail(500, creationFail, callback ); 
-      }
-}
+        });
+    }
+    else {
+        let error = 'Comment creation failed. error: body empty';
+        console.log(error);
+        return fail(400, error, callback);
+    }
+};

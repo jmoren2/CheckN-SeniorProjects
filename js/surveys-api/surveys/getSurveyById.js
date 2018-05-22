@@ -2,7 +2,7 @@
 const getSingleSurveySuccess = require('../responses').singleSurveySuccess;
 const getSurveyFail = require('../responses').SurveyFail;
 
-module.exports.getSurveyById = (ddb, event, context, callback) => {
+module.exports.getSurveyById = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.surveyId !== undefined && 
             event.pathParameters.surveyId !== null && 
@@ -11,22 +11,19 @@ module.exports.getSurveyById = (ddb, event, context, callback) => {
 
             var id = event.pathParameters.surveyId;
             var params = {
-                TableName: "surveys",
-                Key: {
-                    "surveyId": id 
-                }
+                index: 'surveys',
+                type: 'survey',
+                id: id
             };
 
-            console.log("Attempting a conditional delete...");
-    
-            ddb.get(params, function(err, data) {
+            esClient.get(params, function(err, data) {
                 if(err)
                     return getSurveyFail(500,'get Survey by Id failed. Error: ' + err, callback);
                 else {
-                    if(data.Item == null)
+                    if(data._source == null)
                       return getSurveyFail(404, 'No Survey Found', callback);
                     else
-                      return getSingleSurveySuccess(200, data.Item, callback);
+                      return getSingleSurveySuccess(200, data._source, callback);
                 }
             });
         }
@@ -35,4 +32,4 @@ module.exports.getSurveyById = (ddb, event, context, callback) => {
     }
     else
         return getSurveyFail(400,'get Survey by Id failed', callback);
-}
+};
