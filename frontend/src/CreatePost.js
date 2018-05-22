@@ -31,7 +31,7 @@ class CreatePost extends Component{
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.questionObjects = [];
-        console.log("The user object passed in is: " + props.userObj);
+        console.log("The user object passed in is: " + JSON.stringify(props.userObj));
     }
 
     defaultQuestion(){

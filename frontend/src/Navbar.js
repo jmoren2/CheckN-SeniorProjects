@@ -61,7 +61,7 @@ class Navbar extends React.Component {
       <Link to="/">
       <Notification />	&nbsp;
       Notifications</Link>
-      <Link to="/">
+      <Link to="/admin">
       <Admin />	&nbsp;
       Admin Controls</Link>
       <Link to="/">Other</Link>
