@@ -795,3 +795,69 @@ functions:
         - js/users-api/users-index-mapping.json
         - js/users-api/handler.js
         - node_modules/**
+
+##################### Reports ###################
+  getGeneralReport:
+    handler: js/reports-api/handler.getGeneralReport
+    events:
+      - http:
+          path: reports
+          method: get
+          cors: true
+    package:
+      include:
+        - js/reports-api/handler.js
+        - js/reports-api/getGeneralReport.js
+        - node_modules/**
+  
+  getAllUsersReport:
+    handler: js/reports-api/handler.getAllUsersReport
+    events:
+      - http:
+          path: reports/users
+          method: get
+          cors: true
+    package:
+      include:
+        - js/reports-api/handler.js
+        - js/reports-api/getAllUsersReport.js
+        - node_modules/**
+  
+  getUserReport:
+    handler: js/reports-api/handler.getUserReport
+    events:
+      - http:
+          path: reports/users/{userId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/reports-api/handler.js
+        - js/reports-api/getUserReport.js
+        - node_modules/**
+  
+  getAllDepartmentsReport:
+    handler: js/reports-api/handler.getAllDepartmentsReport
+    events:
+      - http:
+          path: reports/departments
+          method: get
+          cors: true
+    package:
+      include:
+        - js/reports-api/handler.js
+        - js/reports-api/getAllDepartmentsReport.js
+        - node_modules/**
+  
+  getDepartmentReport:
+    handler: js/reports-api/handler.getDepartmentReport
+    events:
+      - http:
+          path: reports/departments/{departmentId}
+          method: get
+          cors: true
+    package:
+      include:
+        - js/reports-api/handler.js
+        - js/reports-api/getDepartmentReport.js
+        - node_modules/**
