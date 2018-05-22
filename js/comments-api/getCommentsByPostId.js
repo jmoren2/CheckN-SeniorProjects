@@ -1,44 +1,38 @@
 'use strict';
-const success = require('./responses').multiCommentSuccess;
-const fail = require('./responses').CommentsFail;
+const multiCommentSuccess = require('./responses').multiCommentSuccess;
+const getCommentsFail = require('./responses').CommentsFail;
 
-module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
+module.exports.getCommentsByPostId = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.postId !== undefined && 
             event.pathParameters.postId !== null && 
             event.pathParameters.postId !== "") {
             console.log("Received proxy: " + event.pathParameters.postId);
             var postId = event.pathParameters.postId;
-
-            var filter = {
-                query: {
-                    bool: {
-                        must: {
-                            match: {
-                                postId: postId
-                            }
-                        }
-                    }
+            var params = {
+                TableName: "comments",
+                FilterExpression: "postId = :postId",
+                ExpressionAttributeValues: {
+                    ":postId": postId
                 }
             };
 
-            esClient.search({
-                index: 'comments',
-                type: 'comment',
-                body: filter
-            }, function(error, data) {
-                if(error) {
-                    console.log('error: ' + JSON.stringify(error));
-                    fail(400, error, callback);
-                } else {
-                    console.log('data: ' + JSON.stringify(data));
-                    success(200, data, callback);
+            console.log("Attempting a conditional delete...");
+    
+            ddb.scan(params, function(err, data) {
+                if(err)
+                    return getCommentsFail(500,'get Comments by postId failed. Error: ' + err, callback);
+                else {
+                    if(data.Items.length == 0 )
+                        return getCommentsFail(404, 'No Comments found', callback);
+                    else
+                        return multiCommentSuccess(200, data.Items, callback);
                 }
             });
         }
         else
-            return fail(400, 'get Comments by postId failed.', callback);
+            return getCommentsFail(400, 'get Comments by postId failed.', callback);
     }
     else
-        return fail(400,'get Comments by postId failed', callback);
-};
+        return getCommentsFail(400,'get Comments by postId failed', callback);
+}

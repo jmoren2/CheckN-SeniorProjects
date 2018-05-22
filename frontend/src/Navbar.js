@@ -1,7 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
 import FaBeer from 'react-icons/lib/fa/search';
-import {Link} from 'react-router-dom';
 
 import logo from './images/checknlogo.png';
 import Home from 'react-icons/lib/fa/home';
@@ -16,8 +15,9 @@ import Admin from 'react-icons/lib/fa/lock';
 class Navbar extends React.Component {
   constructor(props){
     super(props);
-
   }
+
+
   generateSearch = (e) => {
     e.preventDefault();     //Stops the page from reloading
 
@@ -43,29 +43,29 @@ class Navbar extends React.Component {
 
   <div id="mySidenav" className="sidenav">
       <a href="javascript:void(0)" className="closebtn"  onClick={closeNav}>&times;</a>
-      <Link to="/feed">
+      <a href="/Feed">
       <Home /> 	&nbsp;
       Home
-      </Link>
-      <Link to="/create">
+      </a>
+      <a href="/Create">
       <Create /> 	&nbsp;
-      Create Post
-      </Link>
-      <Link to="/">
+      Create Post</a>
+      <a href="/">
       <Profile />	&nbsp;
-      Profile
-      </Link>
-      <Link to="/">
+      Profile</a>
+      <a href="/">
       <Check /> 	&nbsp;
-      Tracked Posts</Link>
-      <Link to="/">
+      Tracked Posts</a>
+      <a href="/">
       <Notification />	&nbsp;
-      Notifications</Link>
-      <Link to="/">
+      Notifications</a>
+      <a href="/">
       <Admin />	&nbsp;
-      Admin Controls</Link>
-      <Link to="/">Other</Link>
-      <Link to="/logout">Logout</Link>
+      Admin Controls</a>
+      <a href="/">Other</a>
+      <a href="/About">About</a>
+
+      <a href="/">Logout</a>
 </div>
 
 
@@ -85,7 +85,7 @@ class Navbar extends React.Component {
                 <ul className="navbar-nav mr-auto">
                   
                   <li className="nav-item active">
-                    <a className="nav-link" href="/feed"> CheckN</a>
+                    <a className="nav-link" href="/Feed"> CheckN</a>
                   </li>
 
                   <li className="nav-item active">
@@ -105,7 +105,8 @@ class Navbar extends React.Component {
                     </form>
                 </span>
           </div>
-    </nav>
+</nav>
+
             </div>
         )
     }

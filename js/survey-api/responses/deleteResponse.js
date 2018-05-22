@@ -2,7 +2,7 @@
 const deleteResponseSuccess = require('../responses').deleteResponseSuccess;
 const deleteResponseFail = require('../responses').ResponseFail;
 
-module.exports.deleteResponse = (esClient, event, context, callback) => {
+module.exports.deleteResponse = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.responseId !== undefined && 
             event.pathParameters.responseId !== null && 
@@ -10,23 +10,24 @@ module.exports.deleteResponse = (esClient, event, context, callback) => {
             
             var id = event.pathParameters.responseId;
             var params = {
-                index: 'responses',
-                type: 'response',
-                id: id
+                TableName: "surveyResponses",
+                Key: {
+                    "responseId" : id
+                }
             };
 
             console.log("Attempting a conditional delete...");
     
-            esClient.delete(params, function(err, data) {
+            ddb.delete(params, function(err, data) {
                 if(err)
-                    return deleteResponseFail(500, 'Delete Survey Response failed. Error: ' + err, callback);
+                    return deleteResponseFail(500, 'Delete Survery Response failed. Error: ' + err, callback);
                 else
                     return deleteResponseSuccess(callback);
             });
         }
         else
-            return deleteResponseFail(400, 'Delete Survey Response failed.', callback);
+            return deleteResponseFail(400, 'Delete Survery Response failed.', callback);
     }
     else
-        return deleteResponseFail(400, 'Delete Survey Response failed.', callback);
-};
+        return deleteResponseFail(400, 'Delete Survery Response failed.', callback);
+}

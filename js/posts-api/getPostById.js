@@ -2,7 +2,7 @@
 const success = require('./responses').singlePostSuccess;
 const fail = require('./responses').postsFail;
 
-module.exports.getPostById = (esClient, event, context, callback) => {
+module.exports.getPostById = (ddb, event, context, callback) => {
     console.log('parameter content: ' + JSON.stringify(event.pathParameters));
 
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
@@ -12,43 +12,29 @@ module.exports.getPostById = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.postId);
 
             var id = event.pathParameters.postId;
-
             var params = {
-               index: 'posts',
-               type: 'post',
-               id: id
+                TableName: "posts",
+                Key: {
+                    "postId": id 
+                }
             };
 
-            esClient.get(params, function(err, data) {
-                if(err) {
-                    console.log('error: ' + err);
+            console.log("Attempting a conditional delete...");
+    
+            ddb.get(params, function(err, data) {
+                if(err)
                     return fail(500,'get post by postId failed. Error: ' + err, callback);
-                } else {
-                    console.log('data: ' + JSON.stringify(data));
-                    var post = data._source;
-                    var paramsUser = {
-                        index: 'users',
-                        type: 'user',
-                        id: post.userId
-                     };
-                    esClient.get(paramsUser, function(err, data2){
-                        if(err){
-                            console.log('getPostById get user error: ' + err);
-                            post.userName = 'unknown user';
-                        } else {
-                            console.log('data: ' + JSON.stringify(data2));
-                            var user = data2._source;
-                            post.userName = user.firstName + ' ' + user.lastName;
-                        }
-                        return success(200, post, callback);
-                    });
+                else {
+                    if(data.Item == null)
+                        return fail(404, 'No Post Found', callback);
+                    else
+                        return success(200, data.Item, callback);
                 }
             });
-
         }
         else
             return fail(400, 'get post by postId failed.', callback);
     }
     else
         return fail(400,'get post by postId failed', callback);
-};
+}

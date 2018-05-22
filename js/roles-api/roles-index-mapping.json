@@ -1,5 +1,0 @@
-{
-    "properties": {
-        "role": { "type": "keyword" }
-    }
-}

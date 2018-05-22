@@ -2,7 +2,7 @@
 const getSingleUserSuccess = require('./responses').singleUserSuccess;
 const getUserFail = require('./responses').usersFail;
 
-module.exports.getUserById = (esClient, event, context, callback) => {
+module.exports.getUserById = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.userId !== undefined && 
             event.pathParameters.userId !== null && 
@@ -11,16 +11,23 @@ module.exports.getUserById = (esClient, event, context, callback) => {
 
             var userId = event.pathParameters.userId;
             var params = {
-                index: 'users',
-                type: 'user',
-                id: userId
+                TableName: "users",
+                Key: {
+                    "userId": userId 
+                }
             };
+
+            console.log("Attempting a conditional delete...");
     
-            esClient.get(params, function(err, data) {
+            ddb.get(params, function(err, data) {
                 if(err)
                     return getUserFail(500,'get user by userId failed. Error: ' + err, callback);
-                else
-                    return getSingleUserSuccess(200, data._source, callback);
+                else {
+                    if(data.Item == null)
+                        return getUserFail(404, 'No User Found', callback);
+                    else
+                        return getSingleUserSuccess(200, data.Item, callback);
+                }
             });
         }
         else
@@ -28,4 +35,4 @@ module.exports.getUserById = (esClient, event, context, callback) => {
     }
     else
         return getUserFail(400,'get user by userId failed', callback);
-};
+}

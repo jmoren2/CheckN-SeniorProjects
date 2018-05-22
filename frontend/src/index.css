@@ -48,11 +48,6 @@ body {
   margin-left: 50px;
 }
 
-.votebtn {
-  padding: 14px 60px !important;
-  margin: 20px !important;
-}
-
 @media screen and (max-height: 450px) {
 .sidenav {padding-top: 15px;}
 .sidenav a {font-size: 18px;}

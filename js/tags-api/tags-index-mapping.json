@@ -1,5 +1,0 @@
-{
-    "properties": {
-        "tag": { "type": "keyword" }
-    }
-}

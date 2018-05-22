@@ -2,7 +2,7 @@
 const success = require('./responses').multiRoleSuccess;
 const fail = require('./responses').RolesFail;
 
-module.exports.getAllRoles = (esClient, event, context, callback) => {
+module.exports.getAllRoles = (ddb, event, context, callback) => {
 
     // If there are query parameters, something was probably misused
     if(event.queryStringParameters) {
@@ -11,27 +11,29 @@ module.exports.getAllRoles = (esClient, event, context, callback) => {
     }
 
     var params = {
-        index: 'roles',
-        type: 'role',
-        body: {}
+        TableName: 'roles'
     };
 
-    var roles = [];
+    var items = [];
 
-    esClient.search(params, function (err, data) {
-        if (err)
-            return fail(500, 'getAllRoles failed. Error: ' + err, callback);
-        else {
-            console.log(data);
+    // scan loop in case of multiple pages of results
+    var scanExecute = function (callback) {
+        ddb.scan(params, function (err, data) {
+            if (err)
+                return fail(500, 'getAllRoles failed. Error: ' + err, callback);
+            else {
+                console.log(data);
 
-            var hits = data.hits.hits;
+                items = items.concat(data.Items);
 
-            // parse hits for roles
-            for(let i = 0; i < hits.length; ++i){
-                roles.push(hits[i]._source.role)
+                if (data.LastEvaluatedKey) {
+                    params.ExclusiveStartKey = result.LastEvaluatedKey;
+                    scanExecute(callback);
+                }
+                else
+                    return success(200, items, callback);
             }
-
-            return success(200, roles, callback);
-        }
-    })
+        })
+    };
+    scanExecute(callback);
 };

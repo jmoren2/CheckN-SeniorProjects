@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "aws-sdk": "^2.209.0",
-    "elasticsearch": "^13.3.1",
-    "http-aws-es": "^4.0.0",
     "moment": "^2.22.0",
-    "serverless": "^1.27.0"
+    "serverless": "^1.27.0",
+    "serverless-nested-stack": "0.0.7"
   },
   "devDependencies": {
+    "serverless-nested-stack": "0.0.7",
     "serverless-plugin-split-stacks": "^1.4.1"
   }
 }

@@ -1,26 +1,18 @@
 import React from 'react';
-import {Link, Redirect, Route} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Navbar from './Navbar.js'
 import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
-import TimeAgo from 'react-timeago'
+
 class FeedPage extends React.Component{
     constructor(props){
         super(props);
-
-        if(this.props.userObj === null)
-        {
-            window.location.href = '/login';
-            console.log('hello')
-        }
         this.state = {
             feed: <div>Loading...</div>
         }
-        this.searchQuery = "search=a";
-        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
@@ -32,7 +24,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?search=a`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -42,6 +34,7 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
+            //console.log('comments: ' + JSON.stringify(feedData));
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -58,7 +51,9 @@ class FeedPage extends React.Component{
 
         if(post.userId)
         {
+
             idToVote = post.userId;
+
         }
         else{
             post.userId = "dabda155-3d89-4cf8-b705-3301fe361249"
@@ -67,6 +62,8 @@ class FeedPage extends React.Component{
 
         if(post.positiveVoters)
         {
+
+            
             post['positiveVoters'].push(idToVote);
             console.log('added voter')
             console.log(post)
@@ -188,6 +185,7 @@ class FeedPage extends React.Component{
                 console.log(post);
             }
 
+
             fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
@@ -206,6 +204,7 @@ class FeedPage extends React.Component{
         
         var feed = posts.map((post) => {
             
+
             var pVoters = post.positiveVoters;
             var nVoters = post.neutralVoters;
             var negVoters = post.negativeVoters;
@@ -234,77 +233,106 @@ class FeedPage extends React.Component{
             {
                  negCount = 0;
             }
-            return(
-                //individual feed item
-                <div className="container">
-                
-                    <div className="row">
+            
+               return(
+
+                    //individual feed item
+                    <div className="container">
+                      <div className="row">
+
                         <span className="col-sm" >
                             <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp.bind(this, post)}>
                                 <ThumbsUp /> {positiveCount}
                             </button>
-                            <br />
+                      <br />
                             <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote.bind(this, post)}>
                                 <Neutral /> {neutralCount}
                             </button>
-                            <br />
+                      <br />
                             <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown.bind(this, post)}>
                                 <ThumbsDown /> {negCount}
                             </button>
                         </span>
 
-                        <div className="col-sm-11">      
+                    <div className="col-sm-11">      
                     
-                            <div className="card bg-light h-100">
+                    <div className="card bg-light h-100">
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
                                 
-                                    <div key={post.postId} >
-                                        <div class="card-block">
-                                            {post.title} 
-                                            <br />                                         
-                                        </div>
-                                    </div>
-                                </Link>                     
-                                <br/>
+                                <div key={post.postId} >
 
-                                <div className="row">
+                                <div class="card-block">
 
-                                    <div className="col-sm-4">
-                                        Posted: &nbsp;
-                                        <TimeAgo date={post.timestamp}>
-                                        </TimeAgo>
-                                    </div>
+                                    {post.title} <br />                        
+                                    
+                                </div>
+                                
+                                
+                                </div>
+                            </Link>
 
-                                    <div className="col-sm-8">
-                                    {post.visibilityLevel}
-                                    </div>
+                            
+                            <br/>
+
+                            <div className="row">
+
+                                <div className="col-sm-4">
+                                <Moment format="YYYY/MM/DD HH:mm">
+                                {post.timestamp}
+                                </Moment>
+                                        
 
                                 </div>
+
+                                        <div className="col-sm-8">
+
+                                                 
+                                        {post.visibilityLevel}
+
+                                        </div>
+                                        
+
                             </div>
-                        </div>
                     </div>
-                </div>
-            );
+                        </div>
+
+                      </div>
+                      <br/>
+                    </div>
+
+            )
+  
         })
         return feed;
     }
 
+    //Temporary link to self
     render(){
         return(
             <div>
-                <Navbar searchMethod={this.handleSearch}/>
-                <div className="container">
-                
-                    <div className=''>
-                        <div className='card card-1  text-md-center'>
-                            <div className='card-body text-center'>
-                                <h2 style={{color: 'black'}}>Your Feed</h2>
-                                {this.state.feed}
-                            </div>
+
+                <Navbar />
+            <div className="container">
+            
+                <div className=''>
+                    <div className='card card-1  text-md-center'>
+                        <div className='card-body text-center'>
+                            <h2 style={{color: 'black'}}>Your Feed</h2>
+                            
+                                        
+                        {this.state.feed}
+
+                        
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* <Link to="/post/de70345f-d7ef-4baa-b97f-c5c0391d6dd1">
+                <button className='btn btn-info' type='submit'>View Post</button>
+                </Link> */}
+            </div>
+
         );
     }
 }

@@ -2,7 +2,7 @@
 const deleteDepartmentFail = require('./responses').DepartmentsFail;
 const deleteDepartmentSuccess = require('./responses').deleteDepartmentSuccess;
 
-module.exports.deleteDepartment = (esClient, event, context, callback) => {
+module.exports.deleteDepartment = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.department !== undefined && 
             event.pathParameters.department !== null && 
@@ -10,14 +10,15 @@ module.exports.deleteDepartment = (esClient, event, context, callback) => {
             
             var name = event.pathParameters.department;
             var params = {
-                index: 'departments',
-                type: 'department',
-                id: name
+                TableName: "departments",
+                Key: {
+                    "department" : name
+                }
             };
 
             console.log("Attempting a conditional delete...");
     
-            esClient.delete(params, function(err, data) {
+            ddb.delete(params, function(err, data) {
                 if(err)
                     return deleteDepartmentFail(500, 'Delete Department failed. Error: ' + err, callback);
                 else
@@ -29,4 +30,4 @@ module.exports.deleteDepartment = (esClient, event, context, callback) => {
     }
     else
         return deleteDepartmentFail(400, 'Delete Department failed.', callback);
-};
+}

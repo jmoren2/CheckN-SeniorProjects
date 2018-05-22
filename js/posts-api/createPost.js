@@ -22,30 +22,46 @@ module.exports.createPost = (esClient, event, context, callback) => {
             fail(500, failMessage, callback);
           }
           else {
-            var newSurvey = JSON.parse(data2.body);
+            var newSurvey = JSON.parse(data2.body).survey;
             post.surveyId = newSurvey.surveyId;
+            console.log(JSON.stringify(newSurvey));
             delete post.survey;
-            success(200, post, callback);
+            var params = {
+              index: 'posts',
+              type: 'post',
+              id: post.postId,
+              body: post
+            };
+        
+            esClient.create(params, function(error, data) {
+              if(error) {
+                return fail(500, 'Post creation failed. Error: ' + error, callback);
+              }
+              else {
+                console.log('data: ' + JSON.stringify(post));
+                return success(200, post, callback);
+              }
+            });
           }
         });
+    } else {
+      var params = {
+          index: 'posts',
+          type: 'post',
+          id: post.postId,
+          body: post
+      };
+
+      esClient.create(params, function(error, data) {
+        if(error) {
+          return fail(500, 'Post creation failed. Error: ' + error, callback);
+        }
+        else {
+          console.log('data: ' + JSON.stringify(post));
+          return success(200, post, callback);
+        }
+      });
     }
-
-    var params = {
-        index: 'posts',
-        type: 'post',
-        id: post.postId,
-        body: post
-    };
-
-    esClient.create(params, function(error, data) {
-      if(error) {
-        return fail(500, 'Post creation failed. Error: ' + error, callback);
-      }
-      else {
-        console.log('data: ' + data);
-        return success(200, post, callback);
-      }
-    });
   } else {
     return fail(500, 'Post creation failed.', callback)
   }

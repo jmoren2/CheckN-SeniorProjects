@@ -4,12 +4,12 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "checkn-terraform-state" {
-  bucket = "checkn-tf-remote"
+  bucket = "checkn-terraform-remote"
   acl    = "private"
 }
 
 resource "aws_dynamodb_table" "checkN-terraform-lock" {
-  name           = "checkn-tf-lock"
+  name           = "checkN-terraform-lock"
   hash_key       = "LockId"
   write_capacity = 5
   read_capacity  = 5

@@ -2,7 +2,7 @@
 const getSingleResponseSuccess = require('../responses').singleResponseSuccess;
 const getResponseFail = require('../responses').ResponseFail;
 
-module.exports.getResponseById = (esClient, event, context, callback) => {
+module.exports.getResponseById = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
         if (event.pathParameters.responseId !== undefined && 
             event.pathParameters.responseId !== null && 
@@ -11,19 +11,22 @@ module.exports.getResponseById = (esClient, event, context, callback) => {
 
             var id = event.pathParameters.responseId;
             var params = {
-                index: 'responses',
-                type: 'response',
-                id: id
+                TableName: "surveyResponses",
+                Key: {
+                    "responseId": id 
+                }
             };
+
+            console.log("Attempting a conditional delete...");
     
-            esClient.get(params, function(err, data) {
+            ddb.get(params, function(err, data) {
                 if(err)
                     return getResponseFail(500,'get Response by Id failed. Error: ' + err, callback);
                 else {
-                    if(data._source == null)
+                    if(data.Item == null)
                       return getResponseFail(404, 'No Response Found', callback);
                     else
-                      return getSingleResponseSuccess(200, data._source, callback);
+                      return getSingleResponseSuccess(200, data.Item, callback);
                 }
             });
         }
@@ -32,4 +35,4 @@ module.exports.getResponseById = (esClient, event, context, callback) => {
     }
     else
         return getResponseFail(400,'get Response by Id failed', callback);
-};
+}
