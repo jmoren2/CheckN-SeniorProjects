@@ -59,7 +59,7 @@ module.exports.createComment = (esClient, event, context, callback) => {
                         }
                     };
 
-                    console.log('vote update params: ' + params);
+                    console.log('vote update params: ' + JSON.stringify(params));
                     esClient.update(params, function(error, data2){
                         if(error){
                             console.log('Comment creation failed to update votecount. error: ' + JSON.stringify(error));
