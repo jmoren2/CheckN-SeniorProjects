@@ -35,11 +35,8 @@ class ViewPost extends Component{//Initial State
             voteChoice: 'none',
             showModal: false,
             userThatCommented: "",
-<<<<<<< HEAD
-            showHistory: false
-=======
+            showHistory: false,
             surveyId: ''
->>>>>>> 2696905231da811ca5ee008793c6d45cf226a36a
         };
         this.posterID=null;
         this.posterName=null;
@@ -487,6 +484,7 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
+                                    <button class="btn btn-info" onClick={this.handleOpenHistory}>Edit History</button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
                                         {
