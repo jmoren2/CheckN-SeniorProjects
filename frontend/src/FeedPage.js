@@ -33,7 +33,11 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
+<<<<<<< HEAD
         fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+=======
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -87,7 +91,11 @@ class FeedPage extends React.Component{
         //grab actual user id
 
        
+<<<<<<< HEAD
        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+       fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
         method: 'PUT',
         body: JSON.stringify(post)
     })
@@ -138,7 +146,11 @@ class FeedPage extends React.Component{
             }
 
 
+<<<<<<< HEAD
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -189,7 +201,11 @@ class FeedPage extends React.Component{
                 console.log(post);
             }
 
+<<<<<<< HEAD
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 method: 'PUT',
                 body: JSON.stringify(post)
             })

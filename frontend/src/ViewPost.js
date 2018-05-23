@@ -14,7 +14,6 @@ import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
-
 class ViewPost extends Component{//Initial State
     constructor(props) {
         super(props);
@@ -35,6 +34,8 @@ class ViewPost extends Component{//Initial State
             voteChoice: 'none',
             showModal: false,
             userThatCommented: "",
+            showHistory: false,
+            history:"Please hold....",
             postState: "",
             surveyId: ''
         };
@@ -47,10 +48,16 @@ class ViewPost extends Component{//Initial State
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleOpenHistory = this.handleOpenHistory.bind(this);
+        this.handleCloseHistory = this.handleCloseHistory.bind(this);
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.storeUser = this.storeUser.bind(this);
-        this.editButton = this.editButton.bind(this);
+        this.editPost = this.editPost.bind(this);
+        this.editComment = this.editComment.bind(this);
+        this.handleChangeComment = this.handleChangeComment.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
         this.changePostState = this.changePostState.bind(this);
         this.closePost = this.closePost.bind(this);
         this.openPost = this.openPost.bind(this);
@@ -69,7 +76,11 @@ class ViewPost extends Component{//Initial State
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
+<<<<<<< HEAD
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+=======
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/users/${data.post.userId}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
             headers: {
                 'content-type' : 'application/json'
             },
@@ -169,7 +180,11 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
+<<<<<<< HEAD
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+=======
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
             headers: {
                 'content-type': 'application/json'
             },
@@ -201,7 +216,11 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
+<<<<<<< HEAD
         return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+=======
+        return fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/users/${userId}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -266,7 +285,9 @@ class ViewPost extends Component{//Initial State
                         <p id={comment.userId}>
                             {comment.userId} commented: 
                         </p>
-
+                        {/*TODO: make history only viewable if admin or manager*/}
+                        {this.editComment(comment.commentId)}
+                        <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
                         <div>
                             {vote}
                         </div>
@@ -287,7 +308,11 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
+<<<<<<< HEAD
         fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+=======
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?postId=${this.state.postID}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -308,7 +333,11 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
+<<<<<<< HEAD
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+=======
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -317,7 +346,7 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('new Comment' + JSON.stringify(response))
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
+            this.setState({returnedId: response.comment.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
 
@@ -399,9 +428,49 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
+    handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
+        console.log("edit history type: " + event.type);
+        if(data.type === "comment"){
+            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a comment's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
+        else{
+            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a post's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
+    }
+
+    handleCloseHistory () {
+        this.setState({history : "Please hold...."});
+        this.setState({ showHistory: false });
+    }
+
+      getVoters(){
+        return (
+            <div>
+                
+            </div>
+        )
+      }
      
 
-    editButton() {
+    editPost() {
         if(this.props.userObj.userId === this.posterID && this.state.postState === "OPEN") {
             return(
             <Link to={`/edit/${this.state.postID}`}>
@@ -411,6 +480,18 @@ class ViewPost extends Component{//Initial State
         else {
             return
         }
+    }
+
+    editComment(commentID) {
+        //if(this.props.userObj.userId === this.posterID) {
+        return(
+        <Link to={`/editComment/${commentID}`}>
+        <button className='btn btn-info'>Edit Comment</button>
+        </Link>);
+        //}
+        //else {
+        //    return
+        //}
     }
 
     changePostState() {
@@ -509,7 +590,7 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
-                                        {this.editButton()}
+                                        {this.editPost()}
                                         {this.changePostState()}
                                         {this.surveyButton()}
                                     </div>
@@ -521,6 +602,7 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
+                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
                                         {
@@ -535,7 +617,13 @@ class ViewPost extends Component{//Initial State
                                     </div>
        
                                     <div>
-                                        {this.filterCommentsWithoutContent(this.state.postComments)}
+                                        <ReactModal class="modal fade" isOpen={this.state.showHistory}>
+                                            {this.state.history}
+                                            <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
+                                        </ReactModal>
+                                        {/*TODO: Make filtering comments without content toggled*/}
+                                        {this.state.postComments}
+                                        {/*this.filterCommentsWithoutContent(this.state.postComments)*/}
                                     </div>
                                         
                         </div>

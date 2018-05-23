@@ -10,6 +10,7 @@ import CreatePost from './CreatePost.js';
 import About from './About.js';
 import RegisterUser from './RegisterUser.js';
 import EditPost from './EditPost.js';
+import EditComment from './EditComment.js';
 import Admin from './Admin.js'
 import Report from './Report.js'
 import DepartmentReport from './DepartmentReport.js'
@@ -75,6 +76,7 @@ class App extends React.Component {
                     <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                     <Route path="/about" component={About}/>
                     <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/editComment/:commentID" component={props => (<EditComment userObj={this.userObj} {...props}/>)}/>
                     <Route path="/admin" component={props => (<Admin userObj={this.userObj} {...props}/>)}/>
                     <Route path="/Users/report" component={props => (<Report userObj={this.userObj} {...props}/>)}/>
                     <Route path="/Departments/report" component={props => (<DepartmentReport userObj={this.userObj} {...props}/>)}/>
