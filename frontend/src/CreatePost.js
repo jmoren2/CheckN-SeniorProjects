@@ -14,7 +14,6 @@ class CreatePost extends Component{
         if(this.props.userObj === null)
         {
             window.location.href = '/login';
-            console.log('hello')
         }
         this.state = {
                     title: '', 
@@ -56,19 +55,6 @@ class CreatePost extends Component{
                 questions: this.state.questionObjects,
             };
             this.submitPost(survey);
-
-            /*
-            fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/', {
-                method: 'POST',
-                body: JSON.stringify(survey)
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(result => {
-                this.submitPost(result.survey.surveyId);
-            })
-            .catch(error => console.error('Error:', error));*/
         }
         else
         {
@@ -100,7 +86,7 @@ class CreatePost extends Component{
 
         console.log('creating post with ');
         console.log(data);
-        /*
+        
         fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
         //fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
@@ -115,7 +101,7 @@ class CreatePost extends Component{
         })
         .catch(error => {
             console.log(error);
-        });*/
+        });
     }
 
     handleChangeTitle(event) {
@@ -148,14 +134,13 @@ class CreatePost extends Component{
     }
 
     generateSurvey = () => {
-        console.log('generateSurvey');
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
         document.getElementById('submitDivider').hidden = false;
+
         const temp = this.state.questionObjects;
         temp.push(new this.defaultQuestion());
-        //var temp=this.state.questions
-        //temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+
         this.setState({
             hasSurvey: true,
             questionObjects: temp,
@@ -164,7 +149,6 @@ class CreatePost extends Component{
     }
 
     showSurvey = () => {
-        console.log('showSurvey');
         var index = -1;
         const survey = this.state.questionObjects.map(question => {
             index++;
@@ -187,21 +171,11 @@ class CreatePost extends Component{
             );
         });
         this.setState({survey: survey});
-        /*
-        return(
-            <div>
-                <Divider/>
-                {survey}
-            </div>
-        );*/
     }
 
     addQuestion = () => {
-        console.log('generateSurvey');
         const temp = this.state.questionObjects;
         temp.push(new this.defaultQuestion());
-        //var temp=this.state.questions;
-        //temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
             questionObjects: temp,
             survey: null,
@@ -209,20 +183,13 @@ class CreatePost extends Component{
     }
 
     duplicateQuestion = (event, data) => {
-        console.log('duplicate');
-        console.log(data.index);
-        console.log(this.refs);
-        
         const temp = this.state.questionObjects;
         temp.splice(data.index + 1, 0, new this.defaultQuestion());
         temp[data.index+1].question = temp[data.index].question;
         temp[data.index+1].type = temp[data.index].type;
-        temp[data.index+1].restrictions = temp[data.index].restrictions;//This and type don't work because I need to have the dropdowns display a default value
-        temp[data.index+1].options = temp[data.index].options.slice();//This doesn't work because two objects are referencing the same array
-        //console.log(this.state.questions);
-        //var temp = this.state.questions;
-        //temp.splice(data.index + 1, 0, <Question number={data.index + 2} object={this.questionObjects[data.index+1]}/>);
-        console.log(temp);
+        temp[data.index+1].restrictions = temp[data.index].restrictions;
+        temp[data.index+1].options = temp[data.index].options.slice();
+
         this.setState({
             questionObjects: temp,
             survey: null,
