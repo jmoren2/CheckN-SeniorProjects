@@ -33,12 +33,16 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none',
             showModal: false,
-            userThatCommented: ""
+            userThatCommented: "",
+            showHistory: false
         };
         this.posterID=null;
         this.posterName=null;
+        this.history="Please hold....";
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleOpenHistory = this.handleOpenHistory.bind(this);
+        this.handleCloseHistory = this.handleCloseHistory.bind(this);
         this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -236,7 +240,8 @@ class ViewPost extends Component{//Initial State
                         {vote}
                     </div>
                     
-                    <p>{comment.content}</p>
+                    <p>{comment.content}</p>{/*TODO: make history only viewable if admin or manager*/}
+                    <button class="btn btn-info" onClick={this.handleOpenHistory}>Edit History</button>
                     </div>
                         
                     </div>
@@ -357,6 +362,14 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
+    handleOpenHistory () {
+        this.setState({ showHistory: true });
+    }
+
+    handleCloseHistory () {
+        this.setState({ showHistory: false });
+    }
+
       getVoters(){
         return (
             <div>
@@ -413,6 +426,10 @@ class ViewPost extends Component{//Initial State
                                     </div>
        
                                     <div>
+                                        <ReactModal class="modal fade" isOpen={this.state.showHistory}>
+                                            {this.history}
+                                            <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
+                                        </ReactModal>
                                         {this.state.postComments}
                                     </div>
                                         
