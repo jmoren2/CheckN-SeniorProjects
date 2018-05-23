@@ -1,6 +1,7 @@
 'use strict';
 const success = require('./responses').singlePostSuccess;
 const fail = require('./responses').postsFail;
+const getSurveyById = require('../surveys-api/surveys/getSurveyById').getSurveyById;
 
 module.exports.getPostById = (esClient, event, context, callback) => {
     console.log('parameter content: ' + JSON.stringify(event.pathParameters));
@@ -39,8 +40,21 @@ module.exports.getPostById = (esClient, event, context, callback) => {
                             console.log('data: ' + JSON.stringify(data2));
                             var user = data2._source;
                             post.userName = user.firstName + ' ' + user.lastName;
+                            if(post.surveyId) {
+                                event.pathParameters.surveyId = post.surveyId;
+                                getSurveyById(esClient, event, context, function(err, data3) {
+                                    if(err) {
+                                        return fail(500, 'unable to retrieve survey: ' + error, callback);
+                                    } else {
+                                        delete post.surveyId;
+                                        post.survey = JSON.parse(data3.body).survey;
+                                        console.log('post: ' + JSON.stringify(post));  
+                                        console.log('survey: ' + JSON.stringify(data3.body));                                       
+                                        return success(200, post, callback);
+                                    }
+                                })
+                            }
                         }
-                        return success(200, post, callback);
                     });
                 }
             });

@@ -36,6 +36,8 @@ functions:
         - js/posts-api/getPostById.js
         - js/posts-api/handler.js
         - js/posts-api/responses.js
+        - js/surveys-api/surveys/getSurveyById.js
+        - js/surveys-api/responses.js
         - node_modules/**
 
   getPostsBySearch:
