@@ -35,11 +35,8 @@ class ViewPost extends Component{//Initial State
             voteChoice: 'none',
             showModal: false,
             userThatCommented: "",
-<<<<<<< HEAD
-            postState: ""
-=======
+            postState: "",
             surveyId: ''
->>>>>>> 2696905231da811ca5ee008793c6d45cf226a36a
         };
         this.posterID=null;
         this.posterName=null;
@@ -91,34 +88,8 @@ class ViewPost extends Component{//Initial State
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
 
-<<<<<<< HEAD
             this.state.postState = data.post.state;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
-=======
             // if(pVoters)
             // {
             //     var positiveCount = pVoters.length;
@@ -143,7 +114,6 @@ class ViewPost extends Component{//Initial State
             // {
             //      negCount = 0;
             // }
->>>>>>> 2696905231da811ca5ee008793c6d45cf226a36a
             return(//displays the post contents
             <div className="container">
 
@@ -541,12 +511,8 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                         {this.editButton()}
-<<<<<<< HEAD
                                         {this.changePostState()}
-=======
-                                        <div/>
                                         {this.surveyButton()}
->>>>>>> 2696905231da811ca5ee008793c6d45cf226a36a
                                     </div>
 
                                     <div>
