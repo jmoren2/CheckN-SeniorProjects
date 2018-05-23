@@ -88,7 +88,7 @@ class ViewPost extends Component{//Initial State
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
 
-            this.state.postState = data.post.state;
+            this.setState({postState: data.post.state});
 
             // if(pVoters)
             // {
