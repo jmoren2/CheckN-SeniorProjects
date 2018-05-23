@@ -4,15 +4,15 @@ const deleteTagFail = require('./responses').tagsFail;
 
 module.exports.deleteTag = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.tagId !== undefined && 
-            event.pathParameters.tagId !== null && 
-            event.pathParameters.tagId !== "") {
+        if (event.pathParameters.tag !== undefined && 
+            event.pathParameters.tag !== null && 
+            event.pathParameters.tag !== "") {
             
-            var id = event.pathParameters.tagId;
+            var name = event.pathParameters.tag;
             var params = {
                 TableName: "tags",
                 Key: {
-                    "tagId" : id
+                    "tag" : name
                 }
             };
 

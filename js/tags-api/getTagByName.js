@@ -2,22 +2,21 @@
 const getSingleTagSuccess = require('./responses').singleTagSuccess;
 const getTagFail = require('./responses').tagsFail;
 
-module.exports.getTagById = (ddb, event, context, callback) => {
+module.exports.getTagByName = (ddb, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.tagId !== undefined && 
-            event.pathParameters.tagId !== null && 
-            event.pathParameters.tagId !== "") {
-            console.log("Received proxy: " + event.pathParameters.tagId);
+        if (event.pathParameters.tag !== undefined && 
+            event.pathParameters.tag !== null && 
+            event.pathParameters.tag !== "") {
+            console.log("Received proxy: " + event.pathParameters.tag);
 
-            var tagId = event.pathParameters.tagId;
+            var tag = event.pathParameters.tag;
             var params = {
                 TableName: "tags",
                 Key: {
-                    "tagId": tagId 
+                    "tag": tag 
                 }
             };
 
-            console.log("Attempting a conditional delete...");
     
             ddb.get(params, function(err, data) {
                 if(err)
@@ -31,8 +30,8 @@ module.exports.getTagById = (ddb, event, context, callback) => {
             });
         }
         else
-            return getTagFail(400, 'get Tag by tagId failed.', callback);
+            return getTagFail(400, 'get Tag by name failed.', callback);
     }
     else
-        return getTagFail(400,'get Tag by tagId failed', callback);
+        return getTagFail(400,'get Tag by name failed', callback);
 }

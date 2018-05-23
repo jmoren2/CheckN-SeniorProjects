@@ -5,6 +5,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import App from './index.js';
 import {Dropdown} from 'semantic-ui-react';
 
+import {createUser} from './assets/okta-api-handler'
+
+
 class RegisterUser extends Component{
     constructor(props){
         super(props);
@@ -47,6 +50,20 @@ class RegisterUser extends Component{
             email: this.state.email,
             permissions: [{department: this.state.selectedDepartment, role: 'standard'}]
         };
+
+        var data2 = {
+            firstName: this.state.firstName, 
+            lastName: this.state.lastName,
+            email: this.state.email,
+            login: this.state.email
+        };
+
+        //** Test ONLY dont merge to master **//
+        createUser(data2)
+        .then(result => {
+            console.log(result.json())
+        })
+        // ********************************* //
 
         fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/', {
             method: 'POST',

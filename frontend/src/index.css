@@ -53,6 +53,10 @@ body {
   margin: 20px !important;
 }
 
+.responsecard {
+  text-align: left;
+}
+
 @media screen and (max-height: 450px) {
 .sidenav {padding-top: 15px;}
 .sidenav a {font-size: 18px;}
