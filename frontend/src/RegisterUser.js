@@ -23,7 +23,6 @@ class RegisterUser extends Component{
         this.allFields = [0, 0, 0, 0];
 
         this.getAllDepartments = this.getAllDepartments.bind(this);
-
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);

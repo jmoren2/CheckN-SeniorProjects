@@ -42,6 +42,8 @@ class ViewPost extends Component{//Initial State
         this.posterName=null;
         this.returnedID = null;
         this.postInfo = {};
+        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -52,9 +54,6 @@ class ViewPost extends Component{//Initial State
         this.changePostState = this.changePostState.bind(this);
         this.closePost = this.closePost.bind(this);
         this.openPost = this.openPost.bind(this);
-
-        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
-        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
     }
 
