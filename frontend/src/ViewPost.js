@@ -37,10 +37,14 @@ class ViewPost extends Component{//Initial State
             userThatCommented: "",
             showHistory: false,
             history:"Please hold....",
+            postState: "",
             surveyId: ''
         };
         this.posterID=null;
         this.posterName=null;
+        this.returnedID = null;
+        this.postInfo = {};
+
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleOpenHistory = this.handleOpenHistory.bind(this);
@@ -51,6 +55,13 @@ class ViewPost extends Component{//Initial State
         this.storeUser = this.storeUser.bind(this);
         this.editPost = this.editPost.bind(this);
         this.editComment = this.editComment.bind(this);
+        this.handleChangeComment = this.handleChangeComment.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
+        this.changePostState = this.changePostState.bind(this);
+        this.closePost = this.closePost.bind(this);
+        this.openPost = this.openPost.bind(this);
+
         this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
         this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
         console.log("The user object passed in is: " + props.userObj);
@@ -85,6 +96,8 @@ class ViewPost extends Component{//Initial State
             var pVoters = data.post.positiveVoters;
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
+
+            this.setState({postState: data.post.state});
 
             // if(pVoters)
             // {
@@ -180,6 +193,17 @@ class ViewPost extends Component{//Initial State
             console.log("IN RETRIEVE POST");
             console.log(data);
             console.log(data.post);
+            this.postInfo = {
+                title: data.post.title,
+                content: data.post.content,
+                positiveVoters: data.post.positiveVoters,
+                neutralVoters: data.post.neutralVoters,
+                negativeVoters: data.post.negativeVoters,
+                pinnedId: data.post.pinnedId,
+                state: data.post.state,
+                tagArray: data.post.tags,
+                visibilityLevel: data.post.visibilityLevel
+            };
             this.storeUser(data);//Continues the work in the function above
         });
     }
@@ -334,7 +358,8 @@ class ViewPost extends Component{//Initial State
     //Returns the response box
     //put inside of a method to later have this return nothing if the user already voted
     responseBox(){
-        return(
+        if(this.state.postState === "OPEN"){
+            return(
                 <div>
                 <label>{this.state.votePhrase}</label>
                 <form onSubmit={this.handleSubmit}>
@@ -355,7 +380,8 @@ class ViewPost extends Component{//Initial State
                     </div>
                 </form>
                 </div>
-        );
+            );
+        }
     }
 
     //Handles a click on post vote event
@@ -428,7 +454,7 @@ class ViewPost extends Component{//Initial State
      
 
     editPost() {
-        if(this.props.userObj.userId === this.posterID) {
+        if(this.props.userObj.userId === this.posterID && this.state.postState === "OPEN") {
             return(
             <Link to={`/edit/${this.state.postID}`}>
             <button className='btn btn-info'>Edit Post</button>
@@ -451,6 +477,43 @@ class ViewPost extends Component{//Initial State
         //}
     }
 
+    changePostState() {
+        if(this.state.postState === "OPEN") {
+            return(
+                <button className='btn btn-info' onClick = {this.closePost}>Close Post</button>//Button to close the post
+            );
+        }
+        else {
+            return(
+                <button className='btn btn-info' onClick = {this.openPost}>Reopen Post</button>//Button to reopen the post
+            );
+        }
+    }
+
+    closePost() {
+        this.postInfo.state = "CLOSED";
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+        })
+        .then(response => {
+            return response.json()//Turn the response into a JSON object
+        });
+        //API call to close the post
+    }
+
+    openPost() {
+        this.postInfo.state = "OPEN";
+        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+        })
+        .then(response => {
+            return response.json()//Turn the response into a JSON object
+        });
+        //API call to open the post
+    }
+    
     surveyButton() {
         console.log(this.state.surveyId);
         return(
@@ -511,7 +574,7 @@ class ViewPost extends Component{//Initial State
                                     <div>
                                         {this.state.postContent}
                                         {this.editPost()}
-                                        <div/>
+                                        {this.changePostState()}
                                         {this.surveyButton()}
                                     </div>
 
