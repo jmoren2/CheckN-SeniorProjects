@@ -21,6 +21,7 @@ class FeedPage extends React.Component{
         }
         this.searchQuery = "search=a";
         console.log("The user object passed in is: " + props.userObj);
+        console.log(JSON.stringify(props.userObj));
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
@@ -32,7 +33,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },

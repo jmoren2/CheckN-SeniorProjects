@@ -69,7 +69,7 @@ class ViewPost extends Component{//Initial State
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
             },
@@ -169,7 +169,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -201,7 +201,7 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
-        return fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+        return fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -287,7 +287,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -308,7 +308,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -428,7 +428,7 @@ class ViewPost extends Component{//Initial State
 
     closePost() {
         this.postInfo.state = "CLOSED";
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
@@ -440,7 +440,7 @@ class ViewPost extends Component{//Initial State
 
     openPost() {
         this.postInfo.state = "OPEN";
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
