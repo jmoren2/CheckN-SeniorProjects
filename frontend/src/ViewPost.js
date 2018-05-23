@@ -67,7 +67,7 @@ class ViewPost extends Component{//Initial State
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
             },
@@ -165,7 +165,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -186,7 +186,7 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
-        return fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+        return fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -251,8 +251,7 @@ class ViewPost extends Component{//Initial State
                         <p id={comment.userId}>
                             {comment.userId} commented: 
                         </p>
-
-                        <p>{comment.content}</p>{/*TODO: make history only viewable if admin or manager*/}
+                        {/*TODO: make history only viewable if admin or manager*/}
                         <button class="btn btn-info" onClick={this.handleOpenHistory}>Edit History</button>
                         <div>
                             {vote}
@@ -274,7 +273,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?postId=${this.state.postID}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -295,7 +294,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -304,7 +303,7 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('new Comment' + JSON.stringify(response))
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
+            this.setState({returnedId: response.comment.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
 
@@ -503,7 +502,8 @@ class ViewPost extends Component{//Initial State
                                             {this.history}
                                             <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
                                         </ReactModal>
-                                        {this.state.postComments}
+                                        {/*TODO: Make filtering comments without content toggled*/}
+                                        {/*this.state.postComments*/}
                                         {this.filterCommentsWithoutContent(this.state.postComments)}
                                     </div>
                                         
