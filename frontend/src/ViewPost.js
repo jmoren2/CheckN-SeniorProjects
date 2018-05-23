@@ -50,7 +50,6 @@ class ViewPost extends Component{//Initial State
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleOpenHistory = this.handleOpenHistory.bind(this);
         this.handleCloseHistory = this.handleCloseHistory.bind(this);
-        this.returnedID = null;
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.storeUser = this.storeUser.bind(this);
