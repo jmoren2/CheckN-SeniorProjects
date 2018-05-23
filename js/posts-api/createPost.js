@@ -22,21 +22,24 @@ module.exports.createPost = (esClient, event, context, callback) => {
           fail(500, failMessage, callback);
         } else {
           var newSurvey = JSON.parse(data2.body);
-          post.surveyId = newSurvey.surveyId;
+          post.surveyId = newSurvey.survey.surveyId;
           delete post.survey;
-          
+
           var params = {
             index: 'posts',
             type: 'post',
             id: post.postId,
             body: post
           };
+
+          console.log('post: ' + JSON.stringify(post));
+          console.log('survey: ' + JSON.stringify(newSurvey.survey));
       
           esClient.create(params, function(error, data) {
             if(error) {
               return fail(500, 'Post creation failed. Error: ' + error, callback);
             } else {
-              console.log('data: ' + data);
+              console.log('data: ' + JSON.stringify(data));
               return success(200, post, callback);
             }
           });
