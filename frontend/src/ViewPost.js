@@ -14,7 +14,6 @@ import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
-
 class ViewPost extends Component{//Initial State
     constructor(props) {
         super(props);
