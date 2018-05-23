@@ -834,6 +834,7 @@ functions:
       include:
         - js/reports-api/handler.js
         - js/reports-api/getUserReport.js
+        - js/posts-api/getPostsBySearch.js
         - node_modules/**
   
   getAllDepartmentsReport:
