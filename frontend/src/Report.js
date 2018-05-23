@@ -39,7 +39,7 @@ class Report extends React.Component{
     heandlSearchUser = (event, data) =>
     {
         
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?namesearch=${data.value}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users?namesearch=${data.value}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -104,7 +104,7 @@ class Report extends React.Component{
 
     getUserInfo = () =>
     {
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
         headers: {
             'content-type': 'application/json'
         },
