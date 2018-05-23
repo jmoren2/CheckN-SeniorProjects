@@ -11,7 +11,7 @@ module.exports.updatePost = (esClient, event, context, callback) => {
             index: 'posts',
             type: 'post',
             id: body.postId,
-            body: body
+            body: {doc: body}
         };
 
         console.log("Updating the content of a Post...");
@@ -21,7 +21,7 @@ module.exports.updatePost = (esClient, event, context, callback) => {
               return fail(500, 'Update Post Content failed. Error: ' + error, callback)
             } else {
               console.log('data: ' + JSON.stringify(data));
-              return response(200, data, callback)
+              return response(200, data.result, callback)
             }
         });
     }

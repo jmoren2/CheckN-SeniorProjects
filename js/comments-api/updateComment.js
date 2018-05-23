@@ -14,7 +14,7 @@ module.exports.updateComment = (esClient, event, context, callback) => {
             index: 'comments',
             type: 'comment',
             id: body.commentId,
-            body: body
+            body: {doc: body}
         };
 
         console.log("Updating a Comment...");
@@ -22,7 +22,7 @@ module.exports.updateComment = (esClient, event, context, callback) => {
           if(error)
             fail(500, 'Update Comment failed. Error: ' + error, callback);
           else
-            success(200, body, callback);
+            success(200, data.result, callback);
         });
     }
     else{
