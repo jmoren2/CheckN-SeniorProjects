@@ -853,7 +853,7 @@ functions:
     handler: js/reports-api/handler.getDepartmentReport
     events:
       - http:
-          path: reports/departments/{departmentId}
+          path: reports/departments/{department}
           method: get
           cors: true
     package:
