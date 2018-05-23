@@ -13,6 +13,25 @@ module.exports.createPost = (esClient, event, context, callback) => {
     post.postId = uuid.v4();
     post.timestamp = moment().toISOString();
 
+    // use default values for missing fields
+    let permissions = [];
+    if(post.visibilityLevel) {
+        permissions = post.visibilityLevel;
+        for(let i = 0; i < permissions.length; ++i) {
+            if (!permissions[i].department)
+                permissions[i].department = 'All';
+            if (!permissions[i].role)
+                permissions[i].role = 'standard';
+        }
+    }
+    else {
+        permissions.push({
+            department: 'All',
+            role: 'standard'
+        });
+    }
+    post.visibilityLevel = permissions;
+
     if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
       post.survey.postId = post.postId;
       event.body = JSON.stringify(post.survey);
@@ -34,7 +53,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
 
           console.log('post: ' + JSON.stringify(post));
           console.log('survey: ' + JSON.stringify(newSurvey.survey));
-      
+
           esClient.create(params, function(error, data) {
             if(error) {
               return fail(500, 'Post creation failed. Error: ' + error, callback);
