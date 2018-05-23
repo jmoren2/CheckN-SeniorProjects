@@ -36,11 +36,11 @@ class ViewPost extends Component{//Initial State
             showModal: false,
             userThatCommented: "",
             showHistory: false,
+            history:"Please hold....",
             surveyId: ''
         };
         this.posterID=null;
         this.posterName=null;
-        this.history="Please hold....";
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleOpenHistory = this.handleOpenHistory.bind(this);
@@ -252,7 +252,7 @@ class ViewPost extends Component{//Initial State
                             {comment.userId} commented: 
                         </p>
                         {/*TODO: make history only viewable if admin or manager*/}
-                        <button class="btn btn-info" onClick={this.handleOpenHistory}>Edit History</button>
+                        <button class="btn btn-info" commentId={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</button>
                         <div>
                             {vote}
                         </div>
@@ -383,11 +383,35 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
-    handleOpenHistory () {
-        this.setState({ showHistory: true });
+    handleOpenHistory = (data) => {
+        if(data.type === "comment"){
+            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentId}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a comment's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
+        else{
+            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postId}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a post's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
     }
 
     handleCloseHistory () {
+        this.setState({history : "Please hold...."});
         this.setState({ showHistory: false });
     }
 
@@ -483,7 +507,7 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
-                                    <button class="btn btn-info" onClick={this.handleOpenHistory}>Edit History</button>
+                                    <button class="btn btn-info" postId={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
                                         {
@@ -499,7 +523,7 @@ class ViewPost extends Component{//Initial State
        
                                     <div>
                                         <ReactModal class="modal fade" isOpen={this.state.showHistory}>
-                                            {this.history}
+                                            {this.state.history}
                                             <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
                                         </ReactModal>
                                         {/*TODO: Make filtering comments without content toggled*/}
