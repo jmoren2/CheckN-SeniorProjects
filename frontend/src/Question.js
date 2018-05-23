@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 //import {DropdownButton, MenuItem} from 'react-bootstrap';
-import {Dropdown, Button} from 'semantic-ui-react';
+import {Dropdown, Button, Input} from 'semantic-ui-react';
 
 /*
 A Question is a single question on the interface for creating surveys
@@ -22,7 +22,7 @@ class Question extends React.Component{
             restrictions: props.object.restrictions,
             options: props.object.options,
         }
-
+    
         //These are all predetermined options for type and restrictions
         //the text field is what the user sees, the value is what will be stored in the database.
         this.types = [
@@ -51,7 +51,12 @@ class Question extends React.Component{
             {text: '6', value: 6}, {text: '7', value: 7}, {text: '8', value: 8},
         ];
 
-        this.currentRestrictions = this.freeRestrictions;
+        if (this.state.type == 'free')
+            this.currentRestrictions = this.freeRestrictions;
+        else if (this.state.type == 'select')
+            this.currentRestrictions = this.selectRestrictions;
+        else
+            this.currentRestrictions = this.scaleRestrictions;
     }
 
     //Based on the type of question changes what shows up for the answer section
@@ -209,17 +214,17 @@ class Question extends React.Component{
                 <label>Question </label>
                 <span>
                     <label> {this.state.number}</label>
-                    <input value={this.state.question} onChange={this.onQuestionChange} placeholder='Enter question'/>
+                    <Input defaultValue={this.state.question} value={this.state.question} onChange={this.onQuestionChange} placeholder='Enter question'/>
                 </span>
                 <div/>
                 <span>
                     <div>
                         <label>Type: </label>
-                        <Dropdown defaultValue={this.types[0]} placeholder='Select Type' onChange={this.onTypeChange} selection options={this.types}/>
+                        <Dropdown defaultValue={this.state.type} placeholder='Select Type' onChange={this.onTypeChange} selection options={this.types}/>
                     </div>
                     <div>
                         <label>Restrictions: </label>
-                        <Dropdown defaultValue={this.currentRestrictions[0]} placeholder='Select Restriction' onChange={this.onRestrictionsChange} selection options={this.currentRestrictions}/>
+                        <Dropdown defaultValue={this.state.restrictions} placeholder='Select Restriction' onChange={this.onRestrictionsChange} selection options={this.currentRestrictions}/>
                     </div>
                 </span>
                 <div/>

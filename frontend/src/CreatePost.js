@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Question from './Question.js';
-import {Divider, Button, Icon} from 'semantic-ui-react';
+import {Divider, Button, Icon, Dropdown} from 'semantic-ui-react';
 
 import Plus from 'react-icons/lib/fa/plus';
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -24,7 +24,9 @@ class CreatePost extends Component{
                     returnedId: null, 
                     handleSubmitDone: false,
                     questions: [],
+                    questionObjects: [],
                     hasSurvey: false,
+                    survey: null,
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
@@ -51,7 +53,7 @@ class CreatePost extends Component{
             //First create the survey object and submit it
             const survey = {
                 userId: this.props.userObj.userId,
-                questions: this.questionObjects,
+                questions: this.state.questionObjects,
             };
             this.submitPost(survey);
 
@@ -98,7 +100,7 @@ class CreatePost extends Component{
 
         console.log('creating post with ');
         console.log(data);
-        
+        /*
         fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
         //fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
@@ -113,7 +115,7 @@ class CreatePost extends Component{
         })
         .catch(error => {
             console.log(error);
-        });
+        });*/
     }
 
     handleChangeTitle(event) {
@@ -150,41 +152,85 @@ class CreatePost extends Component{
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
         document.getElementById('submitDivider').hidden = false;
-        this.questionObjects.push(new this.defaultQuestion());
-        var temp=this.state.questions
-        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+        const temp = this.state.questionObjects;
+        temp.push(new this.defaultQuestion());
+        //var temp=this.state.questions
+        //temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
             hasSurvey: true,
-            questions: temp,
-        });
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
     }
 
     showSurvey = () => {
         console.log('showSurvey');
-        var survey = this.state.questions.map(question => {
+        var index = -1;
+        const survey = this.state.questionObjects.map(question => {
+            index++;
+            console.log('' + index + ': ' + this.state.questionObjects[index].question);
             return(
                 <div>
-                 {question}
-                 <Divider/>
+                    <Question number={index + 1} object={this.state.questionObjects[index]}/>
+                    <Dropdown icon='wrench' button>
+                        <Dropdown.Menu>
+                            <Dropdown.Item index={index} onClick={this.duplicateQuestion}>
+                                Duplicate
+                            </Dropdown.Item>
+                            <Dropdown.Item index={index} onClick={this.deleteQuestion}>
+                                Delete
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Divider/>
                 </div>
             );
         });
+        this.setState({survey: survey});
+        /*
         return(
             <div>
                 <Divider/>
                 {survey}
             </div>
-        );
+        );*/
     }
 
     addQuestion = () => {
         console.log('generateSurvey');
-        this.questionObjects.push(new this.defaultQuestion());
-        var temp=this.state.questions
-        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+        const temp = this.state.questionObjects;
+        temp.push(new this.defaultQuestion());
+        //var temp=this.state.questions;
+        //temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
         this.setState({
-            questions: temp,
-        });
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
+    }
+
+    duplicateQuestion = (event, data) => {
+        console.log('duplicate');
+        console.log(data.index);
+        console.log(this.refs);
+        
+        const temp = this.state.questionObjects;
+        temp.splice(data.index + 1, 0, new this.defaultQuestion());
+        temp[data.index+1].question = temp[data.index].question;
+        temp[data.index+1].type = temp[data.index].type;
+        temp[data.index+1].restrictions = temp[data.index].restrictions;//This and type don't work because I need to have the dropdowns display a default value
+        temp[data.index+1].options = temp[data.index].options.slice();//This doesn't work because two objects are referencing the same array
+        //console.log(this.state.questions);
+        //var temp = this.state.questions;
+        //temp.splice(data.index + 1, 0, <Question number={data.index + 2} object={this.questionObjects[data.index+1]}/>);
+        console.log(temp);
+        this.setState({
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
+    }
+
+    deleteQuestion = (event, data) => {
+
     }
 
     render(){
@@ -221,7 +267,7 @@ class CreatePost extends Component{
                                     </div>
 
                                     <Button id='createSurvey' type='button' onClick={this.generateSurvey} positive><Plus/> Add Survey</Button>
-                                    {this.showSurvey()}
+                                    {this.state.survey}
                                     <Button hidden id='addQuestion' type='button' onClick={this.addQuestion} positive><Plus/> Add Question</Button>
 
                                     <div/>
