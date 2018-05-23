@@ -48,7 +48,10 @@ class RegisterUser extends Component{
             firstName: this.state.firstName, 
             lastName: this.state.lastName,
             email: this.state.email,
-            permissions: [{department: this.state.selectedDepartment, role: 'standard'}]
+            userPermissions: [{department: this.state.selectedDepartment, role: 'standard'}],
+            posts: [],
+            comments: [],
+            votes: []
         };
 
         var data2 = {
@@ -116,9 +119,9 @@ class RegisterUser extends Component{
             var departments = [];
             for(var i = 0; i < list.departments.length; ++i){
                 departments.push({
-                    key: list.departments[i].department,
-                    value: list.departments[i].department,
-                    text: list.departments[i].department
+                    key: list.departments[i],
+                    value: list.departments[i],
+                    text: list.departments[i]
                 });
             }
             console.log("Departments Array: " + JSON.stringify(departments));
