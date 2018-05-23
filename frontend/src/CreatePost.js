@@ -99,7 +99,7 @@ class CreatePost extends Component{
         console.log('creating post with ');
         console.log(data);
         
-        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts', {
         //fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
