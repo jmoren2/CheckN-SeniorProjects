@@ -26,11 +26,12 @@ class CreatePost extends Component{
                     questions: [],
                     hasSurvey: false,
         };
+        this.questionObjects = [];
+        
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.questionObjects = [];
         console.log("The user object passed in is: " + JSON.stringify(props.userObj));
     }
 
