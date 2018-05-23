@@ -99,6 +99,7 @@ class Question extends React.Component{
             <span>
                 <label>{i}: </label>
                 <input id={i-1} onChange={this.updateOption} value={this.state.options[i-1]}/>
+                <Button type='button' id={i-1} size='mini' negative onClick={this.deleteOption}>Delete</Button>
             </span>
             </div>
             );
@@ -128,6 +129,12 @@ class Question extends React.Component{
             options: newArray,
         });
         this.props.object.options = newArray;
+    }
+
+    deleteOption = (event) => {
+        var temp = this.state.options;
+        temp.splice(event.target.id, 1);
+        this.setState({options: temp});
     }
 
     //Renders what user will see when creating a scaled question
