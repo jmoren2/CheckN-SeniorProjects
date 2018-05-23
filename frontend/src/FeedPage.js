@@ -275,9 +275,9 @@ class FeedPage extends React.Component{
                                         </TimeAgo>
                                     </div>
 
-                                    <div className="col-sm-8">
+                                    {/* <div className="col-sm-8">
                                     {post.visibilityLevel}
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
