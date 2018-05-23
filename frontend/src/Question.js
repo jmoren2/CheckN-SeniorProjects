@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 //import {DropdownButton, MenuItem} from 'react-bootstrap';
-import {Dropdown, Button, Input} from 'semantic-ui-react';
+import {Dropdown, Button, Input, Grid} from 'semantic-ui-react';
 
 /*
 A Question is a single question on the interface for creating surveys
@@ -143,9 +143,9 @@ class Question extends React.Component{
         var formatOptions = this.state.options.map(() => {
             i++;
             return(
-                <span>
-                    <input id={i} onChange={this.updateOption} value={this.state.options[i]}/>
-                </span>
+                <Grid.Column stretched>
+                    <Input id={i} onChange={this.updateOption} value={this.state.options[i]}/>
+                </Grid.Column>
             );
         });
         return(
@@ -153,7 +153,11 @@ class Question extends React.Component{
             <label>Total Options</label>
             <Dropdown placeholder='2' onChange={this.onScaleChange} selection options={this.scaleRange}/>
             <div/>
-            {formatOptions}
+            <Grid columns={this.state.options.length}>
+                <Grid.Row>
+                    {formatOptions}
+                </Grid.Row>
+            </Grid>
         </div>
         );
     }
