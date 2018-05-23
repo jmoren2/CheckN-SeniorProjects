@@ -31,7 +31,7 @@ module.exports.getCategory = (ddb, event, context, callback) => {
             });
         }
         else
-            return getCategoryFail(400, 'get Category by roleCategory failed.', callback);
+            return getCategoryFail(400, 'get Category by Category failed.', callback);
     }
     else
         return getCategoryFail(400,'get Category by Category failed', callback);
