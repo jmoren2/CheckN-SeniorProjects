@@ -43,7 +43,7 @@ function update(esClient, comment, callback){
             return fail(500, 'Update Comment Content failed. Error: ' + error, callback)
         } else {
             console.log('data: ' + JSON.stringify(data));
-            return response(200, data, callback)
+            return success(200, data, callback)
         }
     });
 }
