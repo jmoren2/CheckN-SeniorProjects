@@ -230,7 +230,12 @@ class CreatePost extends Component{
     }
 
     deleteQuestion = (event, data) => {
-
+        const temp = this.state.questionObjects;
+        temp.splice(data.index, 1);
+        this.setState({
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
     }
 
     render(){
