@@ -19,7 +19,7 @@ class FeedPage extends React.Component{
         this.state = {
             feed: <div>Loading...</div>
         }
-        this.searchQuery = "search=a";
+        this.searchQuery = "pageSize=1000";
         console.log("The user object passed in is: " + props.userObj);
         console.log(JSON.stringify(props.userObj));
     }
