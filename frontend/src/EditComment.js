@@ -37,15 +37,17 @@ class EditComment extends Component{
             this.postID=data.comment.postId;
             this.setState({
                 content: data.comment.content,
+                
             })
-        });
+        });{/*vote: data.comment.vote*/}
     }
 
     handleSubmit(event){
         event.preventDefault();
         //What is being sent to the API
         const data = {
-            content: this.state.content
+            content: this.state.content,
+            vote: this.state.vote
         };
 
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.postID}/comments/${this.state.commentID}`, {
@@ -67,7 +69,7 @@ class EditComment extends Component{
 
     render(){
         if (this.state.handleSubmitDone === true){
-            return(<Redirect to={`/post/${this.postID}`}/>);//go to the new post's page
+            return(<Redirect to={`/post/${this.postID}`}/>);//go back to the post's page after editing the comment
         }
         return(
             <div>

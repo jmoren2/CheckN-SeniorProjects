@@ -533,7 +533,7 @@ class ViewPost extends Component{//Initial State
         }
     }
 
-    editComment(commentID) {
+    editComment(commentID) {//TODO: Add back in the ability to only edit a user's own comment
         //if(this.props.userObj.userId === this.posterID) {
         return(
         <Link to={`/editComment/${commentID}`}>
