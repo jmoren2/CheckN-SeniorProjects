@@ -421,12 +421,12 @@ class ViewPost extends Component{//Initial State
     }
 
     changePostState() {
-        if(this.state.postState === "OPEN" && (this.props.userObj.userId === this.posterID || this.props.userObj.userPermissions[0].role === admin)) {
+        if(this.state.postState === "OPEN" && (this.props.userObj.userId === this.posterID || this.props.userObj.userPermissions[0].role === "admin")) {
             return(
                 <button className='btn btn-info' onClick = {this.closePost}>Close Post</button>//Button to close the post
             );
         }
-        if(this.state.postState === "CLOSED" && (this.props.userObj.userId === this.posterID || this.props.userObj.userPermissions[0].role === admin)) {
+        if(this.state.postState === "CLOSED" && (this.props.userObj.userId === this.posterID || this.props.userObj.userPermissions[0].role === "admin")) {
             return(
                 <button className='btn btn-info' onClick = {this.openPost}>Reopen Post</button>//Button to reopen the post
             );
