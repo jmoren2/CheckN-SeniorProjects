@@ -39,7 +39,7 @@ module.exports.singlePostSuccess = (code, post, callback) => {
     })
 }
 
-module.exports.multiPostSuccess = (code, posts, callback) => {
+module.exports.multiPostSuccess = (code, posts, context, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -50,7 +50,8 @@ module.exports.multiPostSuccess = (code, posts, callback) => {
         body: JSON.stringify({
             statusCode: code,
             posts: posts,
-            count: posts.length
+            total: context.totalPosts,
+            pages: Math.ceil(context.totalPosts / context.pageSize)
         })
     })
 }

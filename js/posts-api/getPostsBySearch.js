@@ -10,10 +10,15 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
         search = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
         tag = event.queryStringParameters.tag;
+        context.page = event.queryStringParameters.page;
+        context.pageSize = event.queryStringParameters.pageSize;
         console.log("Search string: " + search);
         console.log("User string: " + user);
         console.log("Tag: " + tag);
     }
+
+    if(!context.page) context.page = 1;
+    if(!context.pageSize) context.pageSize = 10;
 
     var filter = {
         query: { bool: { must: [] } }
@@ -58,7 +63,9 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
 
     esClient.search({
         index: 'posts',
-        body: filter
+        body: filter,
+        from: (context.page-1)*context.pageSize,
+        size: context.pageSize,
     }, function(error, data) {
         if(error) {
             console.log('error: ' + JSON.stringify(error));
@@ -66,6 +73,7 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
         } else {
             console.log('data: ' + JSON.stringify(data));
             var hits = data.hits.hits;
+            context.totalPosts = data.hits.total;
             var posts = [];
 
             // parse hits for comment objects
@@ -74,13 +82,13 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
             }
 
             console.log('posts: ' + JSON.stringify(posts));
-            return showUsers(esClient, posts, callback);
+            return showUsers(esClient, posts, context, callback);
         }
     });
 };
 
 // associate user names with comments
-function showUsers(esClient, posts, callback){
+function showUsers(esClient, posts, context, callback){
     // build search query
     var userIdArr = [];
     for(let i = 0; i < posts.length; ++i){
@@ -123,6 +131,6 @@ function showUsers(esClient, posts, callback){
             posts[i].userName = userName
         }
 
-        return success(200, posts, callback);
+        return success(200, posts, context, callback);
     });
 };
