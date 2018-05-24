@@ -71,7 +71,7 @@ class RegisterUser extends Component{
         })
         // ********************************* //
 
-        fetch('https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/', {
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/', {
             method: 'POST',
             body: JSON.stringify(data)
         })
