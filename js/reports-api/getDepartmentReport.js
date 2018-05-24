@@ -63,33 +63,15 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                             userCount = data.hits.hits.length;
                             users = data.hits.hits;
                             var topTenContributer = [];
-/*
-                            users.sort(function(a,b) {
-                                if((a._source.posts === undefined && a._source.posts === null) &&
-                                    (b._source.posts === undefined && b._source.posts === null))
-                                    return 0;
-                                else if((a._source.posts !== undefined && a._source.posts !== null) &&
-                                     (b._source.posts === undefined && b._source.posts === null))
-                                    return 1;
-                                else if((a._source.posts === undefined && a._source.posts === null) &&
-                                         (b._source.posts !== undefined && b._source.posts !== null))
-                                    return -1;
-                                else if(a._sources.posts !== undefined && a._source.posts !== null &&
-                                        b._source.posts !== undefined && b._source.posts !== null)
-                                        {
-                                           return (a._source.posts.length > b._source.posts.length) ? 
-                                           1 : ((b._source.posts.length > a._source.posts.length) ? -1 : 0);
-                                        }
-                            })*/
-    
-                           /* if(userCount < 10 )
+
+                            if(userCount < 10)
                                 topTenContributer = users;
                             else{
                                 for (var i = 0; i < 10; i++){
                                     topTenContributer.push(users[userCount-i-1]);
                                 }
                                 report.topTenContributer = topTenContributer;
-                            }*/
+                            }
                             report.userCount = userCount;
                         }
                     }
