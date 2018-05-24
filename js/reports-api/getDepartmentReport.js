@@ -37,73 +37,142 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.departmentId);
 
             var department = decodeURIComponent(event.pathParameters.departmentId);
+            var params = {};
             var report = {};
-            var params = {
-                index: 'posts',
-                //q:"department:" + department
-            };
             
+            console.log("Sending params: " + JSON.stringify(params));
+
+            // Retrieve # of Users
             var userCount = function(report, callback){
-                params={
-                    index:'users',
-                    //q:"department:" + department
+                params = {
+                    index: 'users',
+                    type:'user',
+                    body: {
+                        query: {
+                            nested :{
+                                path: "userPermissions",
+                                query: {
+                                    bool: {
+                                        must: {
+                                            match:{
+                                            "userPermissions.department": department
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 esClient.search(params, function(err, data){
                     if(err) {
-                        report.userCount = 0;
+                        report.totalUser = 0;
                         console.log("Get Department Report: get user count failed");
                     }
                     else{
+                        var user;
                         var users;
-                        var userCount;
-                        if(data.hits === null || data.hits === undefined || data.hits.total === 0){
-                            report.userCount = 0;
+                        var totalUser;
+                        var contributer = [];
+                        var MAX = 10;
+
+                        if(data.hits === null || data.hits === undefined || 
+                            data.hits.hits === undefined || data.hits.hits === null){
+                            report.totalUser = 0;
                         }
                         else{
-                            userCount = data.hits.hits.length;
                             users = data.hits.hits;
-                            var topTenContributer = [];
+                            totalUser = data.hits.hits.length;
+                            report.totalUser = totalUser; 
 
-                            if(userCount < 10)
-                                topTenContributer = users;
-                            else{
-                                for (var i = 0; i < 10; i++){
-                                    topTenContributer.push(users[userCount-i-1]);
-                                }
-                                report.topTenContributer = topTenContributer;
+                            for (var i = 0; i < totalUser; i++){
+                                user = users[i]._source;
+                                contributer.push(user);
                             }
-                            report.userCount = userCount;
+
+                            contributer.sort(function(a,b) {
+                                if(a.posts === undefined && a.posts === null && 
+                                    b.posts === undefined && b.posts === null)
+                                    return 0;
+                                else if(a.posts !== undefined && a.posts !== null &&
+                                        b.posts !== null && b.posts !== undefined){
+                                            if(a.posts.length > b.posts.length)
+                                                return -1;
+                                            else if(a.posts.length < b.posts.length)
+                                                return 1;
+                                            return 0;
+                                        }
+                                else if(a.posts !== undefined && a.posts !== null &&
+                                        b.posts === null && b.posts === undefined)
+                                            return -1;
+                                else
+                                    return 1;
+                            })
+
+                            for(var i = 0; i < contributer.length; i++) {
+                                if(contributer[i].posts !== undefined && contributer[i].posts !== null)
+                                    contributer[i].totalPosts = contributer[i].posts.length;
+                                else
+                                    contributer[i].totalPosts = 0;
+                            }
+                            if(contributer.length < MAX){
+                                report.topTencontributer = contributer;
+                            }
+                            else
+                                report.topTencontributer = contributer.slice(0,MAX);
                         }
                     }
-                    return getSingleDepartmentSuccess(200,users,callback);
+                    return getSingleDepartmentSuccess(200, report,callback);
                 })
             }
-    
+
+        
+            // Retrieve # of Posts, # of Survey, # of Comments
+            params = {
+                index: 'posts',
+                type:'post',
+                body: {
+                    query: {
+                        nested :{
+                            path: "visibilityLevel",
+                            query: {
+                                match:{
+                                    "visibilityLevel.department": department
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             esClient.search(params, function(err, data) {
                 if(err)
                     return getDepartmentFail(500,'get report by department failed. Error: ' + err, callback);
                 else {
                     if(data.hits === null || data.hits === undefined || data.hits.total === 0){
-                        report.postCount = 0;
+                        report.totalPost = 0;
                     }
                     else{
-                        var postCount = 0;
-                        var surveyCount = 0;
+                        var totalPost = 0;
+                        var totalSurvey = 0;
+                        var totalComment = 0;
                         var post;
                         for(var i = 0; i < data.hits.hits.length; i++) { 
                             post = data.hits.hits[i]._source;
                             if(post.surveyId !== undefined && post.surveyId !== null && post.surveyId !== "" ){
-                                surveyCount += 1;
+                                totalSurvey += 1;
                             }
-                            else
-                                postCount += 1;
+                            else {
+                                totalPost += 1;
+                            }
+                            if(post.comments !== undefined && post.comments !== null)
+                                totalComment += post.comments.length
                         }
-                        report.postCount = postCount;
-                        report.surveyCount = surveyCount;
+                        report.totalPost = totalPost;
+                        report.totalComment = totalComment;
+                        report.totalSurvey = totalSurvey;
                     }
                     return userCount(report,callback);
-                    //return getSingleDepartmentSuccess(200, report, callback);
-                    //return getSingleDepartmentSuccess(200, post, callback);
+                    //return getSingleDepartmentSuccess(200,data,callback);
                 }
             });
         }
