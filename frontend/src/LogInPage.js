@@ -68,11 +68,22 @@ class LogInPage extends React.Component{
         })
         .then(response => {
             //NEEDS A CASE FOR IF NO USER IS FOUND
+            
             return(response.users[0]);
         })
         .then(validUser => {
-            this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js
-            this.setState({handleSubmitDone: true});
+            if(validUser)
+            {
+                this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js
+                this.setState({handleSubmitDone: true});
+
+            }
+            else
+            {
+                alert('Login Failed.')
+                
+                window.location.reload();
+            }
         })
         .catch(error => {
             console.log(error);
