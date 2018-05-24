@@ -69,7 +69,7 @@ class ViewPost extends Component{//Initial State
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
             },
@@ -149,9 +149,9 @@ class ViewPost extends Component{//Initial State
                                  
                                 </TimeAgo>
                                 </div>
-                                <div className="col-sm-8">
+                                {/* <div className="col-sm-8">
                                     {data.post.visibilityLevel}
-                                </div>
+                                </div> */}
                             </div>
 
                         </div>
@@ -169,7 +169,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -201,7 +201,7 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
-        return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+        return fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -226,6 +226,11 @@ class ViewPost extends Component{//Initial State
     }
 
     generateCommentFeed(comments){ //comments are edited here  
+
+        if(comments)
+        {
+
+        
         var commentFeed = comments.map((comment) => {
 
                 var content = null;
@@ -283,6 +288,8 @@ class ViewPost extends Component{//Initial State
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
         return commentFeed;
+
+    }
     }
 
 
@@ -308,7 +315,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -428,7 +435,7 @@ class ViewPost extends Component{//Initial State
 
     closePost() {
         this.postInfo.state = "CLOSED";
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
@@ -440,7 +447,7 @@ class ViewPost extends Component{//Initial State
 
     openPost() {
         this.postInfo.state = "OPEN";
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
