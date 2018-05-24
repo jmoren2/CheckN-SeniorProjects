@@ -54,54 +54,7 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     if(mustFilter.bool.must.length > 0) {
         filter.query.bool.must.push(mustFilter);
     }
-    console.log(JSON.stringify(filter));
-
-
-    // associate user names with comments
-    var showUsers = function(posts, callback){
-        // build search query
-        var userIdArr = [];
-        for(let i = 0; i < posts.length; ++i){
-            if(posts[i].userId) {
-                userIdArr.push({
-                    match: {
-                        userId: posts[i].userId
-                    }
-                })
-            }
-        }
-        search = {query:{bool:{should:userIdArr}}};
-        var userMap = {};
-
-        esClient.search({
-            index: 'users',
-            type: 'user',
-            body: search
-        }, function(error, data) {
-            if(error) {
-                console.log('associating users error: ' + JSON.stringify(error));
-            }
-            else {
-                var userArr = data.hits.hits;
-                // populate map
-                for(let i = 0; i < userArr.length; ++i){
-                    let user = userArr[i]._source;
-                    userMap[user.userId] = user.firstName + ' ' + user.lastName;
-                }
-            }
-
-            // associate user names to comments
-            for(let i = 0; i < posts.length; ++i){
-                let userName = 'unknown user';
-                if(userMap[posts[i].userId]){
-                    userName = userMap[posts[i].userId]
-                }
-                posts[i].userName = userName
-            }
-
-            return success(200, posts, callback);
-        });
-    };
+    console.log('post filter: ' + JSON.stringify(filter));
 
     esClient.search({
         index: 'posts',
@@ -119,7 +72,57 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
             for(let i = 0; i < hits.length; ++i){
                 posts.push(hits[i]._source)
             }
-            return showUsers(posts, callback);
+
+            console.log('posts: ' + JSON.stringify(posts));
+            return showUsers(esClient, posts, callback);
         }
+    });
+};
+
+// associate user names with comments
+function showUsers(esClient, posts, callback){
+    // build search query
+    var userIdArr = [];
+    for(let i = 0; i < posts.length; ++i){
+        if(posts[i].userId) {
+            userIdArr.push({
+                match: {
+                    userId: posts[i].userId
+                }
+            })
+        }
+    }
+
+    var search = { query: { bool: { should: userIdArr } } };
+    console.log('user filter: ' + JSON.stringify(search));
+    var userMap = {};
+
+    esClient.search({
+        index: 'users',
+        type: 'user',
+        body: search
+    }, function(error, data) {
+        if(error) {
+            console.log('associating users error: ' + JSON.stringify(error));
+        }
+        else {
+            var userArr = data.hits.hits;
+            // populate map
+            for(let i = 0; i < userArr.length; ++i){
+                let user = userArr[i]._source;
+                userMap[user.userId] = user.firstName + ' ' + user.lastName;
+            }
+        }
+
+        // associate user names to comments
+        for(let i = 0; i < posts.length; ++i){
+            let userName = 'unknown user';
+            if(userMap[posts[i].userId]){
+                userName = userMap[posts[i].userId]
+            }
+            posts[i].userName = userName
+        }
+
+        return success(200, posts, callback);
     });
 };
