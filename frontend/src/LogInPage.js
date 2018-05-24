@@ -17,11 +17,16 @@ class LogInPage extends React.Component{
             returnedUser: null,
             handleSubmitDone: false
         }
+        this.delete_cookie("user")
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         console.log("The user object passed in is: " + props.userObj);
     }
+
+    delete_cookie = function(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
 
     handleChangeEmail(event) {
         this.setState({email: event.target.value});//Updates the firstName field as typing occurs
@@ -36,18 +41,18 @@ class LogInPage extends React.Component{
 
         //** Test ONLY dont merge to master **//
         
-        loginUser(this.state.email, this.state.password)
-        .then(result => {
-            return result.json()
-        })
-        .then(data => {
-            console.log("Logined : ", data)
-        })
+        // loginUser(this.state.email, this.state.password)
+        // .then(result => {
+        //     return result.json()
+        // })
+        // .then(data => {
+        //     console.log("Logined : ", data)
+        // })
 
-        deleteUser("test@test1.com")
-        .then(response => {
-            console.log(response);
-        })
+        // deleteUser("test@test1.com")
+        // .then(response => {
+        //     console.log(response);
+        // })
 
         // ********************************* //
 
