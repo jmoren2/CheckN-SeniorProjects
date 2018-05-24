@@ -207,34 +207,59 @@ class FeedPage extends React.Component{
         
         var feed = posts.map((post) => {
             
-            var pVoters = post.positiveVoters;
-            var nVoters = post.neutralVoters;
-            var negVoters = post.negativeVoters;
+            
+            // var pVoters = post.positiveVoters;
+            // var nVoters = post.neutralVoters;
+            // var negVoters = post.negativeVoters;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
+            // if(pVoters)
+            // {
+            //     var positiveCount = pVoters.length;
+            // }
+            // else
+            // {
+            //     positiveCount = 0;
+            // }
+            // if(nVoters)
+            // {
+            //     var neutralCount = nVoters.length;
+            // }
+            // else
+            // {
+            //      neutralCount = 0;
+            // }
+            // if(negVoters)
+            // {
+            //     var negCount = negVoters.length;
+            // }
+            // else
+            // {
+            //      negCount = 0;
+            // }
+
+            var neutralCount =0;
+            var negCount=0;
+            var positiveCount=0;
+
+
+            // fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?post=SXZ${post.postId}`, {
+            //     headers: {
+            //         'content-type': 'application/json'
+            //          },
+            //     method: 'GET',
+            // })
+            // .then(response => {
+            //     return response.json();
+            // })
+            // .then(data =>{
+
+            //     console.log(data)
+            //     positiveCount = data.count;
+        
+             
+            // })
+
+
             return(
                 //individual feed item
                 <div className="container">
