@@ -33,7 +33,7 @@ class EditPost extends Component{
     }
 
     retrievePost(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -73,7 +73,7 @@ class EditPost extends Component{
             visibilityLevel: this.state.visibilityLevel
         };
 
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(data)//Stringify the data being sent
         })
