@@ -33,7 +33,8 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
+        //fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },

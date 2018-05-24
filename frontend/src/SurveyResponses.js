@@ -32,7 +32,7 @@ class SurveyResponse extends React.Component{
     componentDidMount() {
         //I'll need the survey and the responses so that I can see questions and all possible answers
         this.retrieveSurvey();
-        this.retrieveResponses();
+        //this.retrieveResponses();
     }
 
     retrieveSurvey(){
@@ -47,10 +47,16 @@ class SurveyResponse extends React.Component{
             return results.json();
         })//Saves the response as JSON
         .then(survey => {
+            console.log('displaying stuff');
             console.log(survey);
             console.log(survey.survey);
             this.initializeForSurvey(survey.survey.questions);
+            //console.log(survey.survey.responses);
+            //console.log(survey.survey.responses)
             this.retrieveResponses(survey.survey.responses);
+        })
+        .catch(error => {
+            console.log(error);
         });
     }
 
@@ -103,7 +109,9 @@ class SurveyResponse extends React.Component{
         .catch(error => {
             console.log(error);
         });*/
-        /*this.setState({
+        this.setState({responses: responses});
+        /*
+        this.setState({
             responses: [
                 {
                     userId: 12345,
@@ -204,6 +212,14 @@ class SurveyResponse extends React.Component{
 
     generateAccordions(){
         var index = -1;
+        if (!((typeof this.state.responses) === "object"))
+        {
+            return null;
+        }
+        if(this.state.responses.length == 0)
+        {
+            return null;
+        }
         var accordions = this.state.responses.map((response) => {
             index++;
             if (this.state.filterByResponseTo == -1)
@@ -212,7 +228,7 @@ class SurveyResponse extends React.Component{
                     <div>
                         <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
                             <Icon name='dropdown'/>
-                            {this.state.responses[index].userId}
+                            {this.state.responses[index].userName}
                         </Accordion.Title>
                         <Accordion.Content active={this.state.activeBoxes.includes(index)}>
                             {this.generateRespones(index)}
@@ -226,7 +242,7 @@ class SurveyResponse extends React.Component{
                     <div>
                         <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
                             <Icon name='dropdown'/>
-                            {this.state.responses[index].userId}
+                            {this.state.responses[index].userName}
                         </Accordion.Title>
                         <Accordion.Content active={this.state.activeBoxes.includes(index)}>
                             {this.generateRespones(index)}

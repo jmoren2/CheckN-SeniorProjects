@@ -6,6 +6,7 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea, Label} from 'semantic-ui-react';
+import "./index.css";
 
 /*
 {
@@ -68,9 +69,9 @@ class Survey extends React.Component{
         console.log(survey);
         var questionArray = survey.questions;
         var responseArray = survey.questions.map((question) => {
-            var temp = new this.defaultResponse();
+            //var temp = new this.defaultResponse();
             return(
-                temp
+                []
             )
         });
 
@@ -150,7 +151,7 @@ class Survey extends React.Component{
                         {this.state.questions[index].question}
                     </Card.Header>
                     <Form>
-                    <TextArea id={index} className='freeResponse' value={this.state.responses[index].response[0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
+                    <TextArea id={index} className='freeResponse' value={this.state.responses[index][0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
                     </Form>
                 </Card.Content>
             </Card>
@@ -161,7 +162,7 @@ class Survey extends React.Component{
 
     updateTextResponse = (event) => {
         var temp = this.state.responses;
-        temp[event.target.id].response[0] = event.target.value;
+        temp[event.target.id][0] = event.target.value;
         this.setState({responses: temp});
     }
 
@@ -175,14 +176,14 @@ class Survey extends React.Component{
             else
             {
                 var temp = this.state.responses;
-                temp[event.target.id].response[0] = event.target.value;
+                temp[event.target.id][0] = event.target.value;
                 this.setState({responses: temp});
             }
         }
         else
         {
             var temp = this.state.responses;
-            temp[event.target.id].response[0] = event.target.value;
+            temp[event.target.id][0] = event.target.value;
             this.setState({responses: temp});
         }
     }
@@ -216,7 +217,7 @@ class Survey extends React.Component{
                         <Checkbox 
                             label={this.state.questions[index].options[optionIndex]}
                             value={index}
-                            checked={this.state.questions[index].options[optionIndex] === this.state.responses[index].response[0]}
+                            checked={this.state.questions[index].options[optionIndex] === this.state.responses[index][0]}
                             onChange={onChangeFunction}
                         />
                     </div>
@@ -243,10 +244,10 @@ class Survey extends React.Component{
 
     handleSingleSelectChange = (event, {value, label}) => {
         var temp = this.state.responses;
-        if (temp[value].response[0] === label)
-            temp[value].response[0] = '';
+        if (temp[value][0] === label)
+            temp[value][0] = '';
         else
-            temp[value].response[0] = label;
+            temp[value][0] = label;
         this.setState({responses: temp});
     }
 
@@ -255,16 +256,16 @@ class Survey extends React.Component{
         //If the user has just checked the item, add it
         if (checked)
         {
-            temp[value].response.push(label);
+            temp[value].push(label);
         }
         else    //otherwise the user must have just unchecked it, so remove it
         {
-            var index = temp[value].response.indexOf(label);
+            var index = temp[value].indexOf(label);
             //indexOf should return -1 if item isn't in array, which shouldn't happen
             if (index >= 0)
             {
                 //This should remove 1 item starting at index
-                temp[value].response.splice(index, 1);
+                temp[value].splice(index, 1);
             }
         }
     }
@@ -289,7 +290,7 @@ class Survey extends React.Component{
                     <Checkbox
                         text={this.state.questions[index].options[optionIndex]}
                         value={index}
-                        checked={this.state.questions[index].options[optionIndex] === this.state.responses[index].response[0]}
+                        checked={this.state.questions[index].options[optionIndex] === this.state.responses[index][0]}
                         onChange={this.handleScaleChange}
                     />
                 </Grid.Column>
@@ -321,10 +322,10 @@ class Survey extends React.Component{
 
     handleScaleChange = (event, {value, text}) => {
         var temp = this.state.responses;
-        if (temp[value].response[0] === text)
-            temp[value].response[0] = '';
+        if (temp[value][0] === text)
+            temp[value][0] = '';
         else
-            temp[value].response[0] = text;
+            temp[value][0] = text;
         this.setState({responses: temp});
     }
 
