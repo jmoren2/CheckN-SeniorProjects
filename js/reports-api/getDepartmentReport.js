@@ -73,7 +73,7 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                         var user;
                         var users;
                         var totalUser;
-                        var contributor  = [];
+                        var contributors  = [];
                         var MAX = 10;
 
                         if(data.hits === null || data.hits === undefined || 
@@ -87,10 +87,10 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
 
                             for (var i = 0; i < totalUser; i++){
                                 user = users[i]._source;
-                                contributor.push(user);
+                                contributors.push(user);
                             }
 
-                            contributor.sort(function(a,b) {
+                            contributors.sort(function(a,b) {
                                 if(a.posts === undefined && a.posts === null && 
                                     b.posts === undefined && b.posts === null)
                                     return 0;
@@ -109,17 +109,17 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                                     return 1;
                             })
 
-                            for(var i = 0; i < contributor.length; i++) {
-                                if(contributor[i].posts !== undefined && contributor[i].posts !== null)
-                                    contributor[i].totalPosts = contributor[i].posts.length;
+                            for(var i = 0; i < contributors.length; i++) {
+                                if(contributors[i].posts !== undefined && contributors[i].posts !== null)
+                                    contributors[i].totalPosts = contributors[i].posts.length;
                                 else
-                                    contributor[i].totalPosts = 0;
+                                    contributors[i].totalPosts = 0;
                             }
-                            if(contributor.length < MAX){
-                                report.topTencontributor = contributor;
+                            if(contributors.length < MAX){
+                                report.topTencontributors = contributors;
                             }
                             else
-                                report.topTencontributor = contributor.slice(0,MAX);
+                                report.topTencontributors = contributors.slice(0,MAX);
                         }
                     }
                     return getSingleDepartmentSuccess(200, report,callback);
