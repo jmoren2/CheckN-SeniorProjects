@@ -13,9 +13,11 @@ module.exports.updateComment = (esClient, event, context, callback) => {
 
         // check for vote field, validate if present
         if (comment.vote) {
-            let vote = comment.vote;
+            let vote = comment.vote.toLowerCase();
             if (!(vote === 'positive' || vote === 'negative' || vote === 'neutral'))
                 delete comment.vote;
+            else
+                comment.vote = vote;
         }
 
         console.log("Updating the content of a Comment...");

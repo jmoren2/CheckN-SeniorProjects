@@ -13,9 +13,11 @@ module.exports.createComment = (esClient, event, context, callback) => {
 
         // validate vote field
         if (comment.vote) {
-            let vote = comment.vote;
+            let vote = comment.vote.toLowerCase();
             if (!(vote === 'positive' || vote === 'negative' || vote === 'neutral'))
                 delete comment.vote;
+            else
+                comment.vote = vote;
         }
 
         return create(esClient, comment, callback);
