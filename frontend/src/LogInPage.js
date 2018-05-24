@@ -51,7 +51,8 @@ class LogInPage extends React.Component{
 
         // ********************************* //
 
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.email}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?email=${this.state.email}`, {
+        //fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.email}`, {
                 headers: {
                     'content-type': 'application/json'
                 },

@@ -10,6 +10,12 @@ import CreatePost from './CreatePost.js';
 import About from './About.js';
 import RegisterUser from './RegisterUser.js';
 import EditPost from './EditPost.js';
+import EditComment from './EditComment.js';
+import Admin from './Admin.js'
+import Report from './Report.js'
+import DepartmentReport from './DepartmentReport.js'
+import Survey from './Survey.js';
+import SurveyResponse from './SurveyResponses.js';
 
 class App extends React.Component {
     constructor(props){
@@ -40,10 +46,11 @@ class App extends React.Component {
 
     retrieveUserObjFromCookie(){
         try {
+            console.log(document.cookie);
         //First get the cookie and split it on user=, this way I can have a string that at least starts as the object
         var user = document.cookie.split('user=')[1];
         //Now split on the } to get rid of any extra just in case and put the } back on
-        user = ((user.split('}')[0]) + '}');
+        user = ((user.split('};')[0]) + '}');
         //Now what I have left is the stringified JSON object that can be parsed
         user = JSON.parse(user);
 
@@ -69,6 +76,12 @@ class App extends React.Component {
                     <Route path="/register" component={props => (<RegisterUser userObj={this.userObj} {...props}/>)}/>{/*Shouldn't be at this page if signed-in*/}
                     <Route path="/about" component={About}/>
                     <Route path="/edit/:postID" component={props => (<EditPost userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/editComment/:commentID" component={props => (<EditComment userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/admin" component={props => (<Admin userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/Users/report" component={props => (<Report userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/Departments/report" component={props => (<DepartmentReport userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/survey/:surveyId/:fromPostId" component={props => (<Survey userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/surveyResponses/:surveyId/:fromPostId" component={props => (<SurveyResponse userObj={this.userObj} {...props}/>)}/>
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>

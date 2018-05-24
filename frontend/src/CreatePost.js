@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Question from './Question.js';
-import {Divider, Button} from 'semantic-ui-react';
+import {Divider, Button, Icon, Dropdown} from 'semantic-ui-react';
 
 import Plus from 'react-icons/lib/fa/plus';
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -14,7 +14,6 @@ class CreatePost extends Component{
         if(this.props.userObj === null)
         {
             window.location.href = '/login';
-            console.log('hello')
         }
         this.state = {
                     title: '', 
@@ -24,14 +23,17 @@ class CreatePost extends Component{
                     returnedId: null, 
                     handleSubmitDone: false,
                     questions: [],
+                    questionObjects: [],
                     hasSurvey: false,
+                    survey: null,
         };
+        this.questionObjects = [];
+        
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.questionObjects = [];
-        console.log("The user object passed in is: " + props.userObj);
+        console.log("The user object passed in is: " + JSON.stringify(props.userObj));
     }
 
     defaultQuestion(){
@@ -51,20 +53,9 @@ class CreatePost extends Component{
             //First create the survey object and submit it
             const survey = {
                 userId: this.props.userObj.userId,
-                questions: this.questionObjects,
+                questions: this.state.questionObjects,
             };
-
-            fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/', {
-                method: 'POST',
-                body: JSON.stringify(survey)
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(result => {
-                this.submitPost(result.survey.surveyId);
-            })
-            .catch(error => console.error('Error:', error));
+            this.submitPost(survey);
         }
         else
         {
@@ -72,9 +63,9 @@ class CreatePost extends Component{
         }
     }
 
-    submitPost(surveyId){
+    submitPost(survey){
         var data;
-        if (surveyId === null)
+        if (survey === null)
         {
             data = {
                 title: this.state.title, 
@@ -90,11 +81,20 @@ class CreatePost extends Component{
                 content: this.state.content,
                 tags: this.state.tagArray,
                 userId: this.props.userObj.userId,
-                surveyId: surveyId
+                survey: survey
             };
         }
 
-        fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+        console.log('creating post with ');
+        console.log(data);
+        
+<<<<<<< HEAD
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
+        //fetch('https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+=======
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts', {
+        //fetch('https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
         })
@@ -102,7 +102,11 @@ class CreatePost extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
+            console.log(result);
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
+        })
+        .catch(error => {
+            console.log(error);
         });
     }
 
@@ -136,45 +140,75 @@ class CreatePost extends Component{
     }
 
     generateSurvey = () => {
-        console.log('generateSurvey');
         document.getElementById('createSurvey').hidden = true;
         document.getElementById('addQuestion').hidden = false;
         document.getElementById('submitDivider').hidden = false;
-        this.questionObjects.push(new this.defaultQuestion());
-        var temp=this.state.questions
-        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+
+        const temp = this.state.questionObjects;
+        temp.push(new this.defaultQuestion());
+
         this.setState({
             hasSurvey: true,
-            questions: temp,
-        });
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
     }
 
     showSurvey = () => {
-        console.log('showSurvey');
-        var survey = this.state.questions.map(question => {
+        var index = -1;
+        const survey = this.state.questionObjects.map(question => {
+            index++;
+            console.log('' + index + ': ' + this.state.questionObjects[index].question);
             return(
                 <div>
-                 {question}
-                 <Divider/>
+                    <Question number={index + 1} object={this.state.questionObjects[index]}/>
+                    <Dropdown icon='wrench' button>
+                        <Dropdown.Menu>
+                            <Dropdown.Item index={index} onClick={this.duplicateQuestion}>
+                                Duplicate
+                            </Dropdown.Item>
+                            <Dropdown.Item index={index} onClick={this.deleteQuestion}>
+                                Delete
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Divider/>
                 </div>
             );
         });
-        return(
-            <div>
-                <Divider/>
-                {survey}
-            </div>
-        );
+        this.setState({survey: survey});
     }
 
     addQuestion = () => {
-        console.log('generateSurvey');
-        this.questionObjects.push(new this.defaultQuestion());
-        var temp=this.state.questions
-        temp.push(<Question number={this.questionObjects.length} object={this.questionObjects[this.questionObjects.length -1]}/>);
+        const temp = this.state.questionObjects;
+        temp.push(new this.defaultQuestion());
         this.setState({
-            questions: temp,
-        });
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
+    }
+
+    duplicateQuestion = (event, data) => {
+        const temp = this.state.questionObjects;
+        temp.splice(data.index + 1, 0, new this.defaultQuestion());
+        temp[data.index+1].question = temp[data.index].question;
+        temp[data.index+1].type = temp[data.index].type;
+        temp[data.index+1].restrictions = temp[data.index].restrictions;
+        temp[data.index+1].options = temp[data.index].options.slice();
+
+        this.setState({
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
+    }
+
+    deleteQuestion = (event, data) => {
+        const temp = this.state.questionObjects;
+        temp.splice(data.index, 1);
+        this.setState({
+            questionObjects: temp,
+            survey: null,
+        }, this.showSurvey);
     }
 
     render(){
@@ -211,7 +245,7 @@ class CreatePost extends Component{
                                     </div>
 
                                     <Button id='createSurvey' type='button' onClick={this.generateSurvey} positive><Plus/> Add Survey</Button>
-                                    {this.showSurvey()}
+                                    {this.state.survey}
                                     <Button hidden id='addQuestion' type='button' onClick={this.addQuestion} positive><Plus/> Add Question</Button>
 
                                     <div/>

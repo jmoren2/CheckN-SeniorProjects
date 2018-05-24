@@ -10,9 +10,9 @@ import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
 import ReactModal from 'react-modal'
+import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
-
 
 class ViewPost extends Component{//Initial State
     constructor(props) {
@@ -33,19 +33,34 @@ class ViewPost extends Component{//Initial State
             votePhrase: "Please vote and add a comment if you'd like.",
             voteChoice: 'none',
             showModal: false,
-            userThatCommented: ""
+            userThatCommented: "",
+            showHistory: false,
+            history:"Please hold....",
+            postState: "",
+            surveyId: ''
         };
         this.posterID=null;
         this.posterName=null;
+        this.returnedID = null;
+        this.postInfo = {};
+        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
-        this.returnedID = null;
+        this.handleOpenHistory = this.handleOpenHistory.bind(this);
+        this.handleCloseHistory = this.handleCloseHistory.bind(this);
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.storeUser = this.storeUser.bind(this);
-        this.editButton = this.editButton.bind(this);
-        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
-        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+        this.editPost = this.editPost.bind(this);
+        this.editComment = this.editComment.bind(this);
+        this.handleChangeComment = this.handleChangeComment.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
+        this.changePostState = this.changePostState.bind(this);
+        this.closePost = this.closePost.bind(this);
+        this.openPost = this.openPost.bind(this);
         console.log("The user object passed in is: " + props.userObj);
     }
 
@@ -54,13 +69,14 @@ class ViewPost extends Component{//Initial State
         this.retrieveComments();
     }
 
-    /*componentDidUpdate() {
-        this.retrievePost();
+    componentDidUpdate() {
+        //this.retrievePost();
         //this.retrieveComments();
-    }*/
+    }
 
     storeUser(data) {//A function for fetching the user object associated with the post
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+        this.setState({surveyId: data.post.surveyId});
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
             },
@@ -70,6 +86,7 @@ class ViewPost extends Component{//Initial State
             return response.json();
         })
         .then(userObject => {
+            console.log('DATA' + JSON.stringify(data))
             this.posterID = userObject.user.userId;//Saved for checking to edit the post
             this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
@@ -77,45 +94,47 @@ class ViewPost extends Component{//Initial State
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
+            this.setState({postState: data.post.state});
+
+            // if(pVoters)
+            // {
+            //     var positiveCount = pVoters.length;
+            // }
+            // else
+            // {
+            //     positiveCount = 0;
+            // }
+            // if(nVoters)
+            // {
+            //     var neutralCount = nVoters.length;
+            // }
+            // else
+            // {
+            //      neutralCount = 0;
+            // }
+            // if(negVoters)
+            // {
+            //     var negCount = negVoters.length;
+            // }
+            // else
+            // {
+            //      negCount = 0;
+            // }
             return(//displays the post contents
             <div className="container">
 
                 <div className="row">
                     <span className="col-sm">
-                        <button className="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp /> {positiveCount}
+                        <button id="upVotes" className="btn btn-primary btn-sm" type="submit">
+                            <ThumbsUp />
                         </button>
                         <br />
-                        <button className="btn btn-default btn-sm" type="submit">
-                        <   Neutral /> {neutralCount}
+                        <button id="netVotes" className="btn btn-default btn-sm" type="submit">
+                        <   Neutral /> 
                         </button>
                         <br />
-                        <button className="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> {negCount}
+                        <button id="downVotes" className="btn btn-danger btn-sm" type="submit">
+                            <ThumbsDown /> 
                         </button>       
                     </span>
 
@@ -156,7 +175,8 @@ class ViewPost extends Component{//Initial State
     }
 
     retrievePost(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -170,6 +190,17 @@ class ViewPost extends Component{//Initial State
             console.log("IN RETRIEVE POST");
             console.log(data);
             console.log(data.post);
+            this.postInfo = {
+                title: data.post.title,
+                content: data.post.content,
+                positiveVoters: data.post.positiveVoters,
+                neutralVoters: data.post.neutralVoters,
+                negativeVoters: data.post.negativeVoters,
+                pinnedId: data.post.pinnedId,
+                state: data.post.state,
+                tagArray: data.post.tags,
+                visibilityLevel: data.post.visibilityLevel
+            };
             this.storeUser(data);//Continues the work in the function above
         });
     }
@@ -177,7 +208,7 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
-        return fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+        return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -189,58 +220,74 @@ class ViewPost extends Component{//Initial State
             return result.json()
         })
         .then(response => {
+            console.log(response)
             
-             console.log('response: ' + JSON.stringify(response.user));
-             console.log('response type: ' + typeof response.user);
-             console.log('response obj val: ' + Object.values(response.user));
              if(document.getElementById(response.user.userId))
              {
                 var x = document.getElementById(response.user.userId);
 
-                x.innerHTML = response.user.email + " commented: ";
+                x.innerHTML = response.user.firstName + " " + response.user.lastName + " commented: ";
+                x.title = response.user.email;
             }
         })
     }
 
     generateCommentFeed(comments){ //comments are edited here  
         var commentFeed = comments.map((comment) => {
-            console.log(comment)
 
-            var vote = null;
+                var content = null;
 
-            if(comment.vote === "POSITIVE")
-            {
-                vote = <ThumbsUp />
-            }
-            else if(comment.vote === "NEGATIVE")
-            {
-                vote = <ThumbsDown />
-            }
-            else
-            {
-                vote = <Neutral />
-            }
+                if(comment.content === undefined)
+                {
+                    content = "noContent"
+                }
+                else
+                {
+                    content = "hasContent"
+                }
+
+                var vote = null;
+
+                if(comment.vote === "POSITIVE")
+                {
+                    vote = <ThumbsUp  style={{color: "blue"}} />
+                }
+                else if(comment.vote === "NEGATIVE")
+                {
+                    vote = <ThumbsDown  style={{color: "red"}} />
+                }
+                else
+                {
+                    vote = <Neutral />
+                }
+                
+                var test = this.retreiveUser(comment.userId);
+
+                //console.log('test: ' + test)
+
             
-            var test = this.retreiveUser(comment.userId);
-
-            //console.log('test: ' + test)
-            return(
-                    <div key={comment.commentId} className="card bg-light">
-                    
-                    <div className="card-block">
-                    <p id={comment.userId}>
-                        {comment.userId} commented: 
-                    </p>
-
-                    <div>
-                        {vote}
-                    </div>
-                    
-                    <p>{comment.content}</p>
-                    </div>
+                return(
+                        <div name={content} key={comment.commentId} className="card bg-light">
                         
-                    </div>
-                );
+                        <div className="card-block">
+                        <p id={comment.userId}>
+                            {comment.userId} commented: 
+                        </p>
+                        {/*TODO: make history only viewable if admin or manager*/}
+                        {this.editComment(comment.commentId)}
+                        <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
+                        <div>
+                            {vote}
+                        </div>
+                        
+                        <p>{comment.content}</p>
+                        </div>
+                            
+                        </div>
+                    );
+                
+                
+            
         })
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
@@ -249,7 +296,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -270,7 +317,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -279,7 +326,7 @@ class ViewPost extends Component{//Initial State
         })
         .then(response => {
             console.log('new Comment' + JSON.stringify(response))
-            this.setState({returnedId: response.comment.Item.commentId, newComment: this.addNewCommentToTop(this.state.content) });
+            this.setState({returnedId: response.comment.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
 
@@ -308,7 +355,8 @@ class ViewPost extends Component{//Initial State
     //Returns the response box
     //put inside of a method to later have this return nothing if the user already voted
     responseBox(){
-        return(
+        if(this.state.postState === "OPEN"){
+            return(
                 <div>
                 <label>{this.state.votePhrase}</label>
                 <form onSubmit={this.handleSubmit}>
@@ -329,7 +377,8 @@ class ViewPost extends Component{//Initial State
                     </div>
                 </form>
                 </div>
-        );
+            );
+        }
     }
 
     //Handles a click on post vote event
@@ -350,12 +399,47 @@ class ViewPost extends Component{//Initial State
 
 
     handleOpenModal () {
+        //this.retrieveComments();
+        console.log('state comments' + JSON.stringify(this.state.postComments[0]))
         this.setState({ showModal: true });
       }
       
       handleCloseModal () {
         this.setState({ showModal: false });
       }
+
+    handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
+        console.log("edit history type: " + event.type);
+        if(data.type === "comment"){
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a comment's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
+        else{
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                this.setState({history: "You got to a post's history!"});
+                this.setState({ showHistory: true });
+            });
+        }
+    }
+
+    handleCloseHistory () {
+        this.setState({history : "Please hold...."});
+        this.setState({ showHistory: false });
+    }
 
       getVoters(){
         return (
@@ -364,9 +448,10 @@ class ViewPost extends Component{//Initial State
             </div>
         )
       }
+     
 
-    editButton() {
-        if(this.props.userObj.userId === this.posterID) {
+    editPost() {
+        if(this.props.userObj.userId === this.posterID && this.state.postState === "OPEN") {
             return(
             <Link to={`/edit/${this.state.postID}`}>
             <button className='btn btn-info'>Edit Post</button>
@@ -375,6 +460,100 @@ class ViewPost extends Component{//Initial State
         else {
             return
         }
+    }
+
+    editComment(commentID) {
+        //if(this.props.userObj.userId === this.posterID) {
+        return(
+        <Link to={`/editComment/${commentID}`}>
+        <button className='btn btn-info'>Edit Comment</button>
+        </Link>);
+        //}
+        //else {
+        //    return
+        //}
+    }
+
+    changePostState() {
+        if(this.state.postState === "OPEN") {
+            return(
+                <button className='btn btn-info' onClick = {this.closePost}>Close Post</button>//Button to close the post
+            );
+        }
+        else {
+            return(
+                <button className='btn btn-info' onClick = {this.openPost}>Reopen Post</button>//Button to reopen the post
+            );
+        }
+    }
+
+    closePost() {
+        this.postInfo.state = "CLOSED";
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+        })
+        .then(response => {
+            return response.json()//Turn the response into a JSON object
+        });
+        //API call to close the post
+    }
+
+    openPost() {
+        this.postInfo.state = "OPEN";
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+        })
+        .then(response => {
+            return response.json()//Turn the response into a JSON object
+        });
+        //API call to open the post
+    }
+    
+    surveyButton() {
+        console.log(this.state.surveyId);
+        return(
+            <div>
+                <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
+                    <Button positive>Take Survey</Button>
+                </Link>
+                <Link to={`/surveyResponses/${this.state.surveyId}/${this.state.postID}`}>
+                    <Button positive>View Responses</Button>
+                </Link>
+            </div>
+        );
+    }
+
+    changePost()
+    {
+        if(document.getElementById("upVotes"))
+        {
+        var up = document.getElementById("upVotes");
+        }
+        else
+        {
+            console.log("no upVotes")
+        }
+        
+    }
+
+    filterCommentsWithoutContent(comments)
+    {
+        if(document.getElementsByName("noContent"))
+        {
+            
+            var noc = document.getElementsByName("noContent");
+            
+
+            for (let i = 0; i < noc.length; i++) {
+                noc[i].hidden = true;
+              }
+            
+        }
+        return (
+            comments
+        )
     }
 
     render(){
@@ -391,7 +570,9 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
-                                        {this.editButton()}
+                                        {this.editPost()}
+                                        {this.changePostState()}
+                                        {this.surveyButton()}
                                     </div>
 
                                     <div>
@@ -401,9 +582,12 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
+                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
-                                        {this.state.postComments}
+                                        {
+                                            this.state.postComments
+                                        }
                                         <button class="btn btn-info" onClick={this.handleCloseModal}>Close Modal</button>
                                         </ReactModal>
                                     </div>
@@ -413,7 +597,13 @@ class ViewPost extends Component{//Initial State
                                     </div>
        
                                     <div>
+                                        <ReactModal class="modal fade" isOpen={this.state.showHistory}>
+                                            {this.state.history}
+                                            <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
+                                        </ReactModal>
+                                        {/*TODO: Make filtering comments without content toggled*/}
                                         {this.state.postComments}
+                                        {/*this.filterCommentsWithoutContent(this.state.postComments)*/}
                                     </div>
                                         
                         </div>

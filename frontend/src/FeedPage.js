@@ -21,6 +21,7 @@ class FeedPage extends React.Component{
         }
         this.searchQuery = "search=a";
         console.log("The user object passed in is: " + props.userObj);
+        console.log(JSON.stringify(props.userObj));
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
@@ -32,7 +33,11 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+<<<<<<< HEAD
+        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
+=======
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -86,7 +91,11 @@ class FeedPage extends React.Component{
         //grab actual user id
 
        
-       fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+<<<<<<< HEAD
+       fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+       fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
         method: 'PUT',
         body: JSON.stringify(post)
     })
@@ -137,7 +146,11 @@ class FeedPage extends React.Component{
             }
 
 
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+<<<<<<< HEAD
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -188,7 +201,11 @@ class FeedPage extends React.Component{
                 console.log(post);
             }
 
-            fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+<<<<<<< HEAD
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+=======
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
+>>>>>>> b75a8ab454b38ff56878f4eace23554133864a4f
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -275,9 +292,9 @@ class FeedPage extends React.Component{
                                         </TimeAgo>
                                     </div>
 
-                                    <div className="col-sm-8">
+                                    {/* <div className="col-sm-8">
                                     {post.visibilityLevel}
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
