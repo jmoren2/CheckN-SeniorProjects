@@ -55,25 +55,16 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
 
 
             var showAllResponses = function(survey, callback){
-                if(survey.responses === null || survey.responses === undefined ||
-                   survey.responses === "")
-                   return getSingleSurveySuccess(200, survey, callback);
                 params = {
                     index: 'responses',
                     type: 'response',
-                    body: {
-                        query:{
-                            match:{
-                                surveyId: survey.surveyId
-                            }
-                        }
-                    }
+                    q: 'surveyId:' + survey.surveyId
                 };
 
+                survey.responses = [];
                 esClient.search(params,function(err,data) {
                     if(err) {
                         console.log("getSurveyById: get all responses failed" + err);
-                        survey.responses = "No Responses"
                     }
                     else{
                         if(data.hits.hits !== null && data.hits.hits !== undefined){
@@ -81,13 +72,13 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                                 survey.responses.push(data.hits.hits[i]._source)
                         }
                         else
-                            survey.responses = "No Responses"
+                            survey.responses = [];
                     }
                 
                     if(survey.responses[0].userId !== undefined && survey.responses[0].userId !== null)
-                        return showUser(survey, callback);
+                       return showUser(survey, callback);
 
-                    return getSingleSurveySuccess(200, data, callback);
+                    return getSingleSurveySuccess(200, survey, callback);
                 });
             }
 
