@@ -837,7 +837,10 @@ functions:
         - js/posts-api/getPostsBySearch.js
         - js/reports-api/responses.js
         - js/posts-api/responses.js
+        - js/comments-api/responses.js
+        - js/comments-api/getCommentsBySearch.js
         - node_modules/**
+
   
   getAllDepartmentsReport:
     handler: js/reports-api/handler.getAllDepartmentsReport

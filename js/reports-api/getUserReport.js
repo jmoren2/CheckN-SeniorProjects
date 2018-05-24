@@ -2,6 +2,7 @@
 const success = require('./responses').userReportSuccess;
 const fail = require('./responses').userReportSuccess;
 const getPostsBySearch = require('../posts-api/getPostsBySearch.js').getPostsBySearch;
+const getCommentsBySearch = require('../comments-api/getCommentsBySearch.js').getCommentsBySearch;
 
 module.exports.getUserReport = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
@@ -17,9 +18,32 @@ module.exports.getUserReport = (esClient, event, context, callback) => {
             else{
                  var listOfPostsReturned = JSON.parse(data.body);
                  var report = {postCount: listOfPostsReturned.count}
-                 return success(200, report, callback);
+                 getCommentsBySearch(esClient, event, context, function(err, data2){
+                    if(err){
+                        var failMessage = {message: 'Failed to create Report. Error: ' + error};
+                        return fail(500, failMessage, callback)
+                    }
+                    else{
+                        var listOfCommentsReturned = JSON.parse(data2.body);
+                        report.commentCount = listOfCommentsReturned.count;
+                        
+                        report.positiveVotes = countVotes(listOfCommentsReturned.comments, "positive");
+                        report.neutralVotes = countVotes(listOfCommentsReturned.comments, "neutral");
+                        report.negativeVotes = countVotes(listOfCommentsReturned.comments, "negative");
+                        return success(200, report, callback);
+                    }
+                 });
             }
         });
     }
 
 };
+
+function countVotes(obj, typeOfComment){
+    var count = 0;
+    for(i=0; i < obj.length; i++){
+        if(obj[i].vote===typeOfComment)
+            count +=1;
+    }
+    return count;
+}
