@@ -222,13 +222,23 @@ class ViewPost extends Component{//Initial State
         .then(response => {
             console.log(response)
             
-             if(document.getElementById(response.user.userId))
+             if(response.statusCode !== 500)
              {
-                var x = document.getElementById(response.user.userId);
-
-                x.innerHTML = response.user.firstName + " " + response.user.lastName + " commented: ";
-                x.title = response.user.email;
-            }
+                if(document.getElementById(response.user.userId))
+                {
+                   var x = document.getElementById(response.user.userId);
+   
+                   x.innerHTML = response.user.firstName + " " + response.user.lastName + " commented: ";
+                   x.title = response.user.email;
+               }
+               else
+               {var y = document.getElementById("unknown user");
+   
+                   x.innerHTML = "unknown user" + " commented: ";
+                  
+                   
+               }
+             }
         })
     }
 
@@ -265,18 +275,27 @@ class ViewPost extends Component{//Initial State
                 {
                     vote = <Neutral />
                 }
-                
-                var test = this.retreiveUser(comment.userId);
+
+                var test = null;
+
+                if(comment.userId)
+                {
+                test = comment.userId;
+                }
+                else
+                {
+                    test = "unknown user"
+                }
 
                 //console.log('test: ' + test)
 
-            
+                this.retreiveUser(comment.userId);
                 return(
                         <div name={content} key={comment.commentId} className="card bg-light">
                         
                         <div className="card-block">
-                        <p id={comment.userId}>
-                            {comment.userId} commented: 
+                        <p id={test}>
+                            {test} commented: 
                         </p>
                         {/*TODO: make history only viewable if admin or manager*/}
                         {this.editComment(comment.commentId)}
@@ -303,7 +322,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?post=${this.state.postID}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
