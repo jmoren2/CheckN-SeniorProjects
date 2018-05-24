@@ -42,7 +42,7 @@ class FeedPage extends React.Component{
         .then(feedResults => {
             return feedResults.json();
         })
-        .then(feedData => {
+        .then(feedData => { 
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
