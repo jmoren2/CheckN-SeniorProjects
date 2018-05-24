@@ -50,6 +50,7 @@ class SurveyResponse extends React.Component{
             console.log(survey);
             console.log(survey.survey);
             this.initializeForSurvey(survey.survey.questions);
+            this.retrieveResponses(survey.survey.responses);
         });
     }
 
@@ -82,7 +83,10 @@ class SurveyResponse extends React.Component{
         });
     }
 
-    retrieveResponses(){
+    //Response now come in with the survey
+    retrieveResponses(responses){
+        console.log("getting responses for survey: " + this.state.surveyId);
+        console.log(responses);
         /*fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.state.surveyId}/responses`, {
             headers: {
                 'content-type': 'application/json'
@@ -94,11 +98,12 @@ class SurveyResponse extends React.Component{
         })
         .then(responses => {
             console.log(responses);
+            this.setState({responses: responses});
         })
         .catch(error => {
             console.log(error);
         });*/
-        this.setState({
+        /*this.setState({
             responses: [
                 {
                     userId: 12345,
@@ -114,7 +119,7 @@ class SurveyResponse extends React.Component{
                 }
             ],
             totalIndex: 3
-        })
+        })*/
     }
 
     showSelection(){

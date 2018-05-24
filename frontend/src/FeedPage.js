@@ -21,6 +21,7 @@ class FeedPage extends React.Component{
         }
         this.searchQuery = "search=a";
         console.log("The user object passed in is: " + props.userObj);
+        console.log(JSON.stringify(props.userObj));
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
