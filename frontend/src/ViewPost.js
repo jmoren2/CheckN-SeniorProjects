@@ -76,7 +76,7 @@ class ViewPost extends Component{//Initial State
 
     storeUser(data) {//A function for fetching the user object associated with the post
         this.setState({surveyId: data.post.surveyId});
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${data.post.userId}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/${data.post.userId}`, {
             headers: {
                 'content-type' : 'application/json'
             },
@@ -157,7 +157,7 @@ class ViewPost extends Component{//Initial State
                                 </TimeAgo>
                                 </div>
                                 <div className="col-sm-8">
-                                    {data.post.visibilityLevel}
+                                    {/*data.post.visibilityLevel*/}
                                 </div>
                             </div>
 
@@ -176,7 +176,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}` ,{
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -208,7 +208,7 @@ class ViewPost extends Component{//Initial State
     retreiveUser(userId)
     {
        // console.log('userId: ' + userId)
-        return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/${userId}`, {
+        return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -296,7 +296,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -317,7 +317,7 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}/comments`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -489,7 +489,7 @@ class ViewPost extends Component{//Initial State
 
     closePost() {
         this.postInfo.state = "CLOSED";
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
@@ -501,7 +501,7 @@ class ViewPost extends Component{//Initial State
 
     openPost() {
         this.postInfo.state = "OPEN";
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
             body: JSON.stringify(this.postInfo)//Stringify the data being sent
         })
@@ -601,9 +601,7 @@ class ViewPost extends Component{//Initial State
                                             {this.state.history}
                                             <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
                                         </ReactModal>
-                                        {/*TODO: Make filtering comments without content toggled*/}
-                                        {this.state.postComments}
-                                        {/*this.filterCommentsWithoutContent(this.state.postComments)*/}
+                                        {this.filterCommentsWithoutContent(this.state.postComments)}
                                     </div>
                                         
                         </div>
