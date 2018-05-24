@@ -4,19 +4,19 @@ const uuid = require('uuid');
 const success = require('../responses.js').singleResponseSuccess;
 const fail = require('../responses.js').ResponseFail;
 
-module.exports.createResponse = (ddb, event, context, callback) => {
+module.exports.createResponse = (esClient, event, context, callback) => {
   if (event.body !== null && event.body !== undefined) {
-
     var body = JSON.parse(event.body);
     body.responseId = uuid.v4();
-    body.surveyId = event.pathParameters.surveyId
-    var response = {
-        Item: body,
-        TableName: 'surveyResponses'
-
-    }
+    body.surveyId = event.pathParameters.surveyId;
+    var params = {
+        index: 'responses',
+        type: 'response',
+        id: body.responseId,
+        body: body
+    };
     
-    ddb.put(response, function(error, data) {
+    esClient.create(params, function(error, data) {
       if(error) {
         return fail(500, 'Response creation failed. Error: ' + error, callback);
       } else {
@@ -26,4 +26,4 @@ module.exports.createResponse = (ddb, event, context, callback) => {
   } else {
     return fail(500, 'Response creation failed.', callback)
   } 
-}
+};

@@ -418,7 +418,7 @@ class ViewPost extends Component{//Initial State
     handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
         console.log("edit history type: " + event.type);
         if(data.type === "comment"){
-            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentid}`, {
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentid}`, {
                 method: 'GET'
             })
             .then(result => {
@@ -430,7 +430,7 @@ class ViewPost extends Component{//Initial State
             });
         }
         else{
-            fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
                 method: 'GET'
             })
             .then(result => {
@@ -608,9 +608,7 @@ class ViewPost extends Component{//Initial State
                                             {this.state.history}
                                             <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
                                         </ReactModal>
-                                        {/*TODO: Make filtering comments without content toggled*/}
-                                        {this.state.postComments}
-                                        {/*this.filterCommentsWithoutContent(this.state.postComments)*/}
+                                        {this.filterCommentsWithoutContent(this.state.postComments)}
                                     </div>
                                         
                         </div>

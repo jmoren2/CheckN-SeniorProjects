@@ -1,0 +1,8 @@
+{
+    "properties": {
+        "responseId": {"type": "keyword" },
+        "surveyId": {"type": "keyword" },
+        "userId": { "type": "keyword" },
+        "responses": { "type": "text" }
+    }
+}

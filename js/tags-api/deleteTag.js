@@ -1,33 +1,30 @@
 'use strict';
-const deleteTagSuccess = require('./responses').deleteTagSuccess;
-const deleteTagFail = require('./responses').tagsFail;
+const fail = require('./responses').TagsFail;
+const success = require('./responses').deleteTagSuccess;
 
-module.exports.deleteTag = (ddb, event, context, callback) => {
+module.exports.deleteTag = (esClient, event, context, callback) => {
     if (event.pathParameters !== null && event.pathParameters !== undefined) {
-        if (event.pathParameters.tag !== undefined && 
-            event.pathParameters.tag !== null && 
+        if (event.pathParameters.tag !== undefined &&
+            event.pathParameters.tag !== null &&
             event.pathParameters.tag !== "") {
-            
-            var name = event.pathParameters.tag;
+
+            var tag = event.pathParameters.tag;
             var params = {
-                TableName: "tags",
-                Key: {
-                    "tag" : name
-                }
+                index: 'tags',
+                type: 'tag',
+                id: tag
             };
 
-            console.log("Attempting a conditional delete...");
-    
-            ddb.delete(params, function(err, data) {
+            esClient.delete(params, function(err, data) {
                 if(err)
-                    return deleteTagFail(500, 'Delete Tag failed. Error: ' + err, callback);
+                    return fail(500, 'Delete Tag failed. Error: ' + err, callback);
                 else
-                    return deleteTagSuccess(callback);
+                    return success(callback);
             });
         }
         else
-            return deleteTagFail(400, 'Delete Tag failed.', callback);
+            return fail(400, 'Delete Tag failed.', callback);
     }
     else
-        return deleteTagFail(400, 'Delete Tag failed.', callback);
-}
+        return fail(400, 'Delete Tag failed.', callback);
+};
