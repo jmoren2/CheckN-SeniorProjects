@@ -2,6 +2,13 @@
     "properties": {
         "surveyId": { "type": "keyword" },
         "postId": { "type": "keyword" },
+        "visibilityLevel": {
+            "type": "nested",
+            "properties": {
+                "department": { "type": "keyword" },
+                "role": { "type": "keyword" }
+            }
+        },
         "questions": {
             "type": "nested",
             "properties": {

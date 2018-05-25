@@ -13,20 +13,32 @@ module.exports.createPost = (esClient, event, context, callback) => {
     post.postId = uuid.v4();
     post.timestamp = moment().toISOString();
 
+    // first history entry
+    var history = {};
+    if(post.title)
+        history.title = post.title;
+    if(post.content)
+        history.content = post.content;
+    if(post.tags)
+        history.tags = post.tags;
+    history.timestamp = post.timestamp;
+
+    post.history = [history];
+
     // use default values for missing fields
     let permissions = [];
     if(post.visibilityLevel) {
         permissions = post.visibilityLevel;
         for(let i = 0; i < permissions.length; ++i) {
             if (!permissions[i].department)
-                permissions[i].department = 'All';
+                permissions[i].department = '*';
             if (!permissions[i].role)
                 permissions[i].role = 'standard';
         }
     }
     else {
         permissions.push({
-            department: 'All',
+            department: '*',
             role: 'standard'
         });
     }
@@ -34,6 +46,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
 
     if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
       post.survey.postId = post.postId;
+      post.survey.visibilityLevel = post.visibilityLevel;
       event.body = JSON.stringify(post.survey);
       createSurvey(esClient, event, context, function(err, data2){
         if(err) {

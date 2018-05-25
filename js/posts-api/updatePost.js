@@ -40,16 +40,27 @@ function update(esClient, post, callback){
 
 function updateHistory(esClient, post, old, callback) {
     // pack up old values to add to history
-    let edit = {};
-    edit.title = old.title;
-    edit.content = old.content;
-    edit.tags = old.tags;
-    edit.timestamp = moment().toISOString();
-    if(old.history)
-        post.history = old.history;
-    else
-        post.history = [];
-    post.history.unshift(edit);
+    if(post.title !== old.title || post.content !== old.content || post.tags !== old.tags) {
+        let edit = {};
+        if(post.title)
+            edit.title = post.title;
+        else
+            edit.title = old.title;
+        if(post.content)
+            edit.content = post.content;
+        else
+            edit.content = old.content;
+        if(post.tags)
+            edit.tags = post.tags;
+        else
+            edit.tags = old.tags;
+        edit.timestamp = moment().toISOString();
+        if (old.history)
+            post.history = old.history;
+        else
+            post.history = [];
+        post.history.unshift(edit);
+    }
     return update(esClient, post, callback);
 }
 

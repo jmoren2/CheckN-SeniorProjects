@@ -97,8 +97,15 @@ function updateVote(esClient, comment, old, callback){
 function updateHistory(esClient, comment, old, callback){
     // pack up old values to add to history
     let edit = {};
-    if(comment.content){
-        edit.content = old.content;
+    if(comment.content !== old.content || (comment.vote && comment.vote !== old.vote)){
+        if(comment.content)
+            edit.content = comment.content;
+        else
+            edit.content = old.content;
+        if(comment.vote)
+            edit.vote = comment.vote;
+        else
+            edit.vote = old.vote;
         edit.timestamp = moment().toISOString();
         if(old.history)
             comment.history = old.history;
