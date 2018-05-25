@@ -13,6 +13,12 @@ module.exports.createPost = (esClient, event, context, callback) => {
     post.postId = uuid.v4();
     post.timestamp = moment().toISOString();
 
+    post.voteCounts = {
+        positive: 0,
+        negative: 0,
+        neutral: 0
+    };
+
     // first history entry
     var history = {};
     if(post.title)
