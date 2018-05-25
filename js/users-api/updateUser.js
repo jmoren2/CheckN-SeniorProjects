@@ -15,14 +15,14 @@ module.exports.updateUser = (esClient, event, context, callback) => {
             index: 'users',
             type: 'user',
             id: body.userId,
-            body: {doc:body}
+            body: {doc: body}
         };
 
         esClient.update(params, function(error, data) {
           if(error)
             fail(500, 'Update User failed. Error: ' + error, callback);
           else
-            success(201, data, callback)
+            success(201, body, callback)
         });
     }
     else{
