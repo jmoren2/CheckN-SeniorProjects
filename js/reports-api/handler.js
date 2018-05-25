@@ -11,7 +11,7 @@ const esClient = es.Client({
 });
 
 module.exports.getDepartmentReport = (event, context, callback) => {
-  const getDepartmentReport = require('./getDepartment').getDepartmentReport;
+  const getDepartmentReport = require('./getDepartmentReport').getDepartmentReport;
   getDepartmentReport(esClient, event, context, callback);
 };
 

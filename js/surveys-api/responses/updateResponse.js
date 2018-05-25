@@ -9,14 +9,14 @@ module.exports.updateResponse = (esClient, event, context, callback) => {
             index: 'responses',
             type: 'response',
             id: responseId,
-            body: body
+            body: {doc: body}
         };
 
         esClient.update(params, function(error, data) {
           if(error)
             fail(500, 'Update Responses failed. Error: ' + error, callback);
           else
-            success(201, data._source, callback)
+            success(201, data.result, callback)
         });
     }
     else{

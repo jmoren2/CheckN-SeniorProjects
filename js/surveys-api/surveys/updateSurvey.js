@@ -9,14 +9,14 @@ module.exports.updateSurvey = (esClient, event, context, callback) => {
             index: 'surveys',
             type: 'survey',
             id: surveyId,
-            body: item
+            body: {doc: item}
         };
 
         esClient.update(params, function(error, data) {
           if(error)
             fail(500, 'Update Survey failed. Error: ' + error, callback);
           else
-            success(201, data._source, callback)
+            success(201, data.result, callback)
         });
     }
     else{

@@ -15,11 +15,18 @@
                 "neutral": { "type": "integer" }
             }
         },
-        "nestedComments": { "type": "keyword" },
+        "visibilityLevel": {
+            "type": "nested",
+            "properties": {
+                "department": { "type": "keyword" },
+                "role": { "type": "keyword" }
+            }
+        },
         "history": { 
             "type": "nested",
             "properties": {
                 "content": { "type": "text" },
+                "vote": { "type": "keyword" },
                 "timestamp": { "type": "text" }
             }
         },

@@ -28,7 +28,7 @@ module.exports.createPost = (event, context, callback) => {
 
 module.exports.deletePost = (event, context, callback) => {
   const deletePost = require('./deletePost').deletePost;
-  deletePost(ddb, event, context, callback);
+  deletePost(esClient, event, context, callback);
 };
 
 module.exports.updatePost = (event, context, callback) => {

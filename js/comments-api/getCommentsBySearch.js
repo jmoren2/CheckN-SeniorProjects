@@ -3,13 +3,15 @@ const success = require('./responses').multiCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
-    var text, user, post;
+    var text, user, post, dept, role;
 
     // pull search key(s), user and post from the query string
     if(event.queryStringParameters) {
         text = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
         post = event.queryStringParameters.post;
+        dept = event.queryStringParameters.dept;
+        role = event.queryStringParameters.role;
         console.log("Search string: " + text);
         console.log("User string: " + user);
         console.log("Post string: " + post);
@@ -49,6 +51,37 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
             }
         })
     }
+
+    // initialize visibilityLevel filter
+    var permFilter = {
+        nested: {
+            path: "visibilityLevel",
+            query: {
+                bool: {
+                    must: []
+                }
+            }
+        }
+    };
+
+    // apply department/role to permissions filter
+    if(dept !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.department" : dept
+            }
+        })
+    }
+    if(role !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.role" : role
+            }
+        })
+    }
+    if(permFilter.nested.query.bool.must.length > 0)
+        search.query.bool.filter.push(permFilter);
+
     console.log(search);
 
     // associate user names with comments

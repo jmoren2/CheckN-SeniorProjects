@@ -15,15 +15,34 @@ module.exports.getResponseById = (esClient, event, context, callback) => {
                 type: 'response',
                 id: id
             };
-    
+
+            var showUser = function(response, callback) {
+                params = {
+                    index: 'users',
+                    type: 'user',
+                    id: response.userId
+                };
+
+                esClient.get(params, function (err, data) {
+                    if (err) {
+                        console.log('getResponseById get user error: ' + JSON.stringify(err));
+                        response.userName = 'unknown user';
+                    } else {
+                        var user = data._source;
+                        response.userName = user.firstName + ' ' + user.lastName;
+                    }
+                    return getSingleResponseSuccess(200, response, callback);
+                });
+            };
+
             esClient.get(params, function(err, data) {
                 if(err)
                     return getResponseFail(500,'get Response by Id failed. Error: ' + err, callback);
                 else {
-                    if(data._source == null)
+                    if(data._source === null || data._source === undefined)
                       return getResponseFail(404, 'No Response Found', callback);
                     else
-                      return getSingleResponseSuccess(200, data._source, callback);
+                      return showUser(data._source, callback);
                 }
             });
         }

@@ -9,12 +9,6 @@ module.exports.deletePost = (esClient, event, context, callback) => {
             event.pathParameters.postId !== "") {
             console.log("Received proxy: " + event.pathParameters.postId);
             var id = event.pathParameters.postId;
-            // var params = {
-            //     TableName: "posts",
-            //     Key: {
-            //         "postId" : id
-            //     }
-            // };
 
             var params = {
                 index: 'posts',
@@ -32,13 +26,6 @@ module.exports.deletePost = (esClient, event, context, callback) => {
                 console.log('data: ' + JSON.stringify(data));
                 deletePostSuccess(callback);
             });
-    
-            // ddb.delete(params, function(err, data) {
-            //     if(err)
-            //         return deletePostFail(500, 'Delete Post failed. Error: ' + err, callback);
-            //     else
-            //         return deletePostSuccess(callback);
-            // });
         }
         else
             return deletePostFail(400, 'Delete Post failed.', callback);
