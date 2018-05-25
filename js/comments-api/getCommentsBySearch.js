@@ -9,7 +9,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
     if(event.queryStringParameters) {
         text = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
-        post = event.queryStringParameters.post;
+        post = event.queryStringParameters.postId;
         dept = event.queryStringParameters.dept;
         role = event.queryStringParameters.role;
         console.log("Search string: " + text);
