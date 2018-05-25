@@ -3,8 +3,9 @@ const moment = require('moment');
 const response = require('./responses.js').singlePostSuccess;
 const fail = require('./responses').postsFail;
 module.exports.updatePost = (esClient, event, context, callback) => {
-    if(event.body !== null && event.body !== undefined){
+    if(event.pathParameters && event.pathParameters.postId && event.body !== null && event.body !== undefined){
         var post = JSON.parse(event.body);
+        post.postId = event.pathParameters.postId;
 
         if(post.title || post.content || post.tags)
             return getOriginal(esClient, post, callback);
@@ -12,7 +13,7 @@ module.exports.updatePost = (esClient, event, context, callback) => {
             update(esClient, post, callback);
     }
     else{
-        fail(500,'Post content updated failed. Error: JSON body is empty or undefined', callback);
+        fail(500,'Post content updated failed. Error: invalid postId or JSON body is empty or undefined', callback);
     }
 };
 

@@ -25,6 +25,9 @@ module.exports.createPost = (esClient, event, context, callback) => {
 
     post.history = [history];
 
+    if(!post.state)
+        post.state = 'OPEN';
+
     // use default values for missing fields
     let permissions = [];
     if(post.visibilityLevel) {
@@ -44,6 +47,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
     }
     post.visibilityLevel = permissions;
 
+    console.log('post :' + JSON.stringify(post));
     if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
       post.survey.postId = post.postId;
       post.survey.visibilityLevel = post.visibilityLevel;
@@ -51,33 +55,21 @@ module.exports.createPost = (esClient, event, context, callback) => {
       createSurvey(esClient, event, context, function(err, data2){
         if(err) {
           var failMessage = {message: 'Failed to create Survey. Error: ' + error};
-          fail(500, failMessage, callback);
+          return fail(500, failMessage, callback);
         } else {
           var newSurvey = JSON.parse(data2.body);
           post.surveyId = newSurvey.survey.surveyId;
           delete post.survey;
 
-          var params = {
-            index: 'posts',
-            type: 'post',
-            id: post.postId,
-            body: post
-          };
-
           console.log('post: ' + JSON.stringify(post));
           console.log('survey: ' + JSON.stringify(newSurvey.survey));
 
-          esClient.create(params, function(error, data) {
-            if(error) {
-              return fail(500, 'Post creation failed. Error: ' + error, callback);
-            } else {
-              console.log('data: ' + JSON.stringify(data));
-              return success(200, post, callback);
-            }
-          });
+          return create(esClient, post, callback)
         }
       });
     }
+    else
+        return create(esClient, post, callback)
   } else {
     return fail(500, 'Post creation failed.', callback)
   }
@@ -85,4 +77,22 @@ module.exports.createPost = (esClient, event, context, callback) => {
 
 function isEmptyObject(obj) {
   return !Object.keys(obj).length;
+}
+
+function create(esClient, post, callback){
+    let params = {
+        index: 'posts',
+        type: 'post',
+        id: post.postId,
+        body: post
+    };
+
+    esClient.create(params, function(error, data){
+        if(error) {
+            return fail(500, 'Post creation failed. Error: ' + error, callback);
+        } else {
+            console.log('data: ' + JSON.stringify(data));
+            return success(200, post, callback);
+        }
+    })
 }

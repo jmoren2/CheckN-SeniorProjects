@@ -4,8 +4,9 @@ const success = require('./responses').singleCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.updateComment = (esClient, event, context, callback) => {
-    if(event.body !== null && event.body !== undefined){
+    if(event.pathParameters && event.pathParameters.commentId && event.body !== null && event.body !== undefined){
         var comment = JSON.parse(event.body);
+        comment.commentId = event.pathParameters.commentId;
         var updateHistory = false;
 
         if(comment.content)
