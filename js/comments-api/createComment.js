@@ -30,7 +30,7 @@ module.exports.createComment = (esClient, event, context, callback) => {
 
         comment.history = [history];
 
-        return create(esClient, comment, callback);
+        return getPostPermissions(esClient, comment, callback);
     }
     else {
         let error = 'Comment creation failed. error: body empty';
@@ -38,6 +38,25 @@ module.exports.createComment = (esClient, event, context, callback) => {
         return fail(400, error, callback);
     }
 };
+
+function getPostPermissions(esClient, comment, callback){
+    let params = {
+        index: 'posts',
+        type: 'post',
+        id: comment.postId
+    };
+
+    esClient.get(params, function(error, data){
+        if(error){
+            console.log('Comment creation failed to get parent post. error: ' + JSON.stringify(error));
+            return fail(400, error, callback);
+        }
+        else{
+            comment.visibilityLevel = data._source.visibilityLevel;
+            return create(esClient, comment, callback);
+        }
+    })
+}
 
 function updateVote(esClient, comment, callback){
     let vote = comment.vote;

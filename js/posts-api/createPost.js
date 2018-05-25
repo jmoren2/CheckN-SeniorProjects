@@ -46,6 +46,7 @@ module.exports.createPost = (esClient, event, context, callback) => {
 
     if(post.hasOwnProperty('survey') && !isEmptyObject(post.survey)){
       post.survey.postId = post.postId;
+      post.survey.visibilityLevel = post.visibilityLevel;
       event.body = JSON.stringify(post.survey);
       createSurvey(esClient, event, context, function(err, data2){
         if(err) {
