@@ -56,11 +56,13 @@ export function deleteUser(email){
     .then(data => {
         var id = data.id;
         console.log("Delete User here:" , data)
-
-        return fetch(data._links.deactivate.href,{
-            method: 'POST',
-            headers: headers
+        if(data._links !== undefined && data._links !== null)
+            return fetch(data._links.deactivate.href,{
+                method: 'POST',
+                headers: headers
         })
+        else
+            console.log("Cannot delete User");
     })
 }
 

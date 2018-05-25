@@ -2,9 +2,15 @@
 
 const success = require('./responses.js').singleUserSuccess;
 const fail = require('./responses.js').usersFail;
+
 module.exports.updateUser = (esClient, event, context, callback) => {
-    if(event.body !== null && event.body !== undefined){
+    if(event.body !== null && event.body !== undefined && 
+        event.pathParameters.userId !== undefined && 
+        event.pathParameters.userId !== null) {
+
         var body = JSON.parse(event.body);
+        body.userId = event.pathParameters.userId;
+
         var params = {
             index: 'users',
             type: 'user',

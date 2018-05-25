@@ -30,15 +30,18 @@ module.exports.getPostById = (esClient, event, context, callback) => {
                         index: 'users',
                         type: 'user',
                         id: post.userId
-                     };
-                    esClient.get(paramsUser, function(err, data2){
-                        if(err){
-                            console.log('getPostById get user error: ' + err);
+                    };
+                    esClient.get(paramsUser, function(err2, data2){
+                        if(err2){
+                            console.log('getPostById get user error: ' + err2);
                             post.userName = 'unknown user';
                         } else {
                             console.log('data: ' + JSON.stringify(data2));
                             var user = data2._source;
-                            post.userName = user.firstName + ' ' + user.lastName;
+                            if(data2.found == false || user === undefined || user === null || user === "")
+                                post.userName = 'unknown user'
+                            else
+                                post.userName = user.firstName + ' ' + user.lastName;
                         }
                         return success(200, post, callback);
                     });
