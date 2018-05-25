@@ -13,6 +13,18 @@ module.exports.createPost = (esClient, event, context, callback) => {
     post.postId = uuid.v4();
     post.timestamp = moment().toISOString();
 
+    // first history entry
+    var history = {};
+    if(post.title)
+        history.title = post.title;
+    if(post.content)
+        history.content = post.content;
+    if(post.tags)
+        history.tags = post.tags;
+    history.timestamp = post.timestamp;
+
+    post.history = [history];
+
     // use default values for missing fields
     let permissions = [];
     if(post.visibilityLevel) {

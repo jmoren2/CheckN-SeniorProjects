@@ -20,6 +20,16 @@ module.exports.createComment = (esClient, event, context, callback) => {
                 comment.vote = vote;
         }
 
+        // first history entry
+        var history = {};
+        if(comment.content)
+            history.content = comment.content;
+        if(comment.vote)
+            history.vote = comment.vote;
+        history.timestamp = comment.timestamp;
+
+        comment.history = [history];
+
         return create(esClient, comment, callback);
     }
     else {
