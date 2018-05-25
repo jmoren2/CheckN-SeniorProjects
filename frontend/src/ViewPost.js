@@ -445,11 +445,31 @@ class ViewPost extends Component{//Initial State
                 return result.json()
             })
             .then(response => {
-                this.setState({history: "You got to a comment's history!"});
+                var commentHistory;
+                if(response.comment.history.length > 1){
+                    commentHistory = response.comment.history.map((iteration) => {
+                        <div className="card-block">
+                            {/*TODO: make history only viewable if admin or manager*/}
+                            <div>
+                                {iteration.vote}
+                            </div>
+                            
+                            <p>{iteration.content}</p>
+                        </div>
+                    })
+                }
+                else{
+                    commentHistory = "No edits have been made yet to this comment";
+                }
+                return commentHistory;
+            })
+            .then(timeline => {
+                this.setState({history: timeline});
                 this.setState({ showHistory: true });
             });
         }
         else{
+            console.log()
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
                 method: 'GET'
             })
@@ -457,7 +477,32 @@ class ViewPost extends Component{//Initial State
                 return result.json()
             })
             .then(response => {
-                this.setState({history: "You got to a post's history!"});
+                var postHistory;
+                if(response.post.history.length > 1){
+                    postHistory = response.post.history.map((iteration) => {
+                        <div className="card-block">
+                            {/*TODO: make history only viewable if admin or manager*/}
+                            <div>
+                                {iteration.title}
+                            </div>
+                            
+                            <p>{iteration.content}</p>
+                            {/* <p>{iteration.tags}</p> */}
+                            <div>
+                                {iteration.tags.map((eachTag) => {
+                                    <p>{eachTag}</p>
+                                })}
+                            </div>
+                        </div>
+                    })
+                }
+                else{
+                    postHistory = "No edits have been made yet to this post";
+                }
+                return postHistory;
+            })
+            .then(timeline => {
+                this.setState({history: timeline});
                 this.setState({ showHistory: true });
             });
         }
