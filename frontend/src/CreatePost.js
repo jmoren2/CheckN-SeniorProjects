@@ -88,8 +88,7 @@ class CreatePost extends Component{
         console.log('creating post with ');
         console.log(data);
         
-        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/', {
-        //fetch('https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts/', {
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts', {
             method: 'POST',
             body: JSON.stringify(data)//Stringify the data being sent
         })
@@ -232,7 +231,7 @@ class CreatePost extends Component{
 
                                     <div className='form-group'>
                                         <label>Tags:</label>
-                                        <input onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                        <input value={this.state.tagArray} onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
                                         <span>
                                             <label>Tag Preview: </label>
                                             {this.state.tagButtons}

@@ -446,12 +446,16 @@ class ViewPost extends Component{//Initial State
             })
             .then(response => {
                 var commentHistory;
+                var counter = 0;
                 if(response.comment.history.length > 1){
                     commentHistory = response.comment.history.map((iteration) => {
                         <div className="card-block">
                             {/*TODO: make history only viewable if admin or manager*/}
                             <div>
                                 {iteration.vote}
+                            </div>
+                            <div>
+                                {counter = counter + 1}
                             </div>
                             
                             <p>{iteration.content}</p>
@@ -478,12 +482,17 @@ class ViewPost extends Component{//Initial State
             })
             .then(response => {
                 var postHistory;
+                var counter;
                 if(response.post.history.length > 1){
                     postHistory = response.post.history.map((iteration) => {
                         <div className="card-block">
                             {/*TODO: make history only viewable if admin or manager*/}
                             <div>
                                 {iteration.title}
+                            </div>
+
+                            <div>
+                                {counter = counter + 1}
                             </div>
                             
                             <p>{iteration.content}</p>
@@ -535,15 +544,15 @@ class ViewPost extends Component{//Initial State
     }
 
     editComment(commentID) {//TODO: Add back in the ability to only edit a user's own comment
-        //if(this.props.userObj.userId === this.posterID) {
+        if(this.props.userObj.userId === this.posterID && this.post.postState === "OPEN") {
         return(
-        <Link to={`/editComment/${commentID}`}>
-        <button className='btn btn-info'>Edit Comment</button>
-        </Link>);
-        //}
-        //else {
-        //    return
-        //}
+            <Link to={`/editComment/${commentID}`}>
+                <button className='btn btn-info'>Edit Comment</button>
+            </Link>);
+        }
+        else {
+            return
+        }
     }
 
     changePostState() {
