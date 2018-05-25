@@ -834,7 +834,13 @@ functions:
       include:
         - js/reports-api/handler.js
         - js/reports-api/getUserReport.js
+        - js/posts-api/getPostsBySearch.js
+        - js/reports-api/responses.js
+        - js/posts-api/responses.js
+        - js/comments-api/responses.js
+        - js/comments-api/getCommentsBySearch.js
         - node_modules/**
+
   
   getAllDepartmentsReport:
     handler: js/reports-api/handler.getAllDepartmentsReport
@@ -853,7 +859,7 @@ functions:
     handler: js/reports-api/handler.getDepartmentReport
     events:
       - http:
-          path: reports/departments/{departmentId}
+          path: reports/departments/{department}
           method: get
           cors: true
     package:

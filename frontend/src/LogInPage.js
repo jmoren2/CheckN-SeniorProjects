@@ -44,10 +44,10 @@ class LogInPage extends React.Component{
             console.log("Logined : ", data)
         })
 
-        deleteUser("test@test1.com")
-        .then(response => {
-            console.log(response);
-        })
+        //deleteUser("test@test1.com")
+        //.then(response => {
+        //    console.log(response);
+        //})
 
         // ********************************* //
 

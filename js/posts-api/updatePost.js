@@ -3,7 +3,9 @@ const moment = require('moment');
 const response = require('./responses.js').singlePostSuccess;
 const fail = require('./responses').postsFail;
 module.exports.updatePost = (esClient, event, context, callback) => {
-    if(event.pathParameters && event.pathParameters.postId && event.body !== null && event.body !== undefined){
+    if(event.body !== null && event.body !== undefined && event.pathParameters &&
+        event.pathParameters.postId !== undefined && event.pathParameters.postId !== null) {
+
         var post = JSON.parse(event.body);
         post.postId = event.pathParameters.postId;
 
