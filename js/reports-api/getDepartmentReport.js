@@ -39,8 +39,6 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
             var department = decodeURIComponent(event.pathParameters.departmentId);
             var params = {};
             var report = {};
-            
-            console.log("Sending params: " + JSON.stringify(params));
 
             // Retrieve # of Users
             var userCount = function(report, callback){
@@ -144,12 +142,15 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                     }
                 }
             }
+
             esClient.search(params, function(err, data) {
                 if(err)
                     return getDepartmentFail(500,'get report by department failed. Error: ' + err, callback);
                 else {
                     if(data.hits === null || data.hits === undefined || data.hits.total === 0){
                         report.totalPost = 0;
+                        report.totalComment = 0;
+                        report.totalSurvey = 0;
                     }
                     else{
                         var totalPost = 0;
