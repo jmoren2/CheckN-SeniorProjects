@@ -1,6 +1,5 @@
 'use strict';
 const AWS = require('aws-sdk');
-//const ddb = new AWS.DynamoDB.DocumentClient();
 const es = require('elasticsearch');
 AWS.Config.region = 'us-west-2';
 const esClient = es.Client({
@@ -19,4 +18,9 @@ module.exports.getDepartmentReport = (event, context, callback) => {
 module.exports.getAllDepartmentsReport = (event, context, callback) => {
   const getAllDepartmentsReport = require('./getAllDepartmentsReport').getAllDepartmentsReport;
   getAllDepartmentsReport(esClient, event, context, callback);
+};
+
+module.exports.getUserReport = (event, context, callback) => {
+    const getUserReport = require('./getUserReport').getUserReport;
+    getUserReport(esClient, event, context, callback);
 };
