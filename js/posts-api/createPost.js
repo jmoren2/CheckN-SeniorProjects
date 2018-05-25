@@ -19,14 +19,14 @@ module.exports.createPost = (esClient, event, context, callback) => {
         permissions = post.visibilityLevel;
         for(let i = 0; i < permissions.length; ++i) {
             if (!permissions[i].department)
-                permissions[i].department = 'All';
+                permissions[i].department = '*';
             if (!permissions[i].role)
                 permissions[i].role = 'standard';
         }
     }
     else {
         permissions.push({
-            department: 'All',
+            department: '*',
             role: 'standard'
         });
     }
