@@ -16,7 +16,7 @@ class Admin extends React.Component{
         }
         if(this.props.userObj.userPermissions[0].role !== "admin")
         {
-            window.location.href = '/login';
+            window.location.href = '/feed';
             console.log('goodbye') 
         }
 

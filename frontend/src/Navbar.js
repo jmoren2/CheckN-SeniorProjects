@@ -51,16 +51,6 @@ class Navbar extends React.Component {
       <Create /> 	&nbsp;
       Create Post
       </Link>
-      <Link to="/">
-      <Profile />	&nbsp;
-      Profile
-      </Link>
-      <Link to="/">
-      <Check /> 	&nbsp;
-      Tracked Posts</Link>
-      <Link to="/">
-      <Notification />	&nbsp;
-      Notifications</Link>
       <Link to="/admin">
       <Admin />	&nbsp;
       Admin Controls</Link>

@@ -24,9 +24,15 @@ class Report extends React.Component{
             email:'',
             department:'',
             role: '',
+            userId:'',
             posts: [],
             comments: [],
-            votes:[]
+            votes:[],
+            postCount: '',
+          commentCount: '',
+          positiveVotes: 0,
+          neutralVotes:0,
+          negativeVotes: 0
             
         }
 
@@ -39,7 +45,7 @@ class Report extends React.Component{
     heandlSearchUser = (event, data) =>
     {
         
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users?namesearch=${data.value}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?namesearch=${data.value}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -93,7 +99,6 @@ class Report extends React.Component{
 
     handleUserChange = (event, data) =>
     {
-        document.getElementById("metrics").hidden = false;
        
             this.setState({
                 selectedUser: data.value
@@ -104,7 +109,7 @@ class Report extends React.Component{
 
     getUserInfo = () =>
     {
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?email=${this.state.selectedUser}`, {
         headers: {
             'content-type': 'application/json'
         },
@@ -120,6 +125,7 @@ class Report extends React.Component{
                     selectedUserInfo: data.users[0],
                     firstName: data.users[0].firstName,
                     lastName: data.users[0].lastName,
+                    userId:data.users[0].userId,
                     email:data.users[0].email,
                     department:data.users[0].userPermissions[0].department,
                     role:data.users[0].userPermissions[0].role,
@@ -136,6 +142,34 @@ class Report extends React.Component{
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
+    getUserReport = () =>
+    {
+        //alert(this.state.selectedUser)
+               
+    fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/reports/users/${this.state.userId}`, {
+        headers: {
+            'content-type': 'application/json'
+             },
+        method: 'GET',
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data =>{
+        //alert(JSON.stringify(data));
+
+      this.setState({
+          postCount: data.report.postCount,
+          commentCount: data.report.commentCount,
+          positiveVotes: data.report.positiveVotes,
+          neutralVotes: data.report.neutralVotes,
+          negativeVotes: data.report.negativeVotes
+      }, function(){
+                    
+        document.getElementById("metrics").hidden = false;
+                })      
+    })
+    }
 
     
 
@@ -157,6 +191,7 @@ class Report extends React.Component{
 
                                 <Dropdown id="allUsers" selection options={this.state.AllUsers} hidden onChange={this.handleUserChange}  />
 
+                                <Button standard  id="runUserReport" onClick={this.getUserReport}>Run</Button> <br />
                                 <div id="metrics" hidden>
                                 <Card>
                                     <Card.Header>
@@ -166,12 +201,11 @@ class Report extends React.Component{
                                         </h3>
                                     </Card.Header>
                                     <Card.Description>
-                                        Posts: {this.state.posts.length} <br/>
-                                        Comments: {this.state.comments.length} <br/>
-                                        Total Votes: {this.state.votes.length} <br/>
-                                        Up Votes: {this.state.votes.length} <br/>
-                                        Neutral Votes: {this.state.votes.length} <br/>
-                                        Down Votes: {this.state.votes.length} <br/>
+                                        Posts: {this.state.postCount} <br/>
+                                        Comments: {this.state.commentCount} <br/>
+                                        Up Votes: {this.state.positiveVotes} <br/>
+                                        Neutral Votes: {this.state.neutralVotes} <br/>
+                                        Down Votes: {this.state.negativeVotes} <br/>
                                        
 
                                     </Card.Description>
