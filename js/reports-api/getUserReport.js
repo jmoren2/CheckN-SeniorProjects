@@ -10,6 +10,7 @@ module.exports.getUserReport = (esClient, event, context, callback) => {
         var userId = event.pathParameters.userId;
         console.log(userId);
         event.queryStringParameters = {user: userId};
+        event.queryStringParameters.pageSize = 100;
         getPostsBySearch(esClient, event, context, function(err, data){
             if(err){
                 var failMessage = {message: 'Failed to create Report. Error: ' + error};
@@ -42,7 +43,7 @@ module.exports.getUserReport = (esClient, event, context, callback) => {
 function countVotes(obj, typeOfComment){
     var count = 0;
     for(i=0; i < obj.length; i++){
-        if(obj[i].vote===typeOfComment)
+        if(obj[i].vote.toLowerCase()===typeOfComment)
             count +=1;
     }
     return count;
