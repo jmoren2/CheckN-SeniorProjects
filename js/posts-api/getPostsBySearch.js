@@ -3,20 +3,23 @@ const success = require('./responses').multiPostSuccess;
 const fail = require('./responses').postsFail;
 
 module.exports.getPostsBySearch = (esClient, event, context, callback) => {
-    var search, user, tag;
+    var /*forUser,*/ search, user, tag, dept, role;
 
     // pull search key(s) and user from the query string
     if(event.queryStringParameters) {
+        //forUser = event.queryStringParameters.forUser;
         search = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
         tag = event.queryStringParameters.tag;
+        dept = event.queryStringParameters.dept;
+        role = event.queryStringParameters.role;
         console.log("Search string: " + search);
         console.log("User string: " + user);
         console.log("Tag: " + tag);
     }
 
     var filter = {
-        query: { bool: { must: [] } }
+        query: { bool: { must: [], filter: {} } }
     };
 
     var userFilter, tagFilter, searchFilter;
@@ -51,9 +54,40 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
         tagFilter = { match: { tags: tag } };
         mustFilter.bool.must.push(tagFilter);
     }
+
+    // initialize visibilityLevel filter
+    var permFilter = {
+        nested: {
+            path: "visibilityLevel",
+            query: {
+                bool: {
+                    must: []
+                }
+            }
+        }
+    };
+
+    // apply department/role to permissions filter
+    if(dept !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.department" : dept
+            }
+        })
+    }
+    if(role !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.role" : role
+            }
+        })
+    }
+
     if(mustFilter.bool.must.length > 0) {
         filter.query.bool.must.push(mustFilter);
     }
+    if(permFilter.nested.query.bool.must.length > 0)
+        filter.query.bool.filter = permFilter;
     console.log(JSON.stringify(filter));
 
 
