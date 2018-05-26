@@ -10,15 +10,32 @@ module.exports.createComment = (esClient, event, context, callback) => {
         var comment = JSON.parse(event.body);
         comment.commentId = uuid.v4();
         comment.timestamp = moment().toISOString();
+        comment.voteCounts = {
+            positive: 0,
+            negative: 0,
+            neutral: 0
+        };
 
         // validate vote field
         if (comment.vote) {
-            let vote = comment.vote;
+            let vote = comment.vote.toLowerCase();
             if (!(vote === 'positive' || vote === 'negative' || vote === 'neutral'))
                 delete comment.vote;
+            else
+                comment.vote = vote;
         }
 
-        return create(esClient, comment, callback);
+        // first history entry
+        var history = {};
+        if(comment.content)
+            history.content = comment.content;
+        if(comment.vote)
+            history.vote = comment.vote;
+        history.timestamp = comment.timestamp;
+
+        comment.history = [history];
+
+        return getPostPermissions(esClient, comment, callback);
     }
     else {
         let error = 'Comment creation failed. error: body empty';
@@ -27,12 +44,30 @@ module.exports.createComment = (esClient, event, context, callback) => {
     }
 };
 
+function getPostPermissions(esClient, comment, callback){
+    let params = {
+        index: 'posts',
+        type: 'post',
+        id: comment.postId
+    };
+
+    esClient.get(params, function(error, data){
+        if(error){
+            console.log('Comment creation failed to get parent post. error: ' + JSON.stringify(error));
+            return fail(400, error, callback);
+        }
+        else{
+            comment.visibilityLevel = data._source.visibilityLevel;
+            return create(esClient, comment, callback);
+        }
+    })
+}
+
 function updateVote(esClient, comment, callback){
     let vote = comment.vote;
     if(vote){
-        // construct object with string as key so we can upsert if value not initialized
-        var temp = {};
-        temp[vote] = 1;
+        // update parent comment or post if not nested
+      
         var params = {};
         if(comment.parentId){
             params = {
@@ -49,10 +84,7 @@ function updateVote(esClient, comment, callback){
             }
         }
         params.body = {
-            script: 'ctx._source.voteCounts.' + vote + ' += 1',
-            upsert: {
-                voteCounts: temp
-            }
+            script: 'ctx._source.voteCounts.' + vote + ' += 1'
         };
 
         console.log('vote update params: ' + JSON.stringify(params));

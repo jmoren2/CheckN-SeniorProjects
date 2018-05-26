@@ -26,6 +26,7 @@
             "type": "nested",
             "properties": {
                 "content": { "type": "text" },
+                "vote": { "type": "keyword" },
                 "timestamp": { "type": "text" }
             }
         },

@@ -745,10 +745,12 @@ functions:
     events:
       - http:
           path: index/surveys
+
           method: put
           cors: true
     package:
       include:
+
         - js/surveys-api/surveys/surveys-index-mapping.js
         - js/surveys-api/surveys/surveys-index-mapping.json
         - js/surveys-api/handler.js
@@ -834,6 +836,11 @@ functions:
       include:
         - js/reports-api/handler.js
         - js/reports-api/getUserReport.js
+        - js/posts-api/getPostsBySearch.js
+        - js/reports-api/responses.js
+        - js/posts-api/responses.js
+        - js/comments-api/responses.js
+        - js/comments-api/getCommentsBySearch.js
         - node_modules/**
   
   getAllDepartmentsReport:
@@ -853,7 +860,7 @@ functions:
     handler: js/reports-api/handler.getDepartmentReport
     events:
       - http:
-          path: reports/departments/{departmentId}
+          path: reports/departments/{department}
           method: get
           cors: true
     package:

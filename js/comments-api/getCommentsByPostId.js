@@ -40,5 +40,5 @@ module.exports.getCommentsByPostId = (esClient, event, context, callback) => {
             return fail(400, 'get Comments by postId failed.', callback);
     }
     else
-        return getCommentsFail(400,'get Comments by postId failed', callback);
-}
+        return fail(400,'get Comments by postId failed', callback);
+};

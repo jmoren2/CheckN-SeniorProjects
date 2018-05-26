@@ -41,7 +41,7 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                     } else {
                         var user;
                         for(var i = 0; i < data.docs.length; i++) {
-                            if(data.docs[i].found === true) {
+                            if(data.docs[i].found == true) {
                                 user = data.docs[i]._source;
                                 survey.responses[i].userName = user.firstName + ' ' + user.lastName;
                             }
@@ -55,36 +55,30 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
 
 
             var showAllResponses = function(survey, callback){
-                if(survey.responses === null || survey.responses === undefined ||
-                   survey.responses === "")
-                   return getSingleSurveySuccess(200, survey, callback);
-
                 params = {
                     index: 'responses',
                     type: 'response',
-                    body: {
-                        ids: survey.responses
-                    }
+                    q: 'surveyId:' + survey.surveyId
                 };
 
-                esClient.mget(params,function(err,data) {
+                survey.responses = [];
+                esClient.search(params,function(err,data) {
                     if(err) {
                         console.log("getSurveyById: get all responses failed" + err);
-                        survey.responses = "No Responses"
                     }
                     else{
-                        for(var i = 0; i < survey.responses.length; i++) {
-                            if(data.docs[i].found === true) {
-                                delete survey.responses[i];
-                                survey.responses[i] = data.docs[i]._source;
-                            }
+                        if(data.hits.hits !== null && data.hits.hits !== undefined){
+                            for(var i = 0; i < data.hits.hits.length; i++)
+                                survey.responses.push(data.hits.hits[i]._source)
                         }
-                        if(survey.responses[0].userId !== undefined && survey.responses[0].userId !== null)
-                            return showUser(survey, callback);
+                        else
+                            survey.responses = [];
                     }
+                
+                    if(survey.responses[0].userId !== undefined && survey.responses[0].userId !== null)
+                       return showUser(survey, callback);
+
                     return getSingleSurveySuccess(200, survey, callback);
-                    
-                    //return getSingleSurveySuccess(200, survey, callback);
                 });
             }
 
