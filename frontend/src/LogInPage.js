@@ -22,6 +22,12 @@ class LogInPage extends React.Component{
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         console.log("The user object passed in is: " + props.userObj);
+
+        //This is how I delete the cookie, please don't touch
+        if (props.loggedOut === true)
+        {
+            props.indexUserMethod(null);
+        }
     }
 
     delete_cookie = function(name) {

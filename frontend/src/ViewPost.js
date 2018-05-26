@@ -156,9 +156,11 @@ class ViewPost extends Component{//Initial State
                                  
                                 </TimeAgo>
                                 </div>
+              
                                 {/* <div className="col-sm-8">
                                     {data.post.visibilityLevel}
                                 </div> */}
+
                             </div>
 
                         </div>
@@ -611,6 +613,8 @@ class ViewPost extends Component{//Initial State
     
     surveyButton() {
         console.log(this.state.surveyId);
+        if (typeof this.state.surveyId === "undefined")
+            return null;
         return(
             <div>
                 <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
