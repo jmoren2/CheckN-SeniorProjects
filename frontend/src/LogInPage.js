@@ -41,7 +41,6 @@ class LogInPage extends React.Component{
 
         //** Test ONLY dont merge to master **//
         
-<<<<<<< HEAD
         // loginUser(this.state.email, this.state.password)
         // .then(result => {
         //     return result.json()
@@ -54,20 +53,6 @@ class LogInPage extends React.Component{
         // .then(response => {
         //     console.log(response);
         // })
-=======
-        loginUser(this.state.email, this.state.password)
-        .then(result => {
-            return result.json()
-        })
-        .then(data => {
-            console.log("Logined : ", data)
-        })
-
-        //deleteUser("test@test1.com")
-        //.then(response => {
-        //    console.log(response);
-        //})
->>>>>>> a801e5e011eec1daf45ced5408006198391501c5
 
         // ********************************* //
 
