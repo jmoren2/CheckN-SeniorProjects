@@ -86,6 +86,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
 
     console.log(search);
 
+    
     // associate user names with comments
     var showUsers = function(comments, callback){
         // build search query
@@ -128,7 +129,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
                 }
                 comments[i].userName = userName
             }
-
+        
             return success(200, comments, callback);
         });
     };

@@ -9,10 +9,12 @@ module.exports.getAllDepartments = (esClient, event, context, callback) => {
         return fail(500, 'getAllDepartments: Extra parameters', callback)
     }
 
+    const PAGE_SIZE = 100;
+
     var params = {
         index: 'departments',
         type: 'department',
-        body: {}
+        size: PAGE_SIZE
     };
 
     var departments = [];
