@@ -11,7 +11,7 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
 
             var id = event.pathParameters.surveyId;
             var params;
-            const SEARCH_SIZE = 10000;
+            const PAGE_SIZE = 10000;
 
 
             var showUser = function(survey, callback) {
@@ -56,7 +56,7 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                     index: 'responses',
                     type: 'response',
                     q: 'surveyId:' + survey.surveyId,
-                    size: SEARCH_SIZE
+                    size: PAGE_SIZE
                 };
 
                 survey.responses = [];

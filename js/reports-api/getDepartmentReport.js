@@ -39,7 +39,7 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
             if(!context.page) context.page = 1;
             if(!context.pageSize) context.pageSize = 10
 
-            const SERACH_SIZE = 10000;
+            const PAGE_SIZE = 10000;
             var department = decodeURIComponent(event.pathParameters.departmentId);
             var params = {};
             var report = {};
@@ -55,7 +55,7 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                             "userPermissions.department": department
                         }}}}
                     }}},
-                    size: SERACH_SIZE
+                    size: PAGE_SIZE
                 }
                 esClient.search(params, function(err, data){
                     if(err) {
@@ -130,7 +130,7 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                         "visibilityLevel.department": department
                     }}}}
                 }}},
-                size: SERACH_SIZE
+                size: PAGE_SIZE
             }
 
             esClient.search(params, function(err, data) {
