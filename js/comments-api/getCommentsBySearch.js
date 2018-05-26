@@ -17,6 +17,8 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         console.log("Post string: " + post);
     }
 
+    const PAGE_SIZE = 10000;
+
     // initialize search query
     var search = {
         query: {
@@ -103,7 +105,8 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         esClient.search({
             index: 'users',
             type: 'user',
-            body: search
+            body: search,
+            size: PAGE_SIZE
         }, function(error, data) {
             if(error) {
                 console.log('associating users error: ' + JSON.stringify(error));
@@ -133,7 +136,8 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
     esClient.search({
         index: 'comments',
         type: 'comment',
-        body: search
+        body: search,
+        size: PAGE_SIZE
     }, function(error, data) {
         if(error) {
             console.log('error: ' + JSON.stringify(error));
