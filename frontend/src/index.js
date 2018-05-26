@@ -47,12 +47,11 @@ class App extends React.Component {
 
     retrieveUserObjFromCookie(){
         try {
-            console.log(document.cookie);
         //First get the cookie and split it on user=, this way I can have a string that at least starts as the object
         var user = document.cookie.split('user=')[1] + ';';
 
         //Now split on the } to get rid of any extra just in case and put the } back on
-        user = ((user.split('};')[0]));
+        user = ((user.split('};')[0])) + '}';
      
         //Now what I have left is the stringified JSON object that can be parsed
         user = JSON.parse(user);
