@@ -30,9 +30,7 @@ class SurveyResponse extends React.Component{
     }
 
     componentDidMount() {
-        //I'll need the survey and the responses so that I can see questions and all possible answers
         this.retrieveSurvey();
-        //this.retrieveResponses();
     }
 
     retrieveSurvey(){
@@ -47,12 +45,7 @@ class SurveyResponse extends React.Component{
             return results.json();
         })//Saves the response as JSON
         .then(survey => {
-            console.log('displaying stuff');
-            console.log(survey);
-            console.log(survey.survey);
             this.initializeForSurvey(survey.survey.questions);
-            //console.log(survey.survey.responses);
-            //console.log(survey.survey.responses)
             this.retrieveResponses(survey.survey.responses);
         })
         .catch(error => {
@@ -63,8 +56,6 @@ class SurveyResponse extends React.Component{
     //When initializing a survey I create the {text: , value: } objects for the dropboxes
     //Also store the question array itself in state I will want the question text later on
     initializeForSurvey(questions){
-        console.log('initialize survey being');
-        console.log(questions);
         var dropBoxQuestionArray = [{text: 'All', value: -1}];
         var dropBoxOptionsArrays = []
         for (var i = 0; i < questions.length; i++)
@@ -73,14 +64,10 @@ class SurveyResponse extends React.Component{
             dropBoxOptionsArrays.push([{text: 'Any', value: -1}]);
             for (var j = 0; j < questions[i].options.length; j++)
             {
-                console.log('adding option');
                 dropBoxOptionsArrays[i].push({text: questions[i].options[j], value: j});
-                console.log(dropBoxOptionsArrays[i]);
             }
         }
 
-        console.log("initialize survey done");
-        console.log(dropBoxOptionsArrays);
         this.setState({
             dropBoxQuestionArray: dropBoxQuestionArray,
             dropBoxOptionsArrays: dropBoxOptionsArrays,
@@ -91,43 +78,7 @@ class SurveyResponse extends React.Component{
 
     //Response now come in with the survey
     retrieveResponses(responses){
-        console.log("getting responses for survey: " + this.state.surveyId);
-        console.log(responses);
-        /*fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.state.surveyId}/responses`, {
-            headers: {
-                'content-type': 'application/json'
-            },
-            method: 'GET',
-        })
-        .then(results => {
-            return results.json();
-        })
-        .then(responses => {
-            console.log(responses);
-            this.setState({responses: responses});
-        })
-        .catch(error => {
-            console.log(error);
-        });*/
         this.setState({responses: responses});
-        /*
-        this.setState({
-            responses: [
-                {
-                    userId: 12345,
-                    responses: [['howdy'],['sup'],['hello'],['123'],['a'],['b', 'd'],['3']]
-                },
-                {
-                    userId: 54321,
-                    responses: [['Portland'],['Seattle'],['Los Angeles'],['24'],['d'],['a', 'c'],['8']]
-                },
-                {
-                    userId: 100110101,
-                    responses: [['blah blah blah'],['yadda yadda yadda'],['whatever'],['30000'],['d'],['b', 'c'],['1']]
-                }
-            ],
-            totalIndex: 3
-        })*/
     }
 
     showSelection(){
@@ -179,15 +130,12 @@ class SurveyResponse extends React.Component{
     }
 
     onChangeFilterByQuestions = (event, data) => {
-        console.log(data);
         if (data.value.length == 0)
             this.setState({filterByQuestions: [-1]});
         else
             this.setState({filterByQuestions: data.value});
     }
     onChangeFilterByResponseToDropbox = (event, data) => {
-        console.log(event.value);
-        console.log(data.value);
         this.setState({
             currentDropBoxOptions: this.state.dropBoxOptionsArrays[data.value],
             filterByResponseTo: data.value,
@@ -202,7 +150,6 @@ class SurveyResponse extends React.Component{
     }
 
     showResponses(){
-        console.log('show responses');
         return(
             <Accordion exclusive={false} fluid styled>
                 {this.generateAccordions()}
@@ -261,30 +208,23 @@ class SurveyResponse extends React.Component{
     }
 
     handleAccordionClick = (event, data) => {
-        console.log('===================');
         var temp = this.state.activeBoxes;
-        console.log(temp);
+
         if (temp.includes(data.index))
         {
-            console.log('removing ' + data.index);
-            //get rid of that one
             temp.splice(temp.indexOf(data.index), 1);
         }
         else
         {
-            console.log('adding ' + data.index);
             temp.push(data.index);
         }
-        console.log(temp);
         this.setState({activeBoxes: temp});
     }
 
     generateRespones(index){
         var questionIndex = -1;
         var responseOutput = null;
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        console.log(index);
-        console.log(this.state);
+
         if (this.state.filterByQuestions.includes(-1))
         {
             //render all unconditionally
