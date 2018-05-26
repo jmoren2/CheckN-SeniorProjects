@@ -3,15 +3,19 @@ const success = require('./responses').multiCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
+
     var text, user, post, dept, role;
+
 
     // pull search key(s), user and post from the query string
     if(event.queryStringParameters) {
         text = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
+
         post = event.queryStringParameters.postId;
         dept = event.queryStringParameters.dept;
         role = event.queryStringParameters.role;
+
         console.log("Search string: " + text);
         console.log("User string: " + user);
         console.log("Post string: " + post);

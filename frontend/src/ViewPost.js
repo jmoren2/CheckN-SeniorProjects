@@ -14,7 +14,6 @@ import {Button} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
-
 class ViewPost extends Component{//Initial State
     constructor(props) {
         super(props);
@@ -35,7 +34,9 @@ class ViewPost extends Component{//Initial State
             voteChoice: 'none',
             showModal: false,
             userThatCommented: "",
-            postState: "",
+            showHistory: false,
+            history:"Please hold....",
+            postState: "OPEN",
             surveyId: ''
         };
         this.posterID=null;
@@ -47,10 +48,16 @@ class ViewPost extends Component{//Initial State
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleOpenHistory = this.handleOpenHistory.bind(this);
+        this.handleCloseHistory = this.handleCloseHistory.bind(this);
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.storeUser = this.storeUser.bind(this);
-        this.editButton = this.editButton.bind(this);
+        this.editPost = this.editPost.bind(this);
+        this.editComment = this.editComment.bind(this);
+        this.handleChangeComment = this.handleChangeComment.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.storeUser = this.storeUser.bind(this);
         this.changePostState = this.changePostState.bind(this);
         this.closePost = this.closePost.bind(this);
         this.openPost = this.openPost.bind(this);
@@ -256,11 +263,11 @@ class ViewPost extends Component{//Initial State
 
                 var vote = null;
 
-                if(comment.vote === "POSITIVE")
+                if(comment.vote === "positive")
                 {
                     vote = <ThumbsUp  style={{color: "blue"}} />
                 }
-                else if(comment.vote === "NEGATIVE")
+                else if(comment.vote === "negative")
                 {
                     vote = <ThumbsDown  style={{color: "red"}} />
                 }
@@ -290,7 +297,9 @@ class ViewPost extends Component{//Initial State
                         <p id={test}>
                             {test} commented: 
                         </p>
-
+                        {/*TODO: make history only viewable if admin or manager*/}
+                        {this.editComment(comment.userId, comment.commentId)}
+                        <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
                         <div>
                             {vote}
                         </div>
@@ -300,9 +309,6 @@ class ViewPost extends Component{//Initial State
                             
                         </div>
                     );
-                
-                
-            
         })
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
@@ -313,7 +319,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?post=${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?postId=${this.state.postID}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -426,13 +432,139 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
+    handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
+        console.log("edit history type: " + data.type);
+        if(data.type === "comment"){
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments/${data.commentid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                var commentHistory;
+                var counter = response.comment.history.length;
+                var editText = "";
+
+                if(response.comment.history.length > 1){
+                    commentHistory = response.comment.history.map((iteration) => {
+                        --counter;
+
+                        if(counter === 0){
+                            editText = "Original Comment:";
+                        }
+                        else{
+                            editText = "Edit #" + counter;
+                        }
+
+                        return(
+                            <p>
+                                <div className="card-block">
+                                    {/*TODO: make history only viewable if admin or manager*/}
+                                    <div>{editText}</div>
+                                    <div>{iteration.vote}</div>
+                                    <div>{iteration.content}</div>
+                                </div>
+                            </p>
+                        );
+                    })
+                }
+                else{
+                    commentHistory = "No edits have been made yet to this comment";
+                }
+
+                return commentHistory;
+            })
+            .then(timeline => {
+                this.setState({history: timeline});
+                this.setState({ showHistory: true });
+            });
+        }
+        else{
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
+                method: 'GET'
+            })
+            .then(result => {
+                return result.json()
+            })
+            .then(response => {
+                var postHistory;
+                var counter = response.post.history.length;
+                var editText = "";
+
+                if(response.post.history.length > 1){
+                    postHistory = response.post.history.map((iteration) => {
+                        --counter;
+
+                        if(counter === 0){
+                            editText = "Original Post:";
+                        }
+                        else{
+                            editText = "Edit #" + counter;
+                        }
+
+                        return(
+                            <p>
+                                <div className="card-block">
+                                    {/*TODO: make history only viewable if admin or manager*/}
+                                    <div>{editText}</div>
+                                    <div>Title: {iteration.title}</div>
+                                    <div>Content: {iteration.content}</div>
+
+                                    <div>Tags:
+                                        {iteration.tags.map((eachTag) => {
+                                            return(<div>{eachTag} </div>);
+                                        })}
+                                    </div>
+                                </div>
+                            </p>
+                        );
+                    })
+                }
+                else{
+                    postHistory = "No edits have been made yet to this post";
+                }
+
+                return postHistory;
+            })
+            .then(timeline => {
+                this.setState({history: timeline});
+                this.setState({ showHistory: true });
+            });
+        }
+    }
+
+    handleCloseHistory () {
+        this.setState({history : "Please hold...."});
+        this.setState({ showHistory: false });
+    }
+
+      getVoters(){
+        return (
+            <div>
+                
+            </div>
+        )
+      }
      
 
-    editButton() {
+    editPost() {
         if(this.props.userObj.userId === this.posterID && this.state.postState === "OPEN") {
             return(
             <Link to={`/edit/${this.state.postID}`}>
             <button className='btn btn-info'>Edit Post</button>
+            </Link>);
+        }
+        else {
+            return
+        }
+    }
+
+    editComment(userID, commentID) {//TODO: Add back in the ability to only edit a user's own comment
+        if(this.props.userObj.userId === userID && this.state.postState === "OPEN") {
+        return(
+            <Link to={`/editComment/${commentID}`}>
+                <button className='btn btn-info'>Edit Comment</button>
             </Link>);
         }
         else {
@@ -536,7 +668,7 @@ class ViewPost extends Component{//Initial State
                                 <h1 style={{color: 'black'}}>Post</h1>
                                     <div>
                                         {this.state.postContent}
-                                        {this.editButton()}
+                                        {this.editPost()}
                                         {this.changePostState()}
                                         {this.surveyButton()}
                                     </div>
@@ -548,6 +680,7 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
+                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
                                         {
@@ -562,6 +695,10 @@ class ViewPost extends Component{//Initial State
                                     </div>
        
                                     <div>
+                                        <ReactModal class="modal fade" isOpen={this.state.showHistory}>
+                                            {this.state.history}
+                                            <button class="btn btn-info" onClick={this.handleCloseHistory}>Close History</button>
+                                        </ReactModal>
                                         {this.filterCommentsWithoutContent(this.state.postComments)}
                                     </div>
                                         

@@ -4,9 +4,11 @@ const success = require('./responses').singleCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
 module.exports.updateComment = (esClient, event, context, callback) => {
+
     if(event.pathParameters && event.pathParameters.commentId && event.body !== null && event.body !== undefined){
         var comment = JSON.parse(event.body);
         comment.commentId = event.pathParameters.commentId;
+
         var updateHistory = false;
 
         if(comment.content)
@@ -98,6 +100,7 @@ function updateVote(esClient, comment, old, callback){
 function updateHistory(esClient, comment, old, callback){
     // pack up old values to add to history
     let edit = {};
+
     if(comment.content !== old.content || (comment.vote && comment.vote !== old.vote)){
         if(comment.content)
             edit.content = comment.content;
@@ -107,6 +110,7 @@ function updateHistory(esClient, comment, old, callback){
             edit.vote = comment.vote;
         else
             edit.vote = old.vote;
+      
         edit.timestamp = moment().toISOString();
         if(old.history)
             comment.history = old.history;

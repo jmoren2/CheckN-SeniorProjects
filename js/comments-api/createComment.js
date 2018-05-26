@@ -67,6 +67,7 @@ function updateVote(esClient, comment, callback){
     let vote = comment.vote;
     if(vote){
         // update parent comment or post if not nested
+      
         var params = {};
         if(comment.parentId){
             params = {

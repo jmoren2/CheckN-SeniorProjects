@@ -11,6 +11,7 @@ class EditPost extends Component{
             title: '', 
             content: '',
             tagArray: [],
+            tagstring: '',
             positiveVoters:[],
             neutralVoters: [],
             negativeVoters: [],
@@ -43,6 +44,11 @@ class EditPost extends Component{
             return results.json();
         })//Saves the response as JSON
         .then(data => {
+            var tagString = "";
+            for (var i = 0; i < data.post.tags.length; i++)
+            {
+                tagString += data.post.tags[i] + " ";
+            }
             this.setState({
                 title: data.post.title,
                 content: data.post.content,
@@ -52,8 +58,9 @@ class EditPost extends Component{
                 pinnedId: data.post.pinnedId,
                 state: data.post.state,
                 tagArray: data.post.tags,
+                tagString: tagString,
                 visibilityLevel: data.post.visibilityLevel
-            })
+            }, () => {this.handleChangeTags({target: {value: tagString}})})
         });
     }
 
@@ -107,6 +114,7 @@ class EditPost extends Component{
         //maybe if these stay as buttons they can delete the tag when clicked
         this.setState({
             tagArray: newTags,
+            tagString: event.target.value,
             tagButtons: newTags.map((tag) => {
                 return (<button>
                        {tag}
@@ -141,7 +149,7 @@ class EditPost extends Component{
 
                                     <div className='form-group'>
                                         <label>Tags:</label>
-                                        <input onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                        <input value={this.state.tagString} onChange={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
                                         <span>
                                             <label>Tag Preview: </label>
                                             {this.state.tagButtons}

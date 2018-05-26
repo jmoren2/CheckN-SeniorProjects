@@ -15,6 +15,7 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
         role = event.queryStringParameters.role;
         context.page = event.queryStringParameters.page;
         context.pageSize = event.queryStringParameters.pageSize;
+
         console.log("Search string: " + search);
         console.log("User string: " + user);
         console.log("Tag: " + tag);
@@ -28,6 +29,7 @@ module.exports.getPostsBySearch = (esClient, event, context, callback) => {
     };
 
     var userFilter, tagFilter, searchFilter;
+
 
     if(search !== undefined) {
         console.log('search: ' + search);
