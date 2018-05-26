@@ -19,8 +19,8 @@ module.exports.getSurveyById = (event, context, callback) => {
 };
 
 module.exports.getSurveysBySearch = (event, context, callback) => {
-  const getSurveyBySearch = require('./surveys/getSurveyBySearch').getSurveyBySearch;
-  getSurveyBySearch(esClient, event, context, callback);
+  const getSurveysBySearch = require('./surveys/getSurveysBySearch').getSurveysBySearch;
+  getSurveysBySearch(esClient, event, context, callback);
 };
 
 module.exports.createSurvey = (event, context, callback) => {
