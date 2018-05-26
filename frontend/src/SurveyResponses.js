@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Accordion, Dropdown, Grid, Icon, Card} from 'semantic-ui-react';
+import {Accordion, Dropdown, Grid, Icon, Card, Divider} from 'semantic-ui-react';
 import './index.css'
 
 class SurveyResponse extends React.Component{
@@ -151,9 +151,9 @@ class SurveyResponse extends React.Component{
 
     showResponses(){
         return(
-            <Accordion exclusive={false} fluid styled>
+            <div>
                 {this.generateAccordions()}
-            </Accordion>
+            </div>
         );
     }
 
@@ -173,6 +173,7 @@ class SurveyResponse extends React.Component{
             {
                 return(
                     <div>
+                        <Divider/>
                         <h>
                             {this.state.responses[index].userName}
                         </h>
