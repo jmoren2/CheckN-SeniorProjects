@@ -17,6 +17,7 @@ class LogInPage extends React.Component{
             returnedUser: null,
             handleSubmitDone: false
         }
+        this.delete_cookie("user")
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,6 +29,10 @@ class LogInPage extends React.Component{
             props.indexUserMethod(null);
         }
     }
+
+    delete_cookie = function(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
 
     handleChangeEmail(event) {
         this.setState({email: event.target.value});//Updates the firstName field as typing occurs
@@ -42,18 +47,18 @@ class LogInPage extends React.Component{
 
         //** Test ONLY dont merge to master **//
         
-        loginUser(this.state.email, this.state.password)
-        .then(result => {
-            return result.json()
-        })
-        .then(data => {
-            console.log("Logined : ", data)
-        })
+        // loginUser(this.state.email, this.state.password)
+        // .then(result => {
+        //     return result.json()
+        // })
+        // .then(data => {
+        //     console.log("Logined : ", data)
+        // })
 
-        deleteUser("test@test1.com")
-        .then(response => {
-            console.log(response);
-        })
+        // deleteUser("test@test1.com")
+        // .then(response => {
+        //     console.log(response);
+        // })
 
         // ********************************* //
 
@@ -69,11 +74,22 @@ class LogInPage extends React.Component{
         })
         .then(response => {
             //NEEDS A CASE FOR IF NO USER IS FOUND
+            
             return(response.users[0]);
         })
         .then(validUser => {
-            this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js
-            this.setState({handleSubmitDone: true});
+            if(validUser)
+            {
+                this.props.indexUserMethod(validUser);//Sends the user object up to index for distributing across all pages. indexUserMethod is setUserObject in index.js
+                this.setState({handleSubmitDone: true});
+
+            }
+            else
+            {
+                alert('Login Failed.')
+                
+                window.location.reload();
+            }
         })
         .catch(error => {
             console.log(error);

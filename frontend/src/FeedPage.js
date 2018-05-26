@@ -19,7 +19,7 @@ class FeedPage extends React.Component{
         this.state = {
             feed: <div>Loading...</div>
         }
-        this.searchQuery = "search=a";
+        this.searchQuery = "pageSize=1000";
         console.log("The user object passed in is: " + props.userObj);
         console.log(JSON.stringify(props.userObj));
     }
@@ -34,7 +34,6 @@ class FeedPage extends React.Component{
 
     retrieveFeed(){
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.searchQuery}`, {
-        //fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/posts?${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -43,7 +42,7 @@ class FeedPage extends React.Component{
         .then(feedResults => {
             return feedResults.json();
         })
-        .then(feedData => {
+        .then(feedData => { 
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -88,7 +87,7 @@ class FeedPage extends React.Component{
         //grab actual user id
 
        
-       fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+       fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
         method: 'PUT',
         body: JSON.stringify(post)
     })
@@ -139,7 +138,7 @@ class FeedPage extends React.Component{
             }
 
 
-            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -190,7 +189,7 @@ class FeedPage extends React.Component{
                 console.log(post);
             }
 
-            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/posts/${postToBeVotedOn}`, {
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
                 method: 'PUT',
                 body: JSON.stringify(post)
             })
@@ -208,34 +207,59 @@ class FeedPage extends React.Component{
         
         var feed = posts.map((post) => {
             
-            var pVoters = post.positiveVoters;
-            var nVoters = post.neutralVoters;
-            var negVoters = post.negativeVoters;
+            
+            // var pVoters = post.positiveVoters;
+            // var nVoters = post.neutralVoters;
+            // var negVoters = post.negativeVoters;
 
-            if(pVoters)
-            {
-                var positiveCount = pVoters.length;
-            }
-            else
-            {
-                positiveCount = 0;
-            }
-            if(nVoters)
-            {
-                var neutralCount = nVoters.length;
-            }
-            else
-            {
-                 neutralCount = 0;
-            }
-            if(negVoters)
-            {
-                var negCount = negVoters.length;
-            }
-            else
-            {
-                 negCount = 0;
-            }
+            // if(pVoters)
+            // {
+            //     var positiveCount = pVoters.length;
+            // }
+            // else
+            // {
+            //     positiveCount = 0;
+            // }
+            // if(nVoters)
+            // {
+            //     var neutralCount = nVoters.length;
+            // }
+            // else
+            // {
+            //      neutralCount = 0;
+            // }
+            // if(negVoters)
+            // {
+            //     var negCount = negVoters.length;
+            // }
+            // else
+            // {
+            //      negCount = 0;
+            // }
+
+            var neutralCount =0;
+            var negCount=0;
+            var positiveCount=0;
+
+
+            // fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?post=SXZ${post.postId}`, {
+            //     headers: {
+            //         'content-type': 'application/json'
+            //          },
+            //     method: 'GET',
+            // })
+            // .then(response => {
+            //     return response.json();
+            // })
+            // .then(data =>{
+
+            //     console.log(data)
+            //     positiveCount = data.count;
+        
+             
+            // })
+
+
             return(
                 //individual feed item
                 <div className="container">

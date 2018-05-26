@@ -21,7 +21,7 @@ class RegisterUser extends Component{
             handleSubmitDone: false
         };
         this.allFields = [0, 0, 0, 0];
-
+        this.delete_cookie("user")
         this.getAllDepartments = this.getAllDepartments.bind(this);
         this.handleChangeFirst = this.handleChangeFirst.bind(this);
         this.handleChangeLast = this.handleChangeLast.bind(this);
@@ -29,12 +29,16 @@ class RegisterUser extends Component{
         this.handleDepChange = this.handleDepChange.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        console.log("The user object passed in is: " + props.userObj);
+        //console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){
         this.getAllDepartments();
     }
+
+    delete_cookie = function(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
 
     handleSubmit(event){
         event.preventDefault();
@@ -67,7 +71,7 @@ class RegisterUser extends Component{
         })
         // ********************************* //
 
-        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/prod/users/', {
+        fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/', {
             method: 'POST',
             body: JSON.stringify(data)
         })

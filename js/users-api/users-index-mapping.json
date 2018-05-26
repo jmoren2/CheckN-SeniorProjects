@@ -1,0 +1,16 @@
+{
+    "properties": {
+        "userId": { "type": "keyword" },
+        "firstName": { "type": "keyword" },
+        "lastName": { "type": "keyword" },
+        "email": { "type": "keyword" },
+        "userPermissions": {
+            "type": "nested",
+            "properties": {
+                "department": { "type": "keyword" },
+                "location": { "type": "keyword" },
+                "role": { "type": "keyword" }
+            }
+        }
+    }
+}

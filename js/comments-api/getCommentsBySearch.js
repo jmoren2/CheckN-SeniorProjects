@@ -2,91 +2,156 @@
 const success = require('./responses').multiCommentSuccess;
 const fail = require('./responses').CommentsFail;
 
-module.exports.getCommentsBySearch = (ddb, event, context, callback) => {
+module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
 
-    // pull search key(s) and user from the query string
+    var text, user, post, dept, role;
+
+
+    // pull search key(s), user and post from the query string
     if(event.queryStringParameters) {
-        var search = event.queryStringParameters.search;
-        var user = event.queryStringParameters.user;
-        console.log("Search string: " + search);
+        text = event.queryStringParameters.search;
+        user = event.queryStringParameters.user;
+
+        post = event.queryStringParameters.postId;
+        dept = event.queryStringParameters.dept;
+        role = event.queryStringParameters.role;
+
+        console.log("Search string: " + text);
         console.log("User string: " + user);
+        console.log("Post string: " + post);
     }
 
-    // todo: users not implemented yet
-    user = null;
-
-    if(search || user) {
-        // todo: look up user first if 'user' field is defined, early exit if not resolved
-
-        // use + as AND operator when passing strings, of the form:
-        // /comments?search=key1+key2+...
-        var keyArr = search.split(/[ +]/);
-        console.log(keyArr);
-
-        var numKeys = 0;
-        var attVals = {};
-        var filter = "";
-
-        // NOTE: dynamoDB is case sensitive. Possible solutions: redundant all lowercase searchable data
-        // Or, incorporate the elasticsearch framework.
-
-        // dynamically build a filter expression along with attribute values from provided search keys
-        for(var i=0; i < keyArr.length; ++i){
-            if(keyArr[i]){
-                var attKey = ":word" + i;
-                attVals[attKey] = keyArr[i];
-                if(numKeys > 0)
-                    filter += " AND ";
-                filter += "contains (#content, " + attKey + ")";
-                numKeys++;
+    // initialize search query
+    var search = {
+        query: {
+            bool:{
+                must: [],
+                filter: []
             }
         }
+    };
 
-        console.log("number of search keys:" + numKeys);
+    // match comment content against search text
+    if(text !== undefined) {
+        search.query.bool.must.push({
+            match: {
+                content: text
+            }
+        })
+    }
+    // match user field
+    if(user !== undefined) {
+        search.query.bool.filter.push({
+            term: {
+                userId: user
+            }
+        })
+    }
+    // match postId
+    if(post !== undefined) {
+        search.query.bool.filter.push({
+            term: {
+                postId: post
+            }
+        })
+    }
 
-        if(numKeys > 0) {
-            console.log(JSON.stringify(attVals));
-            console.log(filter);
+    // initialize visibilityLevel filter
+    var permFilter = {
+        nested: {
+            path: "visibilityLevel",
+            query: {
+                bool: {
+                    must: []
+                }
+            }
+        }
+    };
 
-            var params = {
-                TableName: 'comments',
-                FilterExpression: filter,
-                ExpressionAttributeNames: {
-                    "#content": "content"
-                },
-                ExpressionAttributeValues: attVals
-            };
+    // apply department/role to permissions filter
+    if(dept !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.department" : dept
+            }
+        })
+    }
+    if(role !== undefined) {
+        permFilter.nested.query.bool.must.push({
+            term:{
+                "visibilityLevel.role" : role
+            }
+        })
+    }
+    if(permFilter.nested.query.bool.must.length > 0)
+        search.query.bool.filter.push(permFilter);
 
-            console.log(params);
+    console.log(search);
 
-            var items = [];
-
-            // scan loop in case of multiple pages of results
-            var scanExecute = function (callback) {
-                ddb.scan(params, function (err, data) {
-                    if (err)
-                        return fail(500, 'getCommentsBySearch failed. Error: ' + err, callback);
-                    else {
-                        console.log(data);
-
-                        items = items.concat(data.Items);
-
-                        if (data.LastEvaluatedKey) {
-                            params.ExclusiveStartKey = result.LastEvaluatedKey;
-                            scanExecute(callback);
-                        }
-                        else
-                            return success(200, items, callback);
+    // associate user names with comments
+    var showUsers = function(comments, callback){
+        // build search query
+        var userIdArr = [];
+        for(let i = 0; i < comments.length; ++i){
+            if(comments[i].userId) {
+                userIdArr.push({
+                    match: {
+                        userId: comments[i].userId
                     }
                 })
-            };
-            scanExecute(callback);
+            }
         }
-        // if no search keys were found after string parse, abort scan with error
-        else
-            return fail(500, 'getCommentsBySearch failed. Error: Bad search key(s) provided', callback);
-    }
-    // missing parameters
-    else
-        return fail(500, 'getCommentsBySearch failed. Error: No user or search parameters specified', callback);
+        search = {query:{bool:{should:userIdArr}}};
+        var userMap = {};
+
+        esClient.search({
+            index: 'users',
+            type: 'user',
+            body: search
+        }, function(error, data) {
+            if(error) {
+                console.log('associating users error: ' + JSON.stringify(error));
+            }
+            else {
+                var userArr = data.hits.hits;
+                // populate map
+                for(let i = 0; i < userArr.length; ++i){
+                    let user = userArr[i]._source;
+                    userMap[user.userId] = user.firstName + ' ' + user.lastName;
+                }
+            }
+
+            // associate user names to comments
+            for(let i = 0; i < comments.length; ++i){
+                let userName = 'unknown user';
+                if(userMap[comments[i].userId]){
+                    userName = userMap[comments[i].userId]
+                }
+                comments[i].userName = userName
+            }
+
+            return success(200, comments, callback);
+        });
+    };
+
+    esClient.search({
+        index: 'comments',
+        type: 'comment',
+        body: search
+    }, function(error, data) {
+        if(error) {
+            console.log('error: ' + JSON.stringify(error));
+            fail(400, error, callback);
+        } else {
+            console.log('data: ' + JSON.stringify(data));
+            var hits = data.hits.hits;
+            var comments = [];
+
+            // parse hits for comment objects
+            for(let i = 0; i < hits.length; ++i){
+                comments.push(hits[i]._source)
+            }
+            return showUsers(comments, callback);
+        }
+    });
 };

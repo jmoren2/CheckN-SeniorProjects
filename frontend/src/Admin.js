@@ -16,10 +16,11 @@ class Admin extends React.Component{
         }
         if(this.props.userObj.userPermissions[0].role !== "admin")
         {
-            window.location.href = '/login';
+            window.location.href = '/feed';
             console.log('goodbye') 
         }
 
+        
         this.state = {
             report: '',
             runReport: false,
@@ -293,6 +294,7 @@ class Admin extends React.Component{
 
     removeUser = (data) =>
     {
+
         fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${data}`, {
         headers: {
             'content-type': 'application/json'
