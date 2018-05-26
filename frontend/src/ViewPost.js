@@ -36,7 +36,7 @@ class ViewPost extends Component{//Initial State
             userThatCommented: "",
             showHistory: false,
             history:"Please hold....",
-            postState: "",
+            postState: "OPEN",
             surveyId: ''
         };
         this.posterID=null;
@@ -263,11 +263,11 @@ class ViewPost extends Component{//Initial State
 
                 var vote = null;
 
-                if(comment.vote === "POSITIVE")
+                if(comment.vote === "positive")
                 {
                     vote = <ThumbsUp  style={{color: "blue"}} />
                 }
-                else if(comment.vote === "NEGATIVE")
+                else if(comment.vote === "negative")
                 {
                     vote = <ThumbsDown  style={{color: "red"}} />
                 }
@@ -298,7 +298,7 @@ class ViewPost extends Component{//Initial State
                             {test} commented: 
                         </p>
                         {/*TODO: make history only viewable if admin or manager*/}
-                        {this.editComment(comment.commentId)}
+                        {this.editComment(comment.userId, comment.commentId)}
                         <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
                         <div>
                             {vote}
@@ -309,9 +309,6 @@ class ViewPost extends Component{//Initial State
                             
                         </div>
                     );
-                
-                
-            
         })
 
         //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
@@ -322,7 +319,7 @@ class ViewPost extends Component{//Initial State
 
 
     retrieveComments(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?post=${this.state.postID}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments?postId=${this.state.postID}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -438,7 +435,7 @@ class ViewPost extends Component{//Initial State
     handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
         console.log("edit history type: " + data.type);
         if(data.type === "comment"){
-            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments/${data.commentid}`, {
+            fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments/${data.commentid}`, {
                 method: 'GET'
             })
             .then(result => {
@@ -446,25 +443,36 @@ class ViewPost extends Component{//Initial State
             })
             .then(response => {
                 var commentHistory;
-                var counter = 0;
+                var counter = response.comment.history.length;
+                var editText = "";
+
                 if(response.comment.history.length > 1){
                     commentHistory = response.comment.history.map((iteration) => {
-                        <div className="card-block">
-                            {/*TODO: make history only viewable if admin or manager*/}
-                            <div>
-                                {iteration.vote}
-                            </div>
-                            <div>
-                                {counter = counter + 1}
-                            </div>
-                            
-                            <p>{iteration.content}</p>
-                        </div>
+                        --counter;
+
+                        if(counter === 0){
+                            editText = "Original Comment:";
+                        }
+                        else{
+                            editText = "Edit #" + counter;
+                        }
+
+                        return(
+                            <p>
+                                <div className="card-block">
+                                    {/*TODO: make history only viewable if admin or manager*/}
+                                    <div>{editText}</div>
+                                    <div>{iteration.vote}</div>
+                                    <div>{iteration.content}</div>
+                                </div>
+                            </p>
+                        );
                     })
                 }
                 else{
                     commentHistory = "No edits have been made yet to this comment";
                 }
+
                 return commentHistory;
             })
             .then(timeline => {
@@ -473,7 +481,6 @@ class ViewPost extends Component{//Initial State
             });
         }
         else{
-            console.log()
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${data.postid}`, {
                 method: 'GET'
             })
@@ -482,32 +489,42 @@ class ViewPost extends Component{//Initial State
             })
             .then(response => {
                 var postHistory;
-                var counter;
+                var counter = response.post.history.length;
+                var editText = "";
+
                 if(response.post.history.length > 1){
                     postHistory = response.post.history.map((iteration) => {
-                        <div className="card-block">
-                            {/*TODO: make history only viewable if admin or manager*/}
-                            <div>
-                                {iteration.title}
-                            </div>
+                        --counter;
 
-                            <div>
-                                {counter = counter + 1}
-                            </div>
-                            
-                            <p>{iteration.content}</p>
-                            {/* <p>{iteration.tags}</p> */}
-                            <div>
-                                {iteration.tags.map((eachTag) => {
-                                    <p>{eachTag}</p>
-                                })}
-                            </div>
-                        </div>
+                        if(counter === 0){
+                            editText = "Original Post:";
+                        }
+                        else{
+                            editText = "Edit #" + counter;
+                        }
+
+                        return(
+                            <p>
+                                <div className="card-block">
+                                    {/*TODO: make history only viewable if admin or manager*/}
+                                    <div>{editText}</div>
+                                    <div>Title: {iteration.title}</div>
+                                    <div>Content: {iteration.content}</div>
+
+                                    <div>Tags:
+                                        {iteration.tags.map((eachTag) => {
+                                            return(<div>{eachTag} </div>);
+                                        })}
+                                    </div>
+                                </div>
+                            </p>
+                        );
                     })
                 }
                 else{
                     postHistory = "No edits have been made yet to this post";
                 }
+
                 return postHistory;
             })
             .then(timeline => {
@@ -543,8 +560,8 @@ class ViewPost extends Component{//Initial State
         }
     }
 
-    editComment(commentID) {//TODO: Add back in the ability to only edit a user's own comment
-        if(this.props.userObj.userId === this.posterID && this.post.postState === "OPEN") {
+    editComment(userID, commentID) {//TODO: Add back in the ability to only edit a user's own comment
+        if(this.props.userObj.userId === userID && this.state.postState === "OPEN") {
         return(
             <Link to={`/editComment/${commentID}`}>
                 <button className='btn btn-info'>Edit Comment</button>

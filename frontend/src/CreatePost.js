@@ -231,7 +231,7 @@ class CreatePost extends Component{
 
                                     <div className='form-group'>
                                         <label>Tags:</label>
-                                        <input value={this.state.tagArray} onKeyUp={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                        <input onChange={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
                                         <span>
                                             <label>Tag Preview: </label>
                                             {this.state.tagButtons}
