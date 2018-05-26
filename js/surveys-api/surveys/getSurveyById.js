@@ -71,11 +71,9 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                             for(var i = 0; i < data.hits.hits.length; i++)
                                 survey.responses.push(data.hits.hits[i]._source)
                         }
-                        else
-                            survey.responses = [];
                     }
                 
-                    if(survey.responses[0].userId !== undefined && survey.responses[0].userId !== null)
+                    if(survey.responses !== undefined && survey.responses !== null && survey.responses.length != 0)
                        return showUser(survey, callback);
 
                     return getSingleSurveySuccess(200, survey, callback);
