@@ -10,6 +10,7 @@ module.exports.getAllDepartments = (esClient, event, context, callback) => {
     }
 
     const PAGE_SIZE = 100;
+    var departments = [];
 
     var params = {
         index: 'departments',
@@ -17,7 +18,6 @@ module.exports.getAllDepartments = (esClient, event, context, callback) => {
         size: PAGE_SIZE
     };
 
-    var departments = [];
 
     esClient.search(params, function (err, data) {
         if (err)
