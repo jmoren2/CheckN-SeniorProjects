@@ -173,13 +173,10 @@ class SurveyResponse extends React.Component{
             {
                 return(
                     <div>
-                        <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
-                            <Icon name='dropdown'/>
+                        <h>
                             {this.state.responses[index].userName}
-                        </Accordion.Title>
-                        <Accordion.Content active={this.state.activeBoxes.includes(index)}>
-                            {this.generateRespones(index)}
-                        </Accordion.Content>
+                        </h>
+                        {this.generateRespones(index)}
                     </div>
                 );
             }
@@ -187,13 +184,10 @@ class SurveyResponse extends React.Component{
             {
                 return(
                     <div>
-                        <Accordion.Title onClick={this.handleAccordionClick} index={index} active={this.state.activeBoxes.includes(index)}>
-                            <Icon name='dropdown'/>
+                        <h>
                             {this.state.responses[index].userName}
-                        </Accordion.Title>
-                        <Accordion.Content active={this.state.activeBoxes.includes(index)}>
-                            {this.generateRespones(index)}
-                        </Accordion.Content>
+                        </h>
+                        {this.generateRespones(index)}
                     </div>
                 )
             }
