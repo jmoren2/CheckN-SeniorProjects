@@ -10,11 +10,8 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.surveyId);
 
             var id = event.pathParameters.surveyId;
-            var params = {
-                index: 'surveys',
-                type: 'survey',
-                id: id
-            };
+            var params;
+            const SEARCH_SIZE = 10000;
 
 
             var showUser = function(survey, callback) {
@@ -58,7 +55,8 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                 params = {
                     index: 'responses',
                     type: 'response',
-                    q: 'surveyId:' + survey.surveyId
+                    q: 'surveyId:' + survey.surveyId,
+                    size: SEARCH_SIZE
                 };
 
                 survey.responses = [];
@@ -80,6 +78,11 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                 });
             }
 
+            params = {
+                index: 'surveys',
+                type: 'survey',
+                id: id
+            };
             esClient.get(params, function(err, data) {
                 if(err)
                     return getSurveyFail(500,'get Survey by Id failed. Error: ' + err, callback);
