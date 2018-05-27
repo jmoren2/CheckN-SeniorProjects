@@ -9,11 +9,12 @@ class EditComment extends Component{
         this.state = {
             commentID: props.match.params.commentID,//Line In Progress
             content: '',
-            //vote: '',
+            vote: '',
             handleSubmitDone: false
         };
         this.postID='';
         this.handleChangeContent = this.handleChangeContent.bind(this);
+        this.handleChangeVote = this.handleChangeVote.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.retrieveComment = this.retrieveComment.bind(this);
         console.log("The user object passed in is: " + props.userObj);
@@ -37,9 +38,9 @@ class EditComment extends Component{
             this.postID=data.comment.postId;
             this.setState({
                 content: data.comment.content,
-                
+                vote: data.comment.vote
             })
-        });{/*vote: data.comment.vote*/}
+        });
     }
 
     handleSubmit(event){
@@ -67,6 +68,10 @@ class EditComment extends Component{
         this.setState({content: event.target.value});//Updates the content field as typing occurs
     }
 
+    handleChangeVote(event) {
+        this.setState({vote: event.target.value});//Updates the content field as typing occurs
+    }
+
     render(){
         if (this.state.handleSubmitDone === true){
             return(<Redirect to={`/post/${this.postID}`}/>);//go back to the post's page after editing the comment
@@ -84,6 +89,8 @@ class EditComment extends Component{
                                     <div className='form-group'>
                                         <label>Content: </label>
                                         <input value={this.state.content} onChange={this.handleChangeContent} placeholder='Enter the content' className='form-control' /> <br />
+                                        <label>Vote: </label>
+                                        <input value={this.state.vote} onChange={this.handleChangeVote} placeholder='Enter the vote' className='form-control' /> <br />
                                     </div>
 
                                     <button className='btn btn-info' type='submit'>Submit</button>
