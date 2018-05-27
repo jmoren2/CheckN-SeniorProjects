@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Accordion, Dropdown, Grid, Icon, Card, Divider} from 'semantic-ui-react';
+import {CSVLink, CSVDownload} from 'react-csv';
 import './index.css'
 
 class SurveyResponse extends React.Component{
@@ -22,6 +23,8 @@ class SurveyResponse extends React.Component{
             activeBoxes: [],
             //total index will let me do a show all button later
             totalIndex: 0,
+
+            csvData: [],
 
             surveyId: this.props.match.params.surveyId, 
             postId: this.props.match.params.fromPostId,
@@ -47,6 +50,7 @@ class SurveyResponse extends React.Component{
         .then(survey => {
             this.initializeForSurvey(survey.survey.questions);
             this.retrieveResponses(survey.survey.responses);
+            this.createCSVData(survey.survey.questions, survey.survey.responses);
         })
         .catch(error => {
             console.log(error);
@@ -78,7 +82,47 @@ class SurveyResponse extends React.Component{
 
     //Response now come in with the survey
     retrieveResponses(responses){
+        console.log(responses);
         this.setState({responses: responses});
+    }
+
+    createCSVData(questions, responses){
+        var finalArray = [];
+
+        //Create the first row which is name followed by each question
+        var row1 = ['Name'];
+        for (var i = 0; i < questions.length; i++)
+        {
+            var count = 1;
+            row1.push(questions[i].question);
+        }
+        finalArray.push(row1);
+
+        //Now push a new row for each user
+        for (var i = 0; i < responses.length; i++)
+        {
+            var row = [];
+            row.push(responses[i].userName);
+
+            //Go through each response
+            for (var j = 0; j < responses[i].responses.length; j++)
+            {
+                var responseString = responses[i].responses[j][0];
+                //if the question has multiple responses, append them to string with commas
+                if (questions[j].type === 'select' && questions[j].restrictions === 'multiple')
+                {
+                    for (var k = 1; k < responses[i].responses[j].length; k++)
+                    {
+                        responseString += (', ' + responses[i].responses[j][k]);
+                    }
+                }
+                row.push(responseString);
+            }
+
+            finalArray.push(row);
+        }
+
+        this.setState({csvData: finalArray});
     }
 
     showSelection(){
@@ -185,6 +229,7 @@ class SurveyResponse extends React.Component{
             {
                 return(
                     <div>
+                        <Divider/>
                         <h>
                             {this.state.responses[index].userName}
                         </h>
@@ -277,6 +322,7 @@ class SurveyResponse extends React.Component{
             <div className='container'>
                 <div className='card card-1 text-md-center'>
                     {this.showSelection()}
+                    <CSVLink data={this.state.csvData} >Download responses as csv</CSVLink>
                     {this.showResponses()}
                 </div>
             </div>
