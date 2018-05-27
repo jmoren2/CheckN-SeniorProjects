@@ -808,6 +808,9 @@ functions:
       include:
         - js/reports-api/handler.js
         - js/reports-api/getGeneralReport.js
+        - js/reports-api/responses.js
+        - js/departments-api/getAllDepartments.js
+        - js/posts-api/getPostsBySearch.js
         - node_modules/**
   
   getAllUsersReport:
