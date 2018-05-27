@@ -17,7 +17,6 @@ class EditComment extends Component{
         this.handleChangeVote = this.handleChangeVote.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.retrieveComment = this.retrieveComment.bind(this);
-        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount() {//Queries the API for the post being edited
@@ -59,7 +58,6 @@ class EditComment extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
-            console.log('RESULT: ' + JSON.stringify(result));
             this.setState({handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }
@@ -69,7 +67,7 @@ class EditComment extends Component{
     }
 
     handleChangeVote(event) {
-        this.setState({vote: event.target.value});//Updates the content field as typing occurs
+        this.setState({vote: event.target.value});//Updates the vote field as typing occurs
     }
 
     render(){

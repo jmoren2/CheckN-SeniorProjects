@@ -27,9 +27,7 @@ class RegisterUser extends Component{
         this.handleChangeLast = this.handleChangeLast.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleDepChange = this.handleDepChange.bind(this);
-
         this.handleSubmit = this.handleSubmit.bind(this);
-        //console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount(){
@@ -67,7 +65,6 @@ class RegisterUser extends Component{
         //** Test ONLY dont merge to master **//
         createUser(data2)
         .then(result => {
-            console.log(result.json())
         })
         // ********************************* //
 
@@ -79,7 +76,6 @@ class RegisterUser extends Component{
             return result.json()
         })
         .then(response => {
-            console.log("response.user object: " + response.user);
             this.setState({handleSubmitDone: true});
         });
     }
@@ -117,7 +113,6 @@ class RegisterUser extends Component{
             return response.json();
         })
         .then(list => {
-            console.log("LIST: " + JSON.stringify(list));
             var dropdown = document.getElementById("allDepartments");
             var departments = [];
             for(var i = 0; i < list.departments.length; ++i){
@@ -127,11 +122,9 @@ class RegisterUser extends Component{
                     text: list.departments[i]
                 });
             }
-            console.log("Departments Array: " + JSON.stringify(departments));
             this.setState({allDepartments: departments});
 
             dropdown.hidden = false;
-            console.log(this.state.allDepartments);
         });
     }
 

@@ -21,7 +21,6 @@ class ViewPost extends Component{//Initial State
         if(this.props.userObj === null)
         {
             window.location.href = '/login';
-            console.log('hello')
         }
         this.state = {
             postID: props.match.params.postID,
@@ -61,7 +60,6 @@ class ViewPost extends Component{//Initial State
         this.changePostState = this.changePostState.bind(this);
         this.closePost = this.closePost.bind(this);
         this.openPost = this.openPost.bind(this);
-        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount() {//Queries the API for a post and its comments with specified ID
@@ -86,7 +84,6 @@ class ViewPost extends Component{//Initial State
             return response.json();
         })
         .then(userObject => {
-            console.log('DATA' + JSON.stringify(data))
             this.posterID = userObject.user.userId;//Saved for checking to edit the post
             this.posterName = userObject.user.firstName + " " + userObject.user.lastName;//Saves the full name for displaying
 
@@ -189,9 +186,6 @@ class ViewPost extends Component{//Initial State
         })//Saves the response as JSON
         .then(data => {
             //Getting the user name to add to the post
-            console.log("IN RETRIEVE POST");
-            console.log(data);
-            console.log(data.post);
             this.postInfo = {
                 title: data.post.title,
                 content: data.post.content,
@@ -209,7 +203,6 @@ class ViewPost extends Component{//Initial State
 
     retreiveUser(userId)
     {
-       // console.log('userId: ' + userId)
         return fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/${userId}`, {
                 headers: {
                     'content-type': 'application/json'
@@ -217,12 +210,9 @@ class ViewPost extends Component{//Initial State
                 method: 'GET',
         })
         .then(result => {
-        //    console.log('result: ' + JSON.stringify(result));
-        //    console.log('result type: ' + typeof response);
             return result.json()
         })
         .then(response => {
-            console.log(response)
             
              if(response.statusCode !== 500)
              {
@@ -289,8 +279,6 @@ class ViewPost extends Component{//Initial State
                     test = "unknown user"
                 }
 
-                //console.log('test: ' + test)
-
                 this.retreiveUser(comment.userId);
                 return(
                         <div name={content} key={comment.commentId} className="card bg-light">
@@ -312,8 +300,6 @@ class ViewPost extends Component{//Initial State
                         </div>
                     );
         })
-
-        //console.log('cmnt feed: ' +JSON.stringify(commentFeed))
         return commentFeed;
 
     }
@@ -342,7 +328,6 @@ class ViewPost extends Component{//Initial State
         event.preventDefault();
         const data = {content: this.state.content, postId: this.state.postID, userId: this.props.userObj.userId, vote: this.state.voteChoice};//attaches the comment to the post being commented on
 
-        console.log(JSON.stringify(data))
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}/comments`, {
             method: 'POST',
             body: JSON.stringify(data)
@@ -351,7 +336,6 @@ class ViewPost extends Component{//Initial State
             return result.json()
         })
         .then(response => {
-            console.log('new Comment' + JSON.stringify(response))
             this.setState({returnedId: response.comment.commentId, newComment: this.addNewCommentToTop(this.state.content) });
         });
     }
@@ -426,7 +410,6 @@ class ViewPost extends Component{//Initial State
 
     handleOpenModal () {
         //this.retrieveComments();
-        console.log('state comments' + JSON.stringify(this.state.postComments[0]))
         this.setState({ showModal: true });
       }
       
@@ -435,7 +418,6 @@ class ViewPost extends Component{//Initial State
       }
 
     handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
-        console.log("edit history type: " + data.type);
         if(data.type === "comment"){
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments/${data.commentid}`, {
                 method: 'GET'
@@ -612,7 +594,6 @@ class ViewPost extends Component{//Initial State
     }
     
     surveyButton() {
-        console.log(this.state.surveyId);
         if (typeof this.state.surveyId === "undefined")
             return null;
         return(
@@ -633,11 +614,6 @@ class ViewPost extends Component{//Initial State
         {
         var up = document.getElementById("upVotes");
         }
-        else
-        {
-            console.log("no upVotes")
-        }
-        
     }
 
     filterCommentsWithoutContent(comments)

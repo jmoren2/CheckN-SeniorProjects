@@ -14,7 +14,6 @@ class FeedPage extends React.Component{
         if(this.props.userObj === null)
         {
             window.location.href = '/login';
-            console.log('hello')
         }
         this.state = {
             feed: <div>Loading...</div>
@@ -22,8 +21,6 @@ class FeedPage extends React.Component{
         this.searchQuery = "";
         this.pageSize = "pageSize=1000";
         this.forUser = "&forUser=" + this.props.userObj.userId;
-        console.log("The user object passed in is: " + props.userObj);
-        console.log(JSON.stringify(props.userObj));
     }
 
     componentDidMount(){//Queries the API for a post with specified ID
@@ -45,11 +42,9 @@ class FeedPage extends React.Component{
             return feedResults.json();
         })
         .then(feedData => {
-            console.log(JSON.stringify(feedData))
             if(feedData.posts.length === 0)
                 return("No posts to load, make the first!");
 
-            console.log(feedData);
             return(this.generateFeed(feedData.posts));
         })
         .then(Feed => {
@@ -58,8 +53,6 @@ class FeedPage extends React.Component{
     }
 
      voteUp(post) {
-        console.log("voted up!")
-        console.log(JSON.parse(JSON.stringify(post)));
 
         var postToBeVotedOn = post.postId;
         var idToVote = null;
@@ -76,17 +69,11 @@ class FeedPage extends React.Component{
         if(post.positiveVoters)
         {
             post['positiveVoters'].push(idToVote);
-            console.log('added voter')
-            console.log(post)
-            
         }
         else
             {
                 post.positiveVoters = [];
                 post['positiveVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
             }
 
 
@@ -99,20 +86,15 @@ class FeedPage extends React.Component{
         body: JSON.stringify(post)
     })
     .then(result => {
-        console.log('result: ' + JSON.stringify(result));
         return result.json()
     })
     .then(response => {
-        console.log('response: ' + JSON.stringify(response));``
-
     });
 
     }
 
 
     neutralVote(post) {
-        console.log("voted neutral!")
-        console.log(JSON.parse(JSON.stringify(post)));
         var postToBeVotedOn = post.postId;
         var idToVote = null;
 
@@ -131,17 +113,12 @@ class FeedPage extends React.Component{
         if(post.neutralVoters)
         {
             post['neutralVoters'].push(idToVote);
-            console.log('added voter')
-            console.log(post)
             
         }
         else
             {
                 post.neutralVoters = [];
                 post['neutralVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
             }
 
 
@@ -150,20 +127,13 @@ class FeedPage extends React.Component{
                 body: JSON.stringify(post)
             })
             .then(result => {
-                console.log('result: ' + JSON.stringify(result));
                 return result.json()
             })
             .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
-        
             });
     }
 
     voteDown(post) {
-        console.log("voted down!")
-
-
-        console.log(JSON.parse(JSON.stringify(post)));
         var postToBeVotedOn = post.postId;
         var idToVote
 
@@ -183,17 +153,11 @@ class FeedPage extends React.Component{
 
             
             post['negativeVoters'].push(idToVote);
-            console.log('added voter')
-            console.log(post)
-            
         }
         else
             {
                 post.negativeVoters = [];
                 post['negativeVoters'].push(idToVote);
-                console.log('array created');
-                console.log('added voter');
-                console.log(post);
             }
 
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${postToBeVotedOn}`, {
@@ -201,12 +165,9 @@ class FeedPage extends React.Component{
                 body: JSON.stringify(post)
             })
             .then(result => {
-                console.log('result: ' + JSON.stringify(result));
                 return result.json()
             })
             .then(response => {
-                console.log('response: ' + JSON.stringify(response));``
-        
             });
     }
 

@@ -7,18 +7,12 @@ class EditPost extends Component{
     constructor(props){
         super(props);
         this.state = {
-            postID: props.match.params.postID,//Line In Progress
+            postID: props.match.params.postID,
             title: '', 
             content: '',
             tagArray: [],
             tagstring: '',
-            positiveVoters:[],
-            neutralVoters: [],
-            negativeVoters: [],
             tagButtons: '',
-            state:'OPEN',
-            visibilityLevel: [],
-            pinnedId: '30408dd0-e352-4af7-b4ce-a81f9a30c2e0',
             handleSubmitDone: false
         };
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
@@ -26,7 +20,6 @@ class EditPost extends Component{
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.retrievePost = this.retrievePost.bind(this);
-        console.log("The user object passed in is: " + props.userObj);
     }
 
     componentDidMount() {//Queries the API for the post being edited
@@ -52,14 +45,8 @@ class EditPost extends Component{
             this.setState({
                 title: data.post.title,
                 content: data.post.content,
-                positiveVoters: data.post.positiveVoters,
-                neutralVoters: data.post.neutralVoters,
-                negativeVoters: data.post.negativeVoters,
-                pinnedId: data.post.pinnedId,
-                state: data.post.state,
                 tagArray: data.post.tags,
-                tagString: tagString,
-                visibilityLevel: data.post.visibilityLevel
+                tagString: tagString
             }, () => {this.handleChangeTags({target: {value: tagString}})})
         });
     }
@@ -68,16 +55,9 @@ class EditPost extends Component{
         event.preventDefault();
         //What is being sent to the API
         const data = {
-            title: this.state.title, 
+            title: this.state.title,
             content: this.state.content,
-            positiveVoters: this.state.positiveVoters,
-            neutralVoters: this.state.neutralVoters,
-            negativeVoters: this.state.negativeVoters,
-            pinnedId: this.state.pinnedId,
-            state: this.state.state,
             tags: this.state.tagArray,
-            userId: this.props.userObj.userId,
-            visibilityLevel: this.state.visibilityLevel
         };
 
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
@@ -88,7 +68,6 @@ class EditPost extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
-            console.log('RESULT: ' + JSON.stringify(result));
             this.setState({handleSubmitDone: true});//Give the new post ID to the app for redirection
         });
     }

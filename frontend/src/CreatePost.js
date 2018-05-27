@@ -33,7 +33,6 @@ class CreatePost extends Component{
         this.handleChangeContent = this.handleChangeContent.bind(this);
         this.handleChangeTags = this.handleChangeTags.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        console.log("The user object passed in is: " + JSON.stringify(props.userObj));
     }
 
     defaultQuestion(){
@@ -86,9 +85,6 @@ class CreatePost extends Component{
                 survey: survey
             };
         }
-
-        console.log('creating post with ');
-        console.log(data);
         
         fetch('https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts', {
             method: 'POST',
@@ -98,7 +94,6 @@ class CreatePost extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
-            console.log(result);
             this.setState({returnedId: result.post.postId, handleSubmitDone: true});//Give the new post ID to the app for redirection
         })
         .catch(error => {
@@ -154,7 +149,6 @@ class CreatePost extends Component{
         var index = -1;
         const survey = this.state.questionObjects.map(question => {
             index++;
-            console.log('' + index + ': ' + this.state.questionObjects[index].question);
             return(
                 <div>
                     <Question number={index + 1} object={this.state.questionObjects[index]}/>
