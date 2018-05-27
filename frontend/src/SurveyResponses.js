@@ -88,47 +88,39 @@ class SurveyResponse extends React.Component{
 
     createCSVData(questions, responses){
         var finalArray = [];
-        var questionCellLength = [];
+
+        //Create the first row which is name followed by each question
         var row1 = ['Name'];
         for (var i = 0; i < questions.length; i++)
         {
             var count = 1;
             row1.push(questions[i].question);
-            console.log('type: ' + questions[i].type + ' restrictions: ' + questions[i].restrictions);
-            if (questions[i].type === 'select' && questions[i].restrictions === 'multiple')
-            {
-                for (var j = 1; j < questions[i].options.length; j++)
-                {
-                    count++;
-                    row1.push("");
-                }
-            }
-            questionCellLength.push(count);
         }
         finalArray.push(row1);
 
+        //Now push a new row for each user
         for (var i = 0; i < responses.length; i++)
         {
             var row = [];
             row.push(responses[i].userName);
 
+            //Go through each response
             for (var j = 0; j < responses[i].responses.length; j++)
             {
-                //var count = 0;
-                row.push(responses[i].responses[j][0])
-                for (var k = 1; k < questionCellLength[j]; k++)
+                var responseString = responses[i].responses[j][0];
+                //if the question has multiple responses, append them to string with commas
+                if (questions[j].type === 'select' && questions[j].restrictions === 'multiple')
                 {
-                    if (k < responses[i].responses[j].length)
-                        row.push(responses[i].responses[j][k]);
-                    else
-                        row.push("");
+                    for (var k = 1; k < responses[i].responses[j].length; k++)
+                    {
+                        responseString += (', ' + responses[i].responses[j][k]);
+                    }
                 }
+                row.push(responseString);
             }
 
             finalArray.push(row);
         }
-        console.log('csv should have this');
-        console.log(finalArray);
 
         this.setState({csvData: finalArray});
     }
