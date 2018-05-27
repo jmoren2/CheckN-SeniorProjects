@@ -157,9 +157,9 @@ class ViewPost extends Component{//Initial State
                                 </TimeAgo>
                                 </div>
               
-                                {/* <div className="col-sm-8">
-                                    {data.post.visibilityLevel}
-                                </div> */}
+                                <div className="col-sm-8">
+                                    Viewable by {data.post.visibilityLevel[0].role} users.
+                                </div>
 
                             </div>
 

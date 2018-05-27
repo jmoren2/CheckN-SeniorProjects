@@ -19,8 +19,9 @@ class FeedPage extends React.Component{
         this.state = {
             feed: <div>Loading...</div>
         }
-        this.searchQuery = "forUser=" + this.props.userObj.userId;
+        this.searchQuery = "";
         this.pageSize = "pageSize=1000";
+        this.forUser = "&forUser=" + this.props.userObj.userId;
         console.log("The user object passed in is: " + props.userObj);
         console.log(JSON.stringify(props.userObj));
     }
@@ -34,7 +35,7 @@ class FeedPage extends React.Component{
     }
 
     retrieveFeed(){
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.pageSize}&${this.searchQuery}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts?${this.pageSize}${this.forUser}${this.searchQuery}`, {
                 headers: {
                     'content-type': 'application/json'
                 },

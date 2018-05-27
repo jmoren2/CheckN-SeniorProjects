@@ -71,7 +71,8 @@ class CreatePost extends Component{
                 title: this.state.title, 
                 content: this.state.content,
                 tags: this.state.tagArray,
-                userId: this.props.userObj.userId
+                userId: this.props.userObj.userId,
+                visibilityLevel: [{department: "*", role: this.props.userObj.userPermissions[0].role}]
             };
         }
         else
@@ -81,6 +82,7 @@ class CreatePost extends Component{
                 content: this.state.content,
                 tags: this.state.tagArray,
                 userId: this.props.userObj.userId,
+                visibilityLevel: [{department: "*", role: this.props.userObj.userPermissions[0].role}],
                 survey: survey
             };
         }
