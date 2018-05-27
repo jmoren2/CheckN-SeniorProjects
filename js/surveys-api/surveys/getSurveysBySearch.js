@@ -1,23 +1,26 @@
 'use strict';
-const success = require('./responses').multiCommentSuccess;
-const fail = require('./responses').CommentsFail;
+const success = require('../responses').multiSurveysSuccess;
+const fail = require('../responses').SurveyFail;
 
-module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
-    var text, user, post, dept, role;
+module.exports.getSurveysBySearch = (esClient, event, context, callback) => {
+    var text, user, survey, dept, role;
 
-    // pull search key(s), user and post from the query string
+    // pull search key(s), user and survey from the query string
     if(event.queryStringParameters) {
         text = event.queryStringParameters.search;
         user = event.queryStringParameters.user;
-        post = event.queryStringParameters.postId;
+        survey = event.queryStringParameters.surveyId;
         dept = event.queryStringParameters.dept;
         role = event.queryStringParameters.role;
+        context.page = event.queryStringParameters.page;
+        context.pageSize = event.queryStringParameters.pageSize;
         console.log("Search string: " + text);
         console.log("User string: " + user);
-        console.log("Post string: " + post);
+        console.log("survey string: " + survey);
     }
 
-    const PAGE_SIZE = 10000;
+    if(!context.page) context.page = 1;
+    if(!context.pageSize) context.pageSize = 10;
 
     // initialize search query
     var search = {
@@ -29,7 +32,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         }
     };
 
-    // match comment content against search text
+    // match survey content against search text
     if(text !== undefined) {
         search.query.bool.must.push({
             match: {
@@ -37,19 +40,22 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
             }
         })
     }
+
     // match user field
     if(user !== undefined) {
-        search.query.bool.filter.push({
-            term: {
+        search.query.bool.must.push({
+            match: {
                 userId: user
             }
         })
     }
-    // match postId
-    if(post !== undefined) {
+    console.log("Search Query: " + JSON.stringify(search) )
+
+    // match surveyId
+    if(survey !== undefined) {
         search.query.bool.filter.push({
             term: {
-                postId: post
+                surveyId: survey
             }
         })
     }
@@ -86,16 +92,18 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
 
     console.log(search);
 
-    
-    // associate user names with comments
-    var showUsers = function(comments, callback){
+    // associate user names with surveys
+    var showUsers = function(surveys, context, callback){
+        if(surveys == undefined && surveys.length == 0)
+            return success(200, surveys, callback);
+
         // build search query
         var userIdArr = [];
-        for(let i = 0; i < comments.length; ++i){
-            if(comments[i].userId) {
+        for(let i = 0; i < surveys.length; ++i){
+            if(surveys[i].userId) {
                 userIdArr.push({
                     match: {
-                        userId: comments[i].userId
+                        userId: surveys[i].userId
                     }
                 })
             }
@@ -106,8 +114,7 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         esClient.search({
             index: 'users',
             type: 'user',
-            body: search,
-            size: PAGE_SIZE
+            body: search
         }, function(error, data) {
             if(error) {
                 console.log('associating users error: ' + JSON.stringify(error));
@@ -121,24 +128,25 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
                 }
             }
 
-            // associate user names to comments
-            for(let i = 0; i < comments.length; ++i){
+            // associate user names to surveys
+            for(let i = 0; i < surveys.length; ++i){
                 let userName = 'unknown user';
-                if(userMap[comments[i].userId]){
-                    userName = userMap[comments[i].userId]
+                if(userMap[surveys[i].userId]){
+                    userName = userMap[surveys[i].userId]
                 }
-                comments[i].userName = userName
+                surveys[i].userName = userName
             }
-        
-            return success(200, comments, callback);
+
+            return success(200, surveys, context, callback);
         });
     };
 
     esClient.search({
-        index: 'comments',
-        type: 'comment',
+        index: 'surveys',
+        type: 'survey',
         body: search,
-        size: PAGE_SIZE
+        from: (context.page-1)*context.pageSize,
+        size: context.pageSize,
     }, function(error, data) {
         if(error) {
             console.log('error: ' + JSON.stringify(error));
@@ -146,13 +154,16 @@ module.exports.getCommentsBySearch = (esClient, event, context, callback) => {
         } else {
             console.log('data: ' + JSON.stringify(data));
             var hits = data.hits.hits;
-            var comments = [];
+            var surveys = [];
 
-            // parse hits for comment objects
+            context.totalPosts = data.hits.total;
+
+            // parse hits for survey objects
             for(let i = 0; i < hits.length; ++i){
-                comments.push(hits[i]._source)
+                surveys.push(hits[i]._source)
             }
-            return showUsers(comments, callback);
+
+            return showUsers(surveys, context,callback);
         }
     });
 };

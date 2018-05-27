@@ -36,6 +36,10 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
             event.pathParameters.departmentId !== "") {
             console.log("Received proxy: " + event.pathParameters.departmentId);
 
+            if(!context.page) context.page = 1;
+            if(!context.pageSize) context.pageSize = 10
+
+            const PAGE_SIZE = 10000;
             var department = decodeURIComponent(event.pathParameters.departmentId);
             var params = {};
             var report = {};
@@ -45,22 +49,13 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
                 params = {
                     index: 'users',
                     type:'user',
-                    body: {
-                        query: {
-                            nested :{
-                                path: "userPermissions",
-                                query: {
-                                    bool: {
-                                        must: {
-                                            match:{
-                                            "userPermissions.department": department
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    body: { query: { nested :{
+                        path: "userPermissions",
+                        query: { bool: { must: { match:{
+                            "userPermissions.department": department
+                        }}}}
+                    }}},
+                    size: PAGE_SIZE
                 }
                 esClient.search(params, function(err, data){
                     if(err) {
@@ -129,18 +124,13 @@ module.exports.getDepartmentReport = (esClient, event, context, callback) => {
             params = {
                 index: 'posts',
                 type:'post',
-                body: {
-                    query: {
-                        nested :{
-                            path: "visibilityLevel",
-                            query: {
-                                match:{
-                                    "visibilityLevel.department": department
-                                }
-                            }
-                        }
-                    }
-                }
+                body: { query: { nested :{
+                    path: "visibilityLevel",
+                    query: { bool: { must: { match:{
+                        "visibilityLevel.department": department
+                    }}}}
+                }}},
+                size: PAGE_SIZE
             }
 
             esClient.search(params, function(err, data) {
