@@ -40,7 +40,7 @@ module.exports.getUserReport = (esClient, event, context, callback) => {
 
 };
 
-function countVotes(obj, typeOfComment){
+module.exports.countVotes = function countVotes(obj, typeOfComment){
     var count = 0;
     for(i=0; i < obj.length; i++){
         if(obj[i].vote.toLowerCase()===typeOfComment)

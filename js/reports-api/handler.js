@@ -24,3 +24,8 @@ module.exports.getUserReport = (event, context, callback) => {
     const getUserReport = require('./getUserReport').getUserReport;
     getUserReport(esClient, event, context, callback);
 };
+
+module.exports.getGeneralReport = (event, context, callback) => {
+    const getGeneralReport = require('./getGeneralReport').getGeneralReport;
+    getGeneralReport(esClient, event, context, callback);
+};
