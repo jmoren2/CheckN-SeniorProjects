@@ -315,6 +315,19 @@ class FeedPage extends React.Component{
         return feed;
     }
 
+    //This is for navbar's search
+    handleSearch = (searchParams) => {
+        var newQuery = this.generateSearchQuery(searchParams);
+        this.searchQuery = newQuery;
+        this.retrieveFeed();
+    }
+
+    generateSearchQuery(searchParams){
+        var query = "search=";
+        query += searchParams.words;
+        return query;
+    }
+    
     render(){
         return(
             <div>
