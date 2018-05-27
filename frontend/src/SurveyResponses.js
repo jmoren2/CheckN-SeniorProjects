@@ -225,6 +225,25 @@ class SurveyResponse extends React.Component{
                     </div>
                 );
             }
+            else if (this.state.filterByResponse === -1)
+            {
+                if ((typeof this.state.responses[index].responses[this.state.filterByResponseTo][0]) === 'undefined')
+                {
+                    return(<div/>);
+                }
+                else
+                {
+                    return(
+                        <div>
+                            <Divider/>
+                            <h>
+                                {this.state.responses[index].userName}
+                            </h>
+                            {this.generateRespones(index)}
+                        </div>
+                    )
+                }
+            }
             else if (this.state.responses[index].responses[this.state.filterByResponseTo].includes(this.state.questions[this.state.filterByResponseTo].options[this.state.filterByResponse]))
             {
                 return(
@@ -271,6 +290,15 @@ class SurveyResponse extends React.Component{
             //responseIndex++;
             responseOutput = this.state.questions.map((question) => {
                 questionIndex++;
+
+                var responseString = this.state.responses[index].responses[questionIndex][0];
+                if (this.state.questions[questionIndex].restrictions === 'multiple')
+                {
+                    for (var i = 1; i < this.state.responses[index].responses[questionIndex].length; i++)
+                    {
+                        responseString += (', ' + this.state.responses[index].responses[questionIndex][i]);   
+                    }
+                }
                 return(
                     <Card className="responsecard" fluid>
                         <Card.Content>
@@ -278,7 +306,7 @@ class SurveyResponse extends React.Component{
                                 {questionIndex + 1}. {this.state.questions[questionIndex].question}
                             </Card.Header>
                         <div/>
-                        <label>{this.state.responses[index].responses[questionIndex]}</label>
+                        <label>{responseString}</label>
                         </Card.Content>
                     </Card>
                 )
@@ -288,6 +316,15 @@ class SurveyResponse extends React.Component{
         {
             responseOutput = this.state.questions.map((question) => {
                 questionIndex++;
+
+                var responseString = this.state.responses[index].responses[questionIndex][0];
+                if (this.state.questions[questionIndex].restrictions === 'multiple')
+                {
+                    for (var i = 1; i < this.state.responses[index].responses[questionIndex].length; i++)
+                    {
+                        responseString += (', ' + this.state.responses[index].responses[questionIndex][i]);   
+                    }
+                }
                 if (this.state.filterByQuestions.includes(questionIndex))
                 {
                     return(
@@ -297,7 +334,7 @@ class SurveyResponse extends React.Component{
                                     {questionIndex + 1}. {this.state.questions[questionIndex].question}
                                 </Card.Header>
                             <div/>
-                            <label>{this.state.responses[index].responses[questionIndex]}</label>
+                            <label>{responseString}</label>
                             </Card.Content>
                         </Card>
                     )
