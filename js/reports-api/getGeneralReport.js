@@ -16,7 +16,7 @@ module.exports.getGeneralReport = (esClient, event, context, callback) => {
             else{
                 var listOfPostsReturned = JSON.parse(data.body);
 
-                report.postCount = {postCount: listOfPostsReturned.total};
+                var report = {postCount: listOfPostsReturned.total};
 
                 getCommentsBySearch(esClient, event, context, function(err, data2){
                     if(err){
@@ -27,9 +27,9 @@ module.exports.getGeneralReport = (esClient, event, context, callback) => {
                         var listOfCommentsReturned = JSON.parse(data2.body);
 
                         report.commentCount = listOfCommentsReturned.count;
-                        report.positiveCount = countVotes(listOfCommentsReturned, "positive");
-                        report.negativeCount = countVotes(listOfCommentsReturned, "negative");
-                        report.neutralCount = countVotes(listOfCommentsReturned, "neutral");
+                        report.positiveCount = countVotes(listOfCommentsReturned.comments, "positive");
+                        report.negativeCount = countVotes(listOfCommentsReturned.comments, "negative");
+                        report.neutralCount = countVotes(listOfCommentsReturned.comments, "neutral");
                     getAllDepartments(esClient, event, context, function(err, data3){
                         if(err){
                             var failMessage = {message: 'Failed to create Report. Error: ' + error};
