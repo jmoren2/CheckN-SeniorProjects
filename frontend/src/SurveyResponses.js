@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Accordion, Dropdown, Grid, Icon, Card, Divider} from 'semantic-ui-react';
+import {CSVLink, CSVDownload} from 'react-csv';
 import './index.css'
 
 class SurveyResponse extends React.Component{
@@ -22,6 +23,8 @@ class SurveyResponse extends React.Component{
             activeBoxes: [],
             //total index will let me do a show all button later
             totalIndex: 0,
+
+            csvData: [],
 
             surveyId: this.props.match.params.surveyId, 
             postId: this.props.match.params.fromPostId,
@@ -47,6 +50,7 @@ class SurveyResponse extends React.Component{
         .then(survey => {
             this.initializeForSurvey(survey.survey.questions);
             this.retrieveResponses(survey.survey.responses);
+            this.createCSVData(survey.survey.questions, survey.survey.responses);
         })
         .catch(error => {
             console.log(error);
@@ -78,7 +82,55 @@ class SurveyResponse extends React.Component{
 
     //Response now come in with the survey
     retrieveResponses(responses){
+        console.log(responses);
         this.setState({responses: responses});
+    }
+
+    createCSVData(questions, responses){
+        var finalArray = [];
+        var questionCellLength = [];
+        var row1 = ['Name'];
+        for (var i = 0; i < questions.length; i++)
+        {
+            var count = 1;
+            row1.push(questions[i].question);
+            console.log('type: ' + questions[i].type + ' restrictions: ' + questions[i].restrictions);
+            if (questions[i].type === 'select' && questions[i].restrictions === 'multiple')
+            {
+                for (var j = 1; j < questions[i].options.length; j++)
+                {
+                    count++;
+                    row1.push("");
+                }
+            }
+            questionCellLength.push(count);
+        }
+        finalArray.push(row1);
+
+        for (var i = 0; i < responses.length; i++)
+        {
+            var row = [];
+            row.push(responses[i].userName);
+
+            for (var j = 0; j < responses[i].responses.length; j++)
+            {
+                //var count = 0;
+                row.push(responses[i].responses[j][0])
+                for (var k = 1; k < questionCellLength[j]; k++)
+                {
+                    if (k < responses[i].responses[j].length)
+                        row.push(responses[i].responses[j][k]);
+                    else
+                        row.push("");
+                }
+            }
+
+            finalArray.push(row);
+        }
+        console.log('csv should have this');
+        console.log(finalArray);
+
+        this.setState({csvData: finalArray});
     }
 
     showSelection(){
@@ -185,6 +237,7 @@ class SurveyResponse extends React.Component{
             {
                 return(
                     <div>
+                        <Divider/>
                         <h>
                             {this.state.responses[index].userName}
                         </h>
@@ -277,6 +330,7 @@ class SurveyResponse extends React.Component{
             <div className='container'>
                 <div className='card card-1 text-md-center'>
                     {this.showSelection()}
+                    <CSVLink data={this.state.csvData} >Download responses as csv</CSVLink>
                     {this.showResponses()}
                 </div>
             </div>
