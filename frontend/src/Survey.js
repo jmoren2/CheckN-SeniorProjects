@@ -4,6 +4,7 @@
 //Need the page to check against a userID to make sure users that aren't signed in or have already taken can't do it again
 
 import React from 'react';
+import Navbar from './Navbar.js';
 import {Link, Redirect} from 'react-router-dom';
 import {Dropdown, Button, Card, Form, Checkbox, Grid, Divider, Input, TextArea, Label} from 'semantic-ui-react';
 import "./index.css";
@@ -29,7 +30,9 @@ class Survey extends React.Component{
             questions: [],
             responses: [],
             surveyId: '',
-            responseSubmitted: false, 
+            responseSubmitted: false,
+            alreadyTakenSurvey: false, 
+            surveyId: this.props.match.params.surveyId,
             postId: this.props.match.params.fromPostId
         }
     }
@@ -40,7 +43,7 @@ class Survey extends React.Component{
 
     retrieveSurvey(){
         //fetch(`https://c9dszf0z20.execute-api.us-west-2.amazonaws.com/prod/surveys/${this.props.match.params.surveyID}` ,{
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.props.match.params.surveyId}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/surveys/${this.state.surveyId}`, {
             headers: {
                 'content-type': 'application/json'
             },
@@ -67,6 +70,14 @@ class Survey extends React.Component{
     initializeState(survey){
         console.log('initializeState');
         console.log(survey);
+        for (var i = 0; i < survey.responses.length; i++)
+        {
+            if (survey.responses[i].userId === this.props.userObj.userId)
+            {
+                this.setState({alreadyTakenSurvey: true});
+                return;
+            }
+        }
         var questionArray = survey.questions;
         var responseArray = survey.questions.map((question) => {
             //var temp = new this.defaultResponse();
@@ -359,14 +370,23 @@ class Survey extends React.Component{
                 <Redirect to={`/post/${this.state.postId}`}/>
             );
         }
+        if (this.state.alreadyTakenSurvey)
+        {
+            return(
+                <Redirect to={`/surveyResponses/${this.state.surveyId}/${this.state.postId}/fromSurvey`}/>
+            );
+        }
         else
         {
             return(
+                <div>
+                <Navbar/>
                 <div className='container'>
                     <div className='card card-1 text-md-center'>
                         {this.showSurvey()}
                         <Button onClick={this.handleSubmit} positive>Submit Response</Button>
                     </div>
+                </div>
                 </div>
             );
         }

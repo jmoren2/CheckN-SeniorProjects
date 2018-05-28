@@ -86,7 +86,8 @@ class App extends React.Component {
                     <Route path="/Users/report" component={props => (<Report userObj={this.userObj} {...props}/>)}/>
                     <Route path="/Departments/report" component={props => (<DepartmentReport userObj={this.userObj} {...props}/>)}/>
                     <Route path="/survey/:surveyId/:fromPostId" component={props => (<Survey userObj={this.userObj} {...props}/>)}/>
-                    <Route path="/surveyResponses/:surveyId/:fromPostId" component={props => (<SurveyResponse userObj={this.userObj} {...props}/>)}/>
+                    <Route path="/surveyResponses/:surveyId/:fromPostId" component={props => (<SurveyResponse userObj={this.userObj} fromSurvey={false} {...props}/>)}/>
+                    <Route path="/surveyResponses/:surveyId/:fromPostId/fromSurvey" component={props => (<SurveyResponse userObj={this.userObj} fromSurvey={true} {...props}/>)}/>
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>
