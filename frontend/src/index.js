@@ -56,9 +56,9 @@ class App extends React.Component {
         //Now what I have left is the stringified JSON object that can be parsed
         user = JSON.parse(user);
         
+        user = {user};
         
-        
-        return (user);
+        return ({userId: user.userId, userPermissions: [user.userPermissions[0]]});
         }
         catch(err){
             console.log('aasdfasdf')
