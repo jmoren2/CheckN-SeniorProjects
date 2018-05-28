@@ -4,6 +4,7 @@ const fail = require('./responses').userReportSuccess;
 const getAllDepartments = require('../departments-api/getAllDepartments.js').getAllDepartments;
 const getPostsBySearch = require('../posts-api/getPostsBySearch.js').getPostsBySearch;
 const getCommentsBySearch = require('../comments-api/getCommentsBySearch').getCommentsBySearch;
+const getSurveysBySearch = require('../surveys-api/surveys/getSurveysBySearch').getSurveysBySearch;
 const countVotes = require('./getUserReport.js').countVotes;
 
 module.exports.getGeneralReport = (esClient, event, context, callback) => {
@@ -41,7 +42,26 @@ module.exports.getGeneralReport = (esClient, event, context, callback) => {
                             if(report.departmentCount > 0){
                                 report.avgPostPerDepartment = report.postCount / report.departmentCount
                             }
-                            return success(200, report, callback);
+                            else{
+                                report.avgPostPerDepartment = 0;
+                            }
+                            getSurveysBySearch(esClient, event, context, function(err, data4){
+                                if(err){
+                                    var failMessage = {message: 'Failed to create Report. Error: ' + error};
+                                    return fail(500, failMessage, callback);
+                                }
+                                else{
+                                    var listOfSurveys = JSON.parse(data4.body);
+                                    report.surveyCount = listOfSurveys.total;
+                                    if(report.departmentCount > 0){
+                                        report.avgSurveyPerDepartment = report.surveyCount / report.departmentCount;
+                                    }
+                                    else{
+                                        report.avgSurveyPerDepartment = 0;
+                                    }
+                                    return success(200, report, callback);
+                                }
+                            });
 
                         }
                     });
