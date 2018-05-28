@@ -1,6 +1,7 @@
 import React from 'react';
+import Navbar from './Navbar.js';
 import {Link, Redirect} from 'react-router-dom';
-import {Accordion, Dropdown, Grid, Icon, Card, Divider} from 'semantic-ui-react';
+import {Accordion, Dropdown, Grid, Icon, Card, Divider, Tab} from 'semantic-ui-react';
 import {CSVLink, CSVDownload} from 'react-csv';
 import './index.css'
 
@@ -25,11 +26,32 @@ class SurveyResponse extends React.Component{
             totalIndex: 0,
 
             csvData: [],
+            responseTotals: null,
 
             surveyId: this.props.match.params.surveyId, 
             postId: this.props.match.params.fromPostId,
 
         }
+
+        if (this.props.fromSurvey)
+        {
+            alert("You've already taken that survey");
+        }
+
+        this.panes = [
+            {menuItem: 'Individual Responses', 
+                render: () =>
+                    <Tab.Pane key='IndividualResponses'>
+                        {this.showResponses()}
+                    </Tab.Pane>
+            },
+            {menuItem: 'Overall Responses',
+                render: () =>
+                    <Tab.Pane key='OverallResponses'>
+                        {this.showOverall()}
+                    </Tab.Pane>
+            }
+        ]
     }
 
     componentDidMount() {
@@ -48,8 +70,8 @@ class SurveyResponse extends React.Component{
             return results.json();
         })//Saves the response as JSON
         .then(survey => {
-            this.initializeForSurvey(survey.survey.questions);
-            this.retrieveResponses(survey.survey.responses);
+            this.initializeForSurvey(survey.survey.questions, survey.survey.responses);
+            //this.retrieveResponses(survey.survey.responses);
             this.createCSVData(survey.survey.questions, survey.survey.responses);
         })
         .catch(error => {
@@ -59,32 +81,98 @@ class SurveyResponse extends React.Component{
 
     //When initializing a survey I create the {text: , value: } objects for the dropboxes
     //Also store the question array itself in state I will want the question text later on
-    initializeForSurvey(questions){
+    initializeForSurvey(questions, responses){
         var dropBoxQuestionArray = [{text: 'All', value: -1}];
-        var dropBoxOptionsArrays = []
+        var dropBoxOptionsArrays = [];
+        var responseTotals = [];
         for (var i = 0; i < questions.length; i++)
         {
             dropBoxQuestionArray.push({text: i+1, value: i});
             dropBoxOptionsArrays.push([{text: 'Any', value: -1}]);
+            responseTotals.push([]);
             for (var j = 0; j < questions[i].options.length; j++)
             {
                 dropBoxOptionsArrays[i].push({text: questions[i].options[j], value: j});
+                responseTotals[i].push(0);
+            }
+            if (questions[i].type === 'free')
+            {
+                if (questions[i].restrictions === 'numeric')
+                {
+                    responseTotals[i].push(0);//total responses
+                    responseTotals[i].push(0);//sum
+                    responseTotals[i].push(0);//average
+                }
+                else 
+                {
+                    responseTotals[i].push([0]);
+                }
             }
         }
+
+        //Go through the responses and total results for summary
+        for (var i = 0; i < responses.length; i++)
+        {
+            var response = responses[i].responses;
+            //Go through each response to each question
+            for (var j = 0; j < response.length; j++)
+            {
+                if (typeof response[j][0] === 'undefined')
+                    continue;
+                if (questions[j].type === 'free')
+                {
+                    if (questions[j].restrictions === 'numeric')
+                    {
+                        responseTotals[j][0] = 1 + responseTotals[j][0];
+                        responseTotals[j][1] += Number(response[j][0]);
+                        responseTotals[j][2] = (responseTotals[j][1]/responseTotals[j][0]);
+                    }
+                    else
+                    {
+                        responseTotals[j][0] += 1;
+                    }
+                }
+                else if (questions[j].type === 'select')
+                {
+                    //Go through each answer on a select question
+                    for (var k = 0; k < response[j].length; k++)
+                    {
+                        var choice = response[j][k];
+                        for (var l = 0; l < questions[j].options.length; l++)
+                        {
+                            if (choice === questions[j].options[l])
+                                responseTotals[j][l] += 1;
+                        }
+                    }
+                }
+                else
+                {
+                    var choice = response[j][0];
+                    for (var l = 0; l < questions[j].options.length; l++)
+                    {
+                        if (choice === questions[j].options[l])
+                            responseTotals[j][l] += 1;
+                    }
+                }
+            }
+        }
+        console.log(responseTotals);
 
         this.setState({
             dropBoxQuestionArray: dropBoxQuestionArray,
             dropBoxOptionsArrays: dropBoxOptionsArrays,
             currentDropBoxOptions: dropBoxOptionsArrays[0],
-            questions: questions
+            questions: questions,
+            responses: responses,
+            responseTotals: responseTotals
         });
     }
 
     //Response now come in with the survey
-    retrieveResponses(responses){
-        console.log(responses);
-        this.setState({responses: responses});
-    }
+    //retrieveResponses(responses){
+    //    console.log(responses);
+    //    this.setState({responses: responses});
+    //}
 
     createCSVData(questions, responses){
         var finalArray = [];
@@ -354,14 +442,112 @@ class SurveyResponse extends React.Component{
 
     }
 
+    showOverall(){
+        return(
+            <div>
+                {this.generateSummaries()}
+            </div>
+        )
+    }
+
+    generateSummaries(){
+        var index = -1;
+        var questionSummaries = this.state.questions.map((question) => {
+            index++;
+            if (question.type === 'free')
+            {
+                if (question.restrictions === 'numeric')
+                    return this.renderSummaryFreeNumeric(index);
+                return this.renderSummaryFree(index);
+            }
+            //select and scale are similar enough to use the same function
+            return this.renderSummarySelect(index);
+        })
+        return questionSummaries;
+    }
+
+    renderSummaryFree(index){
+        return(
+            <Card className="responsecard" fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {index + 1}. {this.state.questions[index].question}
+                    </Card.Header>
+                    <div/>
+                    <label>Total Responses: {this.state.responseTotals[index][0]}</label>
+                </Card.Content>
+            </Card>
+        )
+    }
+
+    renderSummaryFreeNumeric(index){
+        return(
+            <Card className="responsecard" fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {index + 1}. {this.state.questions[index].question}
+                    </Card.Header>
+                    <div/>
+                    <label>Total Responses: {this.state.responseTotals[index][0]}</label>
+                    <div/>
+                    <label>Sum: {this.state.responseTotals[index][1]}</label>
+                    <div/>
+                    <label>Average: {this.state.responseTotals[index][2]}</label>
+                </Card.Content>
+            </Card>
+        )
+    }
+
+    renderSummarySelect(index){
+        var optionIndex = -1;
+        var options = this.state.questions[index].options.map((option) => {
+            optionIndex++;
+            return(
+                <div>
+                    <label>{option}: {this.state.responseTotals[index][optionIndex]}</label>
+                </div>
+            )
+        })
+        return(
+            <Card className="responsecard" fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {index + 1}. {this.state.questions[index].question}
+                    </Card.Header>
+                    <div/>
+                    {options}
+                </Card.Content>
+            </Card>
+        )
+    }
+
+    /*renderSummaryScale(index){
+        return(
+            <Card className="responsecard" fluid>
+                <Card.Content>
+                    <Card.Header>
+                        {index + 1}. {this.state.questions[index].question}
+                    </Card.Header>
+                    <div/>
+                    <label>Total Responses: {this.state.responseTotals[index][0]}</label>
+                </Card.Content>
+            </Card>
+        )
+    }*/
+
     render(){
         return(
+            <div>
+            <Navbar/>
             <div className='container'>
                 <div className='card card-1 text-md-center'>
                     {this.showSelection()}
                     <CSVLink data={this.state.csvData} >Download responses as csv</CSVLink>
-                    {this.showResponses()}
+                    <label>Total Responses: {this.state.responses.length}</label>
+                    <Tab panes={this.panes}>
+                    </Tab>
                 </div>
+            </div>
             </div>
         );
     }
