@@ -817,6 +817,8 @@ functions:
         - js/posts-api/responses.js
         - js/comments-api/responses.js
         - js/comments-api/getCommentsBySearch.js
+        - js/surveys-api/surveys/getSurveysBySearch.js
+        - js/surveys-api/responses.js
   
   getAllUsersReport:
     handler: js/reports-api/handler.getAllUsersReport
@@ -848,6 +850,8 @@ functions:
         - js/comments-api/responses.js
         - js/comments-api/getCommentsBySearch.js
         - node_modules/**
+        - js/surveys-api/surveys/getSurveysBySearch.js
+        - js/surveys-api/responses.js
 
   
   getAllDepartmentsReport:
