@@ -448,7 +448,7 @@ class ViewPost extends Component{//Initial State
                                     <div>{editText}</div>
                                     <div>{iteration.vote}</div>
                                     <div>{iteration.content}</div>
-                                </div>
+                                </div><br></br>
                             </p>
                         );
                     })
@@ -499,7 +499,7 @@ class ViewPost extends Component{//Initial State
                                         {iteration.tags.map((eachTag) => {
                                             return(<div>{eachTag} </div>);
                                         })}
-                                    </div>
+                                    </div><br></br>
                                 </div>
                             </p>
                         );
@@ -652,6 +652,7 @@ class ViewPost extends Component{//Initial State
                                         {this.changePostState()}
                                         {this.surveyButton()}
                                     </div>
+                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
 
                                     <div>
                                         {this.responseBox()}
@@ -660,7 +661,6 @@ class ViewPost extends Component{//Initial State
                                    <h3 style={{color: 'black'}}>Comments</h3>
                                    
                                     <div>
-                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
                                    <button class="btn btn-info" onClick={this.handleOpenModal}>Show All</button>
                                         <ReactModal class="modal fade" isOpen={this.state.showModal}>
                                         {
