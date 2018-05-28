@@ -17,6 +17,14 @@ class Navbar extends React.Component {
   constructor(props){
     super(props);
 
+    var hidden = false;
+    if (typeof props.searchMethod === 'undefined')
+      hidden = true;
+
+    this.state = {
+      searchHidden: hidden,
+    }
+
   }
   generateSearch = (e) => {
     e.preventDefault();     //Stops the page from reloading
@@ -86,9 +94,9 @@ class Navbar extends React.Component {
 
                 <span className="navbar-text">
                     <form className="form-inline" onSubmit={this.generateSearch}>
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchBox"></input>
+                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchBox" hidden={this.state.searchHidden}></input>
                         
-                        <button className="btn btn-default" type="submit">
+                        <button className="btn btn-default" type="submit" hidden={this.state.searchHidden}>
                             <FaBeer /> 
                         </button>
 
