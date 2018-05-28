@@ -12,16 +12,17 @@ module.exports.mapIndex = async (esClient, event, context, callback) => {
     var data;
 
     try {
-        // await esClient.indices.delete({index: 'responses'});
+        await esClient.indices.delete({index: 'responses'});
         await esClient.indices.create({index: 'responses'});
         data = await esClient.indices.putMapping(options);
+        console.log(data);
+        return success(data, callback);
     } catch (error) {
         console.log(error);
         return fail(500, error, callback);
     }
 
-    console.log(data);
-    return success(data, callback);
+    
 };
 
 function fail(code, msg, callback) {
