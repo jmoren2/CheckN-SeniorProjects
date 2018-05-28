@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Question from './Question.js';
-import {Divider, Button, Icon, Dropdown} from 'semantic-ui-react';
+import {Divider, Button, Icon, Dropdown, TextArea} from 'semantic-ui-react';
 
 import Plus from 'react-icons/lib/fa/plus';
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -217,17 +217,17 @@ class CreatePost extends Component{
 
                                     <div className='form-group'>
                                         <label>Title: </label>
-                                        <input value={this.state.title} onChange={this.handleChangeTitle} placeholder='Enter the title' className='form-control' /> <br />
+                                        <TextArea rows={1} autoHeight value={this.state.title} onChange={this.handleChangeTitle} placeholder='Enter the title' className='form-control' /> <br />
                                     </div>
 
                                     <div className='form-group'>
                                         <label>Content: </label>
-                                        <input value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
+                                        <TextArea rows={4} autoHeight value={this.state.content} onChange={this.handleChangeContent}  placeholder='Enter the content' className='form-control' /> <br />
                                     </div>
 
                                     <div className='form-group'>
                                         <label>Tags:</label>
-                                        <input onChange={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
+                                        <TextArea rows={1} autoHeight onChange={this.handleChangeTags}  placeholder='Enter tags' className='form-control' /> <br />
                                         <span>
                                             <label>Tag Preview: </label>
                                             {this.state.tagButtons}

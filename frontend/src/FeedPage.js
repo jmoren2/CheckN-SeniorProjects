@@ -20,7 +20,7 @@ class FeedPage extends React.Component{
         }
         this.searchQuery = "";
         this.pageSize = "pageSize=1000";
-        this.forUser = "&forUser=" + this.props.userObj.userId;
+        this.forUser = '';//"&forUser=" + this.props.userObj.userId;
     }
 
     componentDidMount(){//Queries the API for a post with specified ID

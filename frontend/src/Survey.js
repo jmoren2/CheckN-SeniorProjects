@@ -71,7 +71,7 @@ class Survey extends React.Component{
         var responseArray = survey.questions.map((question) => {
             //var temp = new this.defaultResponse();
             return(
-                []
+                ['']
             )
         });
 
@@ -151,7 +151,7 @@ class Survey extends React.Component{
                         {this.state.questions[index].question}
                     </Card.Header>
                     <Form>
-                    <TextArea id={index} className='freeResponse' value={this.state.responses[index][0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
+                        <TextArea index={index} className='freeResponse' value={this.state.responses[index][0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
                     </Form>
                 </Card.Content>
             </Card>
@@ -168,7 +168,7 @@ class Survey extends React.Component{
 
     //checks if the new value is not a number, and if it isn't then it doesn't update
     //deals with empty string seperately because I ran into problems with it
-    updateNumericResponse = (event) => {
+    updateNumericResponse = (event, {index}) => {
         if (event.target.value != '')
         {
             if (isNaN(event.target.value))
@@ -176,14 +176,14 @@ class Survey extends React.Component{
             else
             {
                 var temp = this.state.responses;
-                temp[event.target.id][0] = event.target.value;
+                temp[index][0] = event.target.value;
                 this.setState({responses: temp});
             }
         }
         else
         {
             var temp = this.state.responses;
-            temp[event.target.id][0] = event.target.value;
+            temp[index][0] = event.target.value;
             this.setState({responses: temp});
         }
     }
