@@ -123,15 +123,15 @@ class ViewPost extends Component{//Initial State
                 <div className="row">
                     <span className="col-sm">
                         <button id="upVotes" className="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp />
+                            <ThumbsUp /> {data.post.voteCounts.positive}
                         </button>
                         <br />
                         <button id="netVotes" className="btn btn-default btn-sm" type="submit">
-                        <   Neutral /> 
+                        <   Neutral /> {data.post.voteCounts.neutral}
                         </button>
                         <br />
                         <button id="downVotes" className="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> 
+                            <ThumbsDown /> {data.post.voteCounts.negative}
                         </button>       
                     </span>
 
