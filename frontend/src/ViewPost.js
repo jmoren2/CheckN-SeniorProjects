@@ -17,7 +17,7 @@ import TimeAgo from 'react-timeago'
 class ViewPost extends Component{//Initial State
     constructor(props) {
         super(props);
-
+        console.log("COOKIE: " + JSON.stringify(this.props.userObj));
         if(this.props.userObj === null)
         {
             window.location.href = '/login';
@@ -55,8 +55,6 @@ class ViewPost extends Component{//Initial State
         this.editPost = this.editPost.bind(this);
         this.editComment = this.editComment.bind(this);
         this.handleChangeComment = this.handleChangeComment.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.storeUser = this.storeUser.bind(this);
         this.changePostState = this.changePostState.bind(this);
         this.closePost = this.closePost.bind(this);
         this.openPost = this.openPost.bind(this);

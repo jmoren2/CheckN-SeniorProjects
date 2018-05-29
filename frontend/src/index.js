@@ -42,8 +42,10 @@ class App extends React.Component {
         {
             user = {userId: user.userId, userPermissions: [user.userPermissions[0]]};
             document.cookie = ('user=' + JSON.stringify(user));
+            console.log(document.cookie);
         }
         document.cookie = 'path=/';
+        console.log("AFTER: " + document.cookie);
     }
 
     retrieveUserObjFromCookie(){
