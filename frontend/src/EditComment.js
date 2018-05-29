@@ -58,7 +58,9 @@ class EditComment extends Component{
             return response.json()//Turn the response into a JSON object
         })
         .then(result => {
-            this.setState({handleSubmitDone: true});//Give the new post ID to the app for redirection
+            setTimeout(function() { //Start the timer
+                this.setState({handleSubmitDone: true}) //After 1 second, set render to true
+            }.bind(this), 2000)//Give the new post ID to the app for redirection
         });
     }
 
