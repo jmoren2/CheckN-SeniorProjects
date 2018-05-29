@@ -235,15 +235,15 @@ class FeedPage extends React.Component{
                     <div className="row">
                         <span className="col-sm" >
                             <button class="btn btn-primary btn-sm" type="submit" onClick={this.voteUp.bind(this, post)}>
-                                <ThumbsUp /> {positiveCount}
+                                <ThumbsUp /> {post.voteCounts.positive}
                             </button>
                             <br />
                             <button class="btn btn-default btn-sm" type="submit" onClick={this.neutralVote.bind(this, post)}>
-                                <Neutral /> {neutralCount}
+                                <Neutral /> {post.voteCounts.neutral}
                             </button>
                             <br />
                             <button class="btn btn-danger btn-sm" type="submit" onClick={this.voteDown.bind(this, post)}>
-                                <ThumbsDown /> {negCount}
+                                <ThumbsDown /> {post.voteCounts.negative}
                             </button>
                         </span>
 
