@@ -11,7 +11,7 @@ import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
 import './ViewPost.css'
 import ReactModal from 'react-modal'
-import {Button, Comment, Divider} from 'semantic-ui-react';
+import {Button, Comment, Divider, TextArea} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
@@ -40,7 +40,8 @@ class ViewPost extends Component{//Initial State
             showHistory: false,
             history:"Please hold....",
             postState: "OPEN",
-            surveyId: ''
+            surveyId: '',
+            takenSurvey: false
         };
         this.posterID=null;
         this.posterName=null;
@@ -170,7 +171,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}?forUser=${this.props.userObj.userId}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -193,6 +194,8 @@ class ViewPost extends Component{//Initial State
                 visibilityLevel: data.post.visibilityLevel
             };
             this.storeUser(data);//Continues the work in the function above
+            if ((typeof data.post.surveyId) != 'undefined')
+                this.setState({surveyTaken: data.post.surveyTaken});
         });
     }
 
@@ -294,26 +297,6 @@ class ViewPost extends Component{//Initial State
                         </Comment.Group>
                     </div>
                 );
-                /*
-                return(
-                        <div name={content} key={comment.commentId} className="card bg-light">
-                        
-                        <div className="card-block">
-                        <p id={test}>
-                            {test} commented: 
-                        </p>
-                        
-                        {this.editComment(comment.userId, comment.commentId)}
-                        <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
-                        <div>
-                            {vote}
-                        </div>
-                        
-                        <p>{comment.content}</p>
-                        </div>
-                            
-                        </div>
-                );*/
         })
         return commentFeed;
 
@@ -397,7 +380,7 @@ class ViewPost extends Component{//Initial State
                             <ThumbsDown size={30}/>
                         </button>
                     </span>
-                        <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
+                        <TextArea autoHeight onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
                     <button id='submitVoteButton' className='btn btn-primary' type='submit' disabled>Submit</button>
                     </div>
                 </form>
@@ -617,7 +600,7 @@ class ViewPost extends Component{//Initial State
         return(
             <div>
                 <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
-                    <Button positive>Take Survey</Button>
+                    <Button positive hidden={this.state.surveyTaken}>Take Survey</Button>
                 </Link>
                 <Link to={`/surveyResponses/${this.state.surveyId}/${this.state.postID}`}>
                     <Button positive>View Responses</Button>

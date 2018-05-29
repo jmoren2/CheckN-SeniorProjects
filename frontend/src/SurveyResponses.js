@@ -490,8 +490,6 @@ class SurveyResponse extends React.Component{
                     <div/>
                     <label>Total Responses: {this.state.responseTotals[index][0]}</label>
                     <div/>
-                    <label>Sum: {this.state.responseTotals[index][1]}</label>
-                    <div/>
                     <label>Average: {this.state.responseTotals[index][2]}</label>
                 </Card.Content>
             </Card>
