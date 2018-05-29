@@ -10,7 +10,7 @@ import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
 import ReactModal from 'react-modal'
-import {Button} from 'semantic-ui-react';
+import {Button, Comment, Divider} from 'semantic-ui-react';
 
 import TimeAgo from 'react-timeago'
 
@@ -244,7 +244,7 @@ class ViewPost extends Component{//Initial State
 
                 var content = null;
 
-                if(comment.content === undefined)
+                if(comment.content === '')
                 {
                     content = "noContent"
                 }
@@ -257,15 +257,15 @@ class ViewPost extends Component{//Initial State
 
                 if(comment.vote === "positive")
                 {
-                    vote = <ThumbsUp  style={{color: "blue"}} />
+                    vote = <ThumbsUp  size={30} style={{color: "blue"}} />
                 }
                 else if(comment.vote === "negative")
                 {
-                    vote = <ThumbsDown  style={{color: "red"}} />
+                    vote = <ThumbsDown  size={30} style={{color: "red"}} />
                 }
                 else
                 {
-                    vote = <Neutral />
+                    vote = <Neutral size={30}/>
                 }
 
                 var test = null;
@@ -281,13 +281,33 @@ class ViewPost extends Component{//Initial State
 
                 this.retreiveUser(comment.userId);
                 return(
+                    <div name={content} key={comment.commentId} className="card bg-light">
+                        <Comment.Group className='comment'>
+                        <Comment>
+                            <Comment.Avatar src={vote}></Comment.Avatar>
+                            <Comment.Content>
+                                <Comment.Author>{comment.userName}</Comment.Author>
+                                <Comment.Text>
+                                    {comment.content}
+                                </Comment.Text>
+                                <Comment.Actions>
+                                    {this.editComment(comment.userId, comment.commentId)}
+                                    <Comment.Action commentid={comment.commentId} type='comment' onClick={this.handleOpenHistory}>History</Comment.Action>
+                                </Comment.Actions>
+                            </Comment.Content>
+                        </Comment>
+                        </Comment.Group>
+                    </div>
+                );
+                /*
+                return(
                         <div name={content} key={comment.commentId} className="card bg-light">
                         
                         <div className="card-block">
                         <p id={test}>
                             {test} commented: 
                         </p>
-                        {/*TODO: make history only viewable if admin or manager*/}
+                        
                         {this.editComment(comment.userId, comment.commentId)}
                         <Button class="btn btn-info" commentid={comment.commentId} type="comment" onClick={this.handleOpenHistory}>Edit History</Button>
                         <div>
@@ -298,7 +318,7 @@ class ViewPost extends Component{//Initial State
                         </div>
                             
                         </div>
-                    );
+                );*/
         })
         return commentFeed;
 
@@ -417,7 +437,10 @@ class ViewPost extends Component{//Initial State
         this.setState({ showModal: false });
       }
 
-    handleOpenHistory = (event, data) => {//TODO: Fetch histories and set to this.state.history
+    handleOpenHistory = (event) => {//TODO: Fetch histories and set to this.state.history
+        var data = event.target;
+        data.commentid = data.attributes.commentid.nodeValue;
+        //console.log(data);
         if(data.type === "comment"){
             fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/comments/${data.commentid}`, {
                 method: 'GET'
@@ -548,7 +571,7 @@ class ViewPost extends Component{//Initial State
         if(this.props.userObj.userId === userID && this.state.postState === "OPEN") {
         return(
             <Link to={`/editComment/${commentID}`}>
-                <button className='btn btn-info'>Edit Comment</button>
+                <Comment.Action>Edit</Comment.Action>
             </Link>);
         }
         else {
@@ -569,7 +592,7 @@ class ViewPost extends Component{//Initial State
         }
     }
 
-    closePost() {
+    closePost = () => {
         this.postInfo.state = "CLOSED";
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
@@ -581,7 +604,7 @@ class ViewPost extends Component{//Initial State
         //API call to close the post
     }
 
-    openPost() {
+    openPost = () => {
         this.postInfo.state = "OPEN";
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
