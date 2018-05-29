@@ -573,7 +573,7 @@ class ViewPost extends Component{//Initial State
         this.postInfo.state = "CLOSED";
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
-            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+            body: JSON.stringify(this.postInfo.state)//Stringify the data being sent
         })
         .then(response => {
             return response.json()//Turn the response into a JSON object
@@ -585,7 +585,7 @@ class ViewPost extends Component{//Initial State
         this.postInfo.state = "OPEN";
         fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
             method: 'PUT',
-            body: JSON.stringify(this.postInfo)//Stringify the data being sent
+            body: JSON.stringify(this.postInfo.state)//Stringify the data being sent
         })
         .then(response => {
             return response.json()//Turn the response into a JSON object

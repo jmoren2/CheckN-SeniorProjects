@@ -40,6 +40,7 @@ class App extends React.Component {
         } 
         else
         {
+            user = {userId: user.userId, userPermissions: [user.userPermissions[0]]};
             document.cookie = ('user=' + JSON.stringify(user));
         }
         document.cookie = 'path=/';
