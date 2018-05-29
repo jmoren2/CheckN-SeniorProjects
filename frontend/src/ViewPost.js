@@ -37,7 +37,8 @@ class ViewPost extends Component{//Initial State
             history:"Please hold....",
             postState: "OPEN",
             surveyId: '',
-            takenSurvey: false
+            takenSurvey: false,
+            isAdmin: false
         };
         this.posterID=null;
         this.posterName=null;
@@ -64,6 +65,8 @@ class ViewPost extends Component{//Initial State
     componentDidMount() {//Queries the API for a post and its comments with specified ID
         this.retrievePost();
         this.retrieveComments();
+        if (this.props.userObj.userPermissions[0].role === 'admin')
+            this.setState({isAdmin: true});
     }
 
     componentDidUpdate() {
@@ -292,8 +295,11 @@ class ViewPost extends Component{//Initial State
                                     {comment.content}
                                 </Comment.Text>
                                 <Comment.Actions>
+                                    <Comment.Action active={false}>
+                                    <TimeAgo date={comment.timestamp}></TimeAgo>
+                                    </Comment.Action>
                                     {this.editComment(comment.userId, comment.commentId)}
-                                    <Comment.Action commentid={comment.commentId} type='comment' onClick={this.handleOpenHistory}>History</Comment.Action>
+                                    <Comment.Action hidden={!this.state.isAdmin} commentid={comment.commentId} type='comment' onClick={this.handleOpenHistory}>History</Comment.Action>
                                 </Comment.Actions>
                             </Comment.Content>
                         </Comment>
@@ -656,7 +662,7 @@ class ViewPost extends Component{//Initial State
                                         {this.changePostState()}
                                         {this.surveyButton()}
                                     </div>
-                                    <Button class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
+                                    <Button hidden={!this.state.isAdmin} class="btn btn-info" postid={this.state.postID} type="post" onClick={this.handleOpenHistory}>Edit History</Button>
 
                                     <div>
                                         {this.responseBox()}
