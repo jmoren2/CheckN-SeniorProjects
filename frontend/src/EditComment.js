@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import Navbar from './Navbar.js'
 import 'bootstrap/dist/css/bootstrap.css';
+import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
+import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
+import Neutral from 'react-icons/lib/fa/arrows-h';
+import {TextArea} from 'semantic-ui-react';
 
 class EditComment extends Component{
     constructor(props){
@@ -17,6 +21,8 @@ class EditComment extends Component{
         this.handleChangeVote = this.handleChangeVote.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.retrieveComment = this.retrieveComment.bind(this);
+        this.opacities = {POSITIVE: '0.6', NEUTRAL: '0.6', NEGATIVE: '0.6'};
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
     }
 
     componentDidMount() {//Queries the API for the post being edited
@@ -35,9 +41,13 @@ class EditComment extends Component{
         })//Saves the response as JSON
         .then(data => {
             this.postID=data.comment.postId;
+            this.opacities = {POSITIVE: '0.4', NEUTRAL: '0.4', NEGATIVE: '0.4'};
+            this.opacities[data.comment.vote.toUpperCase()] = '1';
+            this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+            this.borders[data.comment.vote.toUpperCase()] = '4px solid black';
             this.setState({
                 content: data.comment.content,
-                vote: data.comment.vote
+                vote: data.comment.vote.toUpperCase()
             })
         });
     }
@@ -70,40 +80,48 @@ class EditComment extends Component{
         this.setState({vote: event.target.value});//Updates the vote field as typing occurs
     }
 
+    voteSelected = (e) => {
+        e.preventDefault();
+        //This basically resets the opacities and borders of all buttons, then sets up the selected one
+        this.opacities = {POSITIVE: '0.4', NEUTRAL: '0.4', NEGATIVE: '0.4'};
+        this.opacities[e.target.id] = '1';
+        this.borders = {POSITIVE: '0px solid black' , NEUTRAL: '0px solid black', NEGATIVE: '0px solid black'};
+        this.borders[e.target.id] = '4px solid black';
+        this.setState({
+            vote: e.target.id
+        });
+        //enable submitting now that there is a vote
+        //document.getElementById("submitVoteButton").disabled = false;
+    }
+
     render(){
         if (this.state.handleSubmitDone === true){
             return(<Redirect to={`/post/${this.postID}`}/>);//go back to the post's page after editing the comment
         }
         return(
-            <div>
-            <Navbar />
-                <div className="container">
-                    <div className=''>
-                        <div className='card card-1  text-md-center'>
-                            <div className='card-body text-center'>
-                                <h2 className='text-center' style={{color:'black'}}>Edit Your Comment</h2>
-                                <form onSubmit={this.handleSubmit}>
-
-                                    <div className='form-group'>
-                                        <label>Content: </label>
-                                        <input value={this.state.content} onChange={this.handleChangeContent} placeholder='Enter the content' className='form-control' /> <br />
-                                        <label>Vote: </label>
-                                        <input value={this.state.vote} onChange={this.handleChangeVote} placeholder='Enter the vote' className='form-control' /> <br />
-                                    </div>
-
-                                    <button className='btn btn-info' type='submit'>Submit</button>
-
-                                    <Link to={`/post/${this.postID}`}>
-                                    <button className='btn btn-info'>Cancel Edit</button>
-                                    </Link>
-
-                                </form>
-                            </div>
-                        </div>
+            <div className='container'>
+                <div className='card card-1 text-md-center'>
+                <h2 className='text-center' style={{color:'black'}}>Edit Your Comment</h2>
+                <form onSubmit={this.handleSubmit}>
+                    <div className='form-group'>
+                    <span>
+                        <button type='button' id='POSITIVE' className="btn btn-primary votebtn" style={{opacity: this.opacities['POSITIVE'], border: this.borders['POSITIVE']}} onClick={this.voteSelected}>
+                            <ThumbsUp size={30}/>
+                        </button>
+                        <button type='button' id='NEUTRAL' className="btn btn-default votebtn" style={{opacity: this.opacities['NEUTRAL'], border: this.borders['NEUTRAL']}} onClick={this.voteSelected}>
+                            <Neutral size={30}/>
+                        </button>
+                        <button type='button' id='NEGATIVE' className="btn btn-danger votebtn" style={{opacity: this.opacities['NEGATIVE'], border: this.borders['NEGATIVE']}} onClick={this.voteSelected}>
+                            <ThumbsDown size={30}/>
+                        </button>
+                    </span>
+                    <TextArea autoHeight onChange={this.handleChangeContent} value={this.state.content} placeholder='Share your thoughts...' style={{width: '70%', margin: 'auto'}}/> <br />
+                    <button id='submitVoteButton' className='btn btn-primary' type='submit'>Submit</button>
                     </div>
+                </form>
                 </div>
             </div>
-        );
+        )
     }
 }
 
