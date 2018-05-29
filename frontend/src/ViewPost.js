@@ -225,8 +225,8 @@ class ViewPost extends Component{//Initial State
                }
                else
                {var y = document.getElementById("unknown user");
-   
-                   x.innerHTML = "unknown user" + " commented: ";
+                if(y)
+                   y.innerHTML = "unknown user" + " commented: ";
                   
                    
                }
