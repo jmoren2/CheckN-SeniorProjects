@@ -59,7 +59,6 @@ class App extends React.Component {
         return ({userId: user.userId, userPermissions: [user.userPermissions[0]]});
         }
         catch(err){
-            console.log('aasdfasdf')
             //If anything at all went wrong then send a null user and they should be sent to login screen
             console.log(err);
             return null;
@@ -68,6 +67,7 @@ class App extends React.Component {
 
     render(){
         return(
+            <div id="PageContainer" width="100%" height="100%">
             <Router>
                 <div>
                     <Route exact path="/" component={props => (<LogInPage indexUserMethod={this.setUserObject} userObj={this.userObj} loggedOut={true} {...props}/>)}/>{/*Passes a potentially null user object to the login page to check if login is necessary*/}
@@ -89,6 +89,7 @@ class App extends React.Component {
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                 </div>
             </Router>
+            </div>
         );
     }
 }

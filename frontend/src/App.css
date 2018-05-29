@@ -72,3 +72,8 @@
 .sidenav {padding-top: 15px;}
 .sidenav a {font-size: 18px;}
 }
+
+#title {
+  font-family: 'Lobster', cursive;
+  font-size: 40pt;
+}

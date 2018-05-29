@@ -1,10 +1,11 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import logo from './images/checknlogo.png';
+import logo from './images/checknlogo.svg';
 import clientLogo from './images/nikeCheck.jpg'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {loginUser, getUser, deleteUser} from './assets/okta-api-handler'
+import './images/NikeWHQ_Campus_Aerial_5075_original.jpg'
 
 
 
@@ -101,18 +102,18 @@ class LogInPage extends React.Component{
         }
         return(
             <div id="LoginPageContainer" className="h-100 w-50">
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <div className="container">
                     <div className='card card-1 text-md-center'>
                         <div className='card-body text-center'>
-                            <img height="25%" width="25%" src={clientLogo} style={{objectFit:'contain'}} /><br />
+                            <img height="50%" width="50%" src={clientLogo} style={{objectFit:'contain'}} /><br />
 
                             <div className="row">
 
                                 <div className="mx-auto">
 
                                     <div className="">
-                                        <h2 className=''  style={{color:'black'}}>CheckN</h2>
-                                        <img height="15%" width="15%" src={logo} style={{objectFit:'contain'}} />
+                                        <h2 className=''  style={{color:'black'}} id='title'>CheckN</h2>
                                     </div>
                                     
                                 </div>
