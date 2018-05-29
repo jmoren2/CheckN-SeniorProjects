@@ -36,7 +36,8 @@ class ViewPost extends Component{//Initial State
             showHistory: false,
             history:"Please hold....",
             postState: "OPEN",
-            surveyId: ''
+            surveyId: '',
+            takenSurvey: false
         };
         this.posterID=null;
         this.posterName=null;
@@ -173,7 +174,7 @@ class ViewPost extends Component{//Initial State
 
     retrievePost(){
         //fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}`, {
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}` ,{
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/posts/${this.state.postID}?forUser=${this.props.userObj.userId}` ,{
             headers: {
                 'content-type': 'application/json'
             },
@@ -196,6 +197,8 @@ class ViewPost extends Component{//Initial State
                 visibilityLevel: data.post.visibilityLevel
             };
             this.storeUser(data);//Continues the work in the function above
+            if ((typeof data.post.surveyId) != 'undefined')
+                this.setState({surveyTaken: data.post.surveyTaken});
         });
     }
 
@@ -600,7 +603,7 @@ class ViewPost extends Component{//Initial State
         return(
             <div>
                 <Link to={`/survey/${this.state.surveyId}/${this.state.postID}`}>
-                    <Button positive>Take Survey</Button>
+                    <Button positive hidden={this.state.surveyTaken}>Take Survey</Button>
                 </Link>
                 <Link to={`/surveyResponses/${this.state.surveyId}/${this.state.postID}`}>
                     <Button positive>View Responses</Button>
