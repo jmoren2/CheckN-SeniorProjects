@@ -1,12 +1,14 @@
 import React from 'react';
 import {Link, Redirect, Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
-import Navbar from './Navbar.js'
+import './FeedPage.css';
+import Navbar from './Navbar.js';
 import ThumbsUp from 'react-icons/lib/fa/thumbs-up';
 import ThumbsDown from 'react-icons/lib/fa/thumbs-down';
 import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
-import TimeAgo from 'react-timeago'
+import TimeAgo from 'react-timeago';
+
 class FeedPage extends React.Component{
     constructor(props){
         super(props);
@@ -172,8 +174,8 @@ class FeedPage extends React.Component{
     }
 
     generateFeed(posts){
-        
         var feed = posts.map((post) => {
+            console.log('post: ' + JSON.stringify(post));
             
             
             // var pVoters = post.positiveVoters;
@@ -253,17 +255,16 @@ class FeedPage extends React.Component{
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
                                 
                                     <div key={post.postId} >
-                                        <div class="card-block">
+                                        <div class="card-block" id="postTitle">
                                             {post.title} 
-                                            <br />                                         
+                                            <br />                                       
                                         </div>
                                     </div>
-                                </Link>                     
-                                <br/>
-
+                                </Link>
+                                <span id="postUser">{post.userName}</span>
                                 <div className="row">
 
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-4" id="postDetails">
                                         Posted: &nbsp;
                                         <TimeAgo date={post.timestamp}>
                                         </TimeAgo>

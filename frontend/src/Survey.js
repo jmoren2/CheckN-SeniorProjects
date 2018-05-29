@@ -380,6 +380,7 @@ class Survey extends React.Component{
         {
             return(
                 <div>
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <Navbar/>
                 <div className='container'>
                     <div className='card card-1 text-md-center'>

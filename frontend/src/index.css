@@ -73,3 +73,7 @@ body {
 #PageContainer {
   background-image: './images/NikeWHQ_Campus_Aerial_5075_original.jpg';
 }
+
+.row {
+  margin: 5px;
+}

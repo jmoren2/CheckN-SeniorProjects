@@ -135,6 +135,7 @@ class RegisterUser extends Component{
         return(
             <div>
 
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <div className="container">
                 
                     <div className=''>

@@ -17,13 +17,12 @@ class About extends React.Component{
 
     render(){
         return(
-
-            
             <div>
+            <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
             <Navbar />
                <div className="text-center">
                    
-                    Written by A-Team Capstone Winter 2018!
+                    Written by A-Team Capstone Winter-Spring 2018!
 
                     <div className="text-center">
 

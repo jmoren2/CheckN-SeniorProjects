@@ -3,7 +3,6 @@ import {Link, Redirect, Route} from 'react-router-dom';
 import { Dropdown, Button, Input, Container, Header, Form, TextArea, Modal, Image, Card } from 'semantic-ui-react';
 import Navbar from './Navbar.js'
 
-
 class Report extends React.Component{
     constructor(props){
         super(props);
@@ -178,26 +177,27 @@ class Report extends React.Component{
         console.log(this.state.posts)
         return(
             <div>
-            
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <Navbar searchMethod={this.handleSearch}/>
                 <div className="container">
                 
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
-                                <h2 style={{color: 'black'}}>Users Report</h2>
+                                <h2 style={{color: 'black'}} id="pageTitle">Users Report</h2>
 
                                 <Input id="searchUser"  placeholder='Search User...' onChange={this.heandlSearchUser} /> <br/>
 
                                 <Dropdown id="allUsers" selection options={this.state.AllUsers} hidden onChange={this.handleUserChange}  />
 
                                 <Button standard  id="runUserReport" onClick={this.getUserReport}>Run</Button> <br />
+                                
                                 <div id="metrics" hidden>
-                                <Card>
+                                <br />
+                                <Card id="metricsCard">
                                     <Card.Header>
                                         <h3>
-
-                                        {this.state.firstName + " " + this.state.lastName + " Report"}
+                                            {this.state.firstName + " " + this.state.lastName + " Report"}
                                         </h3>
                                     </Card.Header>
                                     <Card.Description>

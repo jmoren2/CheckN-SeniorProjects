@@ -2,7 +2,7 @@ import React from 'react';
 import {Link, Redirect, Route} from 'react-router-dom';
 import { Dropdown, Button, Input, Container, Header, Form, TextArea, Modal, Image } from 'semantic-ui-react';
 import Navbar from './Navbar.js'
-
+import './App.css'
 
 
 class Admin extends React.Component{
@@ -673,14 +673,14 @@ class Admin extends React.Component{
 
          return(
              <div>
-             
-                 <Navbar searchMethod={this.handleSearch}/>
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
+                <Navbar searchMethod={this.handleSearch}/>
                  <div className="container">
                  
                      <div className=''>
                          <div className='card card-1  text-md-center'>
                              <div className='card-body text-center'>
-                                 <h2 style={{color: 'black'}}>Admin Page</h2>
+                                 <h2 style={{color: 'black'}} id="pageTitle">Admin Page</h2>
 
 
                             <Dropdown placeholder='Select Type' onChange={this.handleReportType} selection options={this.options}/>

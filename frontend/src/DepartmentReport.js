@@ -162,13 +162,14 @@ class DepartmentReport extends React.Component{
         return(
             <div>
             
-                <Navbar searchMethod={this.handleSearch}/>
+            <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
+            <Navbar searchMethod={this.handleSearch}/>
                 <div className="container">
                 
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
-                                <h2 style={{color: 'black'}}>Department Report</h2>
+                                <h2 style={{color: 'black'}} id="pageTitle">Department Report</h2>
 
                                 <Dropdown id="allDepartments" name="selectedDepartment" label="All Departments" selection onFocus={this.getAllDepartments} options={this.state.allDepartments} onChange={this.handleChange} />
 
@@ -176,7 +177,8 @@ class DepartmentReport extends React.Component{
                             
 
                                 <div id="metrics" hidden>
-                                        <Card>
+                                    <br />
+                                        <Card id="metricsCard">
                                             <Card.Header>
                                                 <h3>
 

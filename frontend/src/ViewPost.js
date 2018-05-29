@@ -9,6 +9,7 @@ import Neutral from 'react-icons/lib/fa/arrows-h';
 import Moment from 'react-moment';
 import Check from 'react-icons/lib/fa/check-circle-o';
 import './index.css'
+import './ViewPost.css'
 import ReactModal from 'react-modal'
 import {Button, Comment, Divider} from 'semantic-ui-react';
 
@@ -24,7 +25,10 @@ class ViewPost extends Component{//Initial State
         }
         this.state = {
             postID: props.match.params.postID,
+            postTitle: "",
+            postUserName: "",
             postContent: "",
+            postDetails: "",
             postComments: "",
             newComment: "",
             content: "",
@@ -89,7 +93,21 @@ class ViewPost extends Component{//Initial State
             var nVoters = data.post.neutralVoters;
             var negVoters = data.post.negativeVoters;
 
+            var details = (<div className="row">
+                <div className="col-sm-4">
+                Posted: &nbsp;
+                <TimeAgo date={data.post.timestamp}>
+                </TimeAgo>
+                </div>
+                <div className="col-sm-8">
+                    Viewable by {data.post.visibilityLevel[0].role} users.
+                </div>
+            </div>);
+
             this.setState({postState: data.post.state});
+            this.setState({postTitle: data.post.title});
+            this.setState({postUserName: this.posterName});
+            this.setState({postDetails: details});
 
             // if(pVoters)
             // {
@@ -117,50 +135,29 @@ class ViewPost extends Component{//Initial State
             // }
             return(//displays the post contents
             <div className="container">
-
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster|Vollkorn" rel="stylesheet" />
+                <span id="voteCount">
+                    <button id="upVotes" className="btn btn-primary btn-sm" type="submit">
+                        <ThumbsUp /> {data.post.voteCounts.positive}
+                    </button>
+                    <button id="netVotes" className="btn btn-default btn-sm" type="submit">
+                        <Neutral /> {data.post.voteCounts.neutral}
+                    </button>
+                    <button id="downVotes" className="btn btn-danger btn-sm" type="submit">
+                        <ThumbsDown /> {data.post.voteCounts.negative}
+                    </button>       
+                </span>
                 <div className="row">
-                    <span className="col-sm">
-                        <button id="upVotes" className="btn btn-primary btn-sm" type="submit">
-                            <ThumbsUp /> {data.post.voteCounts.positive}
-                        </button>
-                        <br />
-                        <button id="netVotes" className="btn btn-default btn-sm" type="submit">
-                        <   Neutral /> {data.post.voteCounts.neutral}
-                        </button>
-                        <br />
-                        <button id="downVotes" className="btn btn-danger btn-sm" type="submit">
-                            <ThumbsDown /> {data.post.voteCounts.negative}
-                        </button>       
-                    </span>
-
                     <div className="col-sm-11">
                         <div className="card bg-light h-100">
-
                             <div key={data} className="">
                                 <div className="card-block">
-                                    <h3>{data.post.title}</h3>
-                                    <p>{this.posterName}</p>
-                                    <p id="postEdit">{data.post.content}</p>
+                                    <p id="postCardContent">{data.post.content}</p>
+                                    <span id="postCardDetails">{this.state.postDetails}</span>
                                 </div>
                             </div>
-
-                            <div className="row">
-                                <div className="col-sm-4">
-                                Posted: &nbsp;
-                                <TimeAgo date={data.post.timestamp}>
-                                 
-                                </TimeAgo>
-                                </div>
-              
-                                <div className="col-sm-8">
-                                    Viewable by {data.post.visibilityLevel[0].role} users.
-                                </div>
-
-                            </div>
-
                         </div>
                     </div>
-
                 </div>
                 <br/>
             </div>
@@ -666,9 +663,10 @@ class ViewPost extends Component{//Initial State
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
 
-                                <h1 style={{color: 'black'}}>Post</h1>
+                                <h1 style={{color: 'black'}} id="postCardTitle">{this.state.postTitle}</h1>
+                                <span id="postCardUser">{this.state.postUserName}</span>
                                     <div>
-                                        {this.state.postContent}
+                                        <span id="postCardContent">{this.state.postContent}</span>
                                         {this.editPost()}
                                         {this.changePostState()}
                                         {this.surveyButton()}

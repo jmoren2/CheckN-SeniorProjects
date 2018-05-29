@@ -102,7 +102,7 @@ class LogInPage extends React.Component{
         }
         return(
             <div id="LoginPageContainer" className="h-100 w-50">
-                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster|Lora" rel="stylesheet" />
                 <div className="container">
                     <div className='card card-1 text-md-center'>
                         <div className='card-body text-center'>

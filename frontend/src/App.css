@@ -77,3 +77,34 @@
   font-family: 'Lobster', cursive;
   font-size: 40pt;
 }
+
+#pageTitle {
+  font-family: 'Lobster', cursive;
+  font-size: 20pt;
+}
+
+#navTitle {
+  font-family: 'Lobster', cursive;
+  font-size: 20pt;
+}
+
+#postCardTitle {
+  font-family: 'Lato', sans-serif;
+  font-size: 15pt;
+}
+
+#postCardDetails {
+  font-family: 'Lato', sans-serif;
+  font-size: 10pt;
+}
+
+#postCardUser {
+  font-family: 'Lato', sans-serif;
+  font-size: 10pt;
+}
+
+#metricsCard {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}

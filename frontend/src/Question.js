@@ -222,6 +222,7 @@ class Question extends React.Component{
     render() {
         return(
             <div>
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <label>Question </label>
                 <span>
                     <label> {this.state.number}</label>

@@ -1,0 +1,26 @@
+#postTitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 20pt;
+}
+
+#postDetails {
+    font-family: 'Lato', sans-serif;
+    font-size: 10pt;
+    padding-bottom: 10px;
+}
+
+#postUser {
+    font-family: 'Lato', sans-serif;
+    font-size: 12pt;
+    text-align: center;
+}
+
+#postContent {
+    font-family: 'Lato', sans-serif;
+    font-size: 12pt;
+    padding: 10px;
+}
+
+#voteCount {
+    text-align: center;
+}

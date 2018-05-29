@@ -1,0 +1,26 @@
+#postCardTitle {
+    font-family: 'Vollkorn', serif;
+    font-size: 25pt;
+}
+
+#postCardDetails {
+    font-family: 'Lato', sans-serif;
+    font-size: 10pt;
+    padding-bottom: 10px;
+}
+
+#postCardUser {
+    font-family: 'Lato', sans-serif;
+    font-size: 12pt;
+    text-align: left;
+}
+
+#postCardContent {
+    font-family: 'Lato', sans-serif;
+    font-size: 12pt;
+    padding: 10px;
+}
+
+#voteCount {
+    text-align: center;
+}
