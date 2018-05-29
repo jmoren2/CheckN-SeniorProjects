@@ -380,7 +380,7 @@ class ViewPost extends Component{//Initial State
                             <ThumbsDown size={30}/>
                         </button>
                     </span>
-                        <input onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
+                        <TextArea autoHeight onChange={this.handleChangeComment}  placeholder='Share your thoughts...' className='form-control' style={{width: '70%', margin: 'auto'}}/> <br />
                     <button id='submitVoteButton' className='btn btn-primary' type='submit' disabled>Submit</button>
                     </div>
                 </form>
