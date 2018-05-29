@@ -8,7 +8,7 @@ class App extends Component {
       <div classNameName="App">
         <header classNameName="App-header">
           <img src={logo} classNameName="App-logo" alt="logo" />
-          <h1 classNameName="App-title">Front-End Developments</h1>
+          <h1 classNameName="App-title">CheckN</h1>
         </header>
         <p classNameName="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.

@@ -301,13 +301,14 @@ class FeedPage extends React.Component{
     render(){
         return(
             <div>
+                <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Lato|Lobster" rel="stylesheet" />
                 <Navbar searchMethod={this.handleSearch}/>
                 <div className="container">
                 
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
-                                <h2 style={{color: 'black'}}>Your Feed</h2>
+                                <h2 style={{color: 'black'}} id="title">Your Feed</h2>
                                 {this.state.feed}
                             </div>
                         </div>
