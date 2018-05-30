@@ -13,6 +13,11 @@ module.exports.getPostById = (esClient, event, context, callback) => {
 
             var id = event.pathParameters.postId;
 
+            // get user for seeing if survey is taken
+            var forUser;
+            if(event.queryStringParameters && event.queryStringParameters.forUser)
+                forUser = event.queryStringParameters.forUser;
+
             var params = {
                index: 'posts',
                type: 'post',
@@ -39,11 +44,16 @@ module.exports.getPostById = (esClient, event, context, callback) => {
                             console.log('data: ' + JSON.stringify(data2));
                             var user = data2._source;
                             if(data2.found == false || user === undefined || user === null || user === "")
-                                post.userName = 'unknown user'
+                                post.userName = 'unknown user';
                             else
                                 post.userName = user.firstName + ' ' + user.lastName;
                         }
-                        return success(200, post, callback);
+                        // show whether user has taken survey or not
+                        post.surveyTaken = false;
+                        if(post.surveyId && forUser)
+                            return checkSurvey(esClient, post, forUser, callback);
+                        else
+                            return success(200, post, callback);
                     });
                 }
             });
@@ -55,3 +65,39 @@ module.exports.getPostById = (esClient, event, context, callback) => {
     else
         return fail(400,'get post by postId failed', callback);
 };
+
+function checkSurvey(esClient, post, forUser, callback){
+    var filter = {
+        query: { bool: { must: [] } }
+    };
+
+    filter.query.bool.must.push({
+        match: {
+            surveyId: post.surveyId
+        }
+    });
+
+    filter.query.bool.must.push({
+        match: {
+            userId: forUser
+        }
+    });
+
+    var params = {
+        index: 'responses',
+        type: 'response',
+        body: filter
+    };
+
+    esClient.search(params, function(error, data){
+        if(error){
+            console.log('getPostById check user response error: ' + JSON.stringify(error));
+        }
+        else{
+            console.log('check survey response data: ' + JSON.stringify(data));
+            if(data.hits.total > 0)
+                post.surveyTaken = true;
+        }
+        return success(200, post, callback);
+    })
+}
