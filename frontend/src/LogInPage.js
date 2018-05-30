@@ -113,7 +113,7 @@ class LogInPage extends React.Component{
                                 <div className="mx-auto">
 
                                     <div className="">
-                                        <h2 className=''  style={{color:'black'}} id='title'>CheckN</h2>
+                                        <h2 className=''  style={{color:'black'}} id='loginTitle'>CheckN</h2>
                                     </div>
                                     
                                 </div>

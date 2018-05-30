@@ -35,7 +35,7 @@ module.exports.singleSurveySuccess = (code, survey, callback) => {
     })
 }
 
-module.exports.multiSurveySuccess = (code, surveys, callback) => {
+module.exports.multiSurveysSuccess = (code, surveys, context, callback) => {
     return callback(null, {
         statusCode: code,
         headers: {
@@ -45,8 +45,9 @@ module.exports.multiSurveySuccess = (code, surveys, callback) => {
         },
         body: JSON.stringify({
             statusCode: code,
-            surveys: surveys,
-            count: surveys.length
+            Surveys: surveys,
+            total: context.totalPosts,
+            pages: Math.ceil(context.totalPosts / context.pageSize)
         })
     })
 }

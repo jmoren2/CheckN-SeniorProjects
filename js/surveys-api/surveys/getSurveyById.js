@@ -10,11 +10,8 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
             console.log("Received proxy: " + event.pathParameters.surveyId);
 
             var id = event.pathParameters.surveyId;
-            var params = {
-                index: 'surveys',
-                type: 'survey',
-                id: id
-            };
+            var params;
+            const PAGE_SIZE = 10000;
 
 
             var showUser = function(survey, callback) {
@@ -58,7 +55,8 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                 params = {
                     index: 'responses',
                     type: 'response',
-                    q: 'surveyId:' + survey.surveyId
+                    q: 'surveyId:' + survey.surveyId,
+                    size: PAGE_SIZE
                 };
 
                 survey.responses = [];
@@ -71,17 +69,20 @@ module.exports.getSurveyById = (esClient, event, context, callback) => {
                             for(var i = 0; i < data.hits.hits.length; i++)
                                 survey.responses.push(data.hits.hits[i]._source)
                         }
-                        else
-                            survey.responses = [];
                     }
                 
-                    if(survey.responses[0].userId !== undefined && survey.responses[0].userId !== null)
+                    if(survey.responses !== undefined && survey.responses !== null && survey.responses.length != 0)
                        return showUser(survey, callback);
 
                     return getSingleSurveySuccess(200, survey, callback);
                 });
             }
 
+            params = {
+                index: 'surveys',
+                type: 'survey',
+                id: id
+            };
             esClient.get(params, function(err, data) {
                 if(err)
                     return getSurveyFail(500,'get Survey by Id failed. Error: ' + err, callback);

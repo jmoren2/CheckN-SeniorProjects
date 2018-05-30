@@ -249,7 +249,7 @@ class FeedPage extends React.Component{
                             </button>
                         </span>
 
-                        <div className="col-sm-11">      
+                        <div className="col-sm-10">      
                     
                             <div className="card bg-light h-100">
                                 <Link style={{margin: '10px'}} to={`/post/${post.postId}`}>
@@ -277,6 +277,7 @@ class FeedPage extends React.Component{
                                 </div>
                             </div>
                         </div>
+                        <div className="col-sm" />
                     </div>
                 </div>
             );

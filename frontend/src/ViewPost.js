@@ -152,7 +152,8 @@ class ViewPost extends Component{//Initial State
                     </button>       
                 </span>
                 <div className="row">
-                    <div className="col-sm-11">
+                <div className="col-sm" />
+                    <div className="col-sm-10">
                         <div className="card bg-light h-100">
                             <div key={data} className="">
                                 <div className="card-block">
@@ -162,6 +163,7 @@ class ViewPost extends Component{//Initial State
                             </div>
                         </div>
                     </div>
+                    <div className="col-sm" />
                 </div>
                 <br/>
             </div>

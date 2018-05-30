@@ -5,7 +5,7 @@ import Question from './Question.js';
 import {Divider, Button, Icon, Dropdown, TextArea} from 'semantic-ui-react';
 
 import Plus from 'react-icons/lib/fa/plus';
-//import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 class CreatePost extends Component{
     constructor(props){
@@ -213,7 +213,7 @@ class CreatePost extends Component{
                     <div className=''>
                         <div className='card card-1  text-md-center'>
                             <div className='card-body text-center'>
-                                <h2 className='text-center' style={{color:'black'}}>Create New Post</h2>
+                                <h2 className='text-center' style={{color:'black'}} id="title">Create New Post</h2>
                                 <form onSubmit={this.handleSubmit}>
 
                                     <div className='form-group'>

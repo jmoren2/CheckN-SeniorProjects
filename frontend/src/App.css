@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-image: './images/NikeWHQ_Campus_Aerial_5075_original.jpg';
 }
 
 #LoginPageContainer {
@@ -8,6 +9,7 @@
   margin-right: auto;
   width: 50%;
   text-align: center;
+  background-image: './images/NikeWHQ_Campus_Aerial_5075_original.jpg';
 }
 
 .App-header {
@@ -107,4 +109,35 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+
+#desc {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 12pt;
+}
+
+#details {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 10pt;
+}
+
+#title {
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 25pt;
+}
+
+#navTitle {
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 20pt;
+}
+
+#loginTitle {
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 40pt;
+  margin-top: -40pt;
 }
