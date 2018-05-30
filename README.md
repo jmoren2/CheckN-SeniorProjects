@@ -1,4 +1,4 @@
-# technology-speaks
+# checkN
 ----------
 
 Before deploying this program for the first time run the following in cmd:
