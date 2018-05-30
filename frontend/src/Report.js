@@ -44,7 +44,7 @@ class Report extends React.Component{
     heandlSearchUser = (event, data) =>
     {
         
-        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?namesearch=${data.value}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?name=${data.value}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
