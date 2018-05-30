@@ -162,7 +162,7 @@ class Survey extends React.Component{
                         {this.state.questions[index].question}
                     </Card.Header>
                     <Form>
-                        <TextArea index={index} className='freeResponse' value={this.state.responses[index][0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
+                        <TextArea id={index} className='freeResponse' value={this.state.responses[index][0]} onChange={onChangeMethod} fluid placeholder='Enter Response...' rows={theRows} autoHeight/>
                     </Form>
                 </Card.Content>
             </Card>
