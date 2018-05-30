@@ -295,7 +295,7 @@ class Admin extends React.Component{
     removeUser = (data) =>
     {
 
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${data}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/${data}`, {
         headers: {
             'content-type': 'application/json'
         },
@@ -315,7 +315,7 @@ class Admin extends React.Component{
     handleRemoveUser = (event) =>
     {
         
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?email=${this.state.selectedUser}`, {
         headers: {
             'content-type': 'application/json'
         },
@@ -335,7 +335,7 @@ class Admin extends React.Component{
     {
         if(this.state.report === "Users")
         {
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users?namesearch=${data.value}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?name=${data.value}`, {
                 headers: {
                     'content-type': 'application/json'
                 },
@@ -477,7 +477,7 @@ class Admin extends React.Component{
 
     getUserInfo = () =>
     {
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users?email=${this.state.selectedUser}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users?email=${this.state.selectedUser}`, {
         headers: {
             'content-type': 'application/json'
         },
@@ -519,7 +519,7 @@ class Admin extends React.Component{
 
         console.log(data)
 
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users/${this.state.selectedUserInfo.userId}`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users/${this.state.selectedUserInfo.userId}`, {
             method: 'PUT',
             body: JSON.stringify(data)
         })
@@ -552,7 +552,7 @@ class Admin extends React.Component{
 
         console.log(data)
 
-        fetch(`https://mvea1vrrvc.execute-api.us-west-2.amazonaws.com/prod/users`, {
+        fetch(`https://wjnoc9sykb.execute-api.us-west-2.amazonaws.com/dev/users`, {
             method: 'POST',
             body: JSON.stringify(data)
         })

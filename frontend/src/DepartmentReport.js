@@ -112,7 +112,6 @@ class DepartmentReport extends React.Component{
 
     calculateMetrics = () =>
     {
-        console.log('hehreeee')
         var posts = 0;
         var comments = 0;
         var votes =0;
@@ -151,7 +150,10 @@ class DepartmentReport extends React.Component{
             depPosts: posts,
             depComments: comments,
             depVotes: votes
-        })
+        },
+    function(){
+        alert(JSON.stringify(this.state.usersByDep))
+    })
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
